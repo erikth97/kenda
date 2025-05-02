@@ -1,0 +1,63 @@
+---
+// ProgressBar.astro - Barra de progreso horizontal en la parte superior
+---
+
+<div id="progress-bar-container" class="fixed top-0 left-0 w-full h-2 z-50 hidden bg-gray-100">
+  <div id="progress-bar" class="h-full bg-kenda-orange w-0 transition-all duration-300"></div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const progressBar = document.getElementById('progress-bar');
+    const progressBarContainer = document.getElementById('progress-bar-container');
+    const heroSection = document.getElementById('hero');
+    
+    // Función para calcular y actualizar el progreso
+    const updateProgressBar = () => {
+      // Altura total del documento desplazable
+      const totalHeight = document.body.scrollHeight - window.innerHeight;
+      
+      // Posición actual del scroll
+      const scrollPosition = window.scrollY;
+      
+      // Calcular el porcentaje de scroll
+      const scrollPercentage = (scrollPosition / totalHeight) * 100;
+      
+      // Actualizar el ancho de la barra de progreso
+      if (progressBar) {
+        progressBar.style.width = `${scrollPercentage}%`;
+      }
+      
+      // Mostrar u ocultar la barra según si estamos en HeroSection
+      if (progressBarContainer && heroSection) {
+        const heroBottom = heroSection.getBoundingClientRect().bottom;
+        
+        // Mostrar la barra solo cuando hemos pasado la HeroSection
+        if (heroBottom <= 0) {
+          progressBarContainer.classList.remove('hidden');
+        } else {
+          progressBarContainer.classList.add('hidden');
+        }
+      }
+    };
+    
+    // Escuchar eventos de scroll
+    window.addEventListener('scroll', updateProgressBar, { passive: true });
+    
+    // Actualizar al cargar la página
+    updateProgressBar();
+  });
+</script>
+
+<style>
+  /* Asegurar que el color sea el correcto */
+  #progress-bar {
+    background-color: #FF7A00; /* Color naranja de KENDA */
+    height: 100%;
+  }
+  
+  /* Agregar un efecto de sombra sutil */
+  #progress-bar-container {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+</style>
