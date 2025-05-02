@@ -1,0 +1,26 @@
+---
+interface Props {
+  id: string;
+  // Definición de los valores permitidos para background
+  background?: 'white' | 'light' | 'dark' | 'gradient';
+  className?: string;
+}
+
+const { id, background = 'white', className = '' } = Astro.props;
+
+// Mapeo de estilos para cada tipo de fondo
+const bgClasses = {
+  white: 'bg-white',
+  light: 'bg-gray-100',
+  dark: 'bg-gray-900 text-white',
+  gradient: 'bg-gradient-to-r from-kenda-red to-kenda-orange text-white'
+};
+
+const bgClass = bgClasses[background];
+---
+
+<section id={id} class={`py-16 md:py-24 ${bgClass} ${className}`}>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <slot />
+  </div>
+</section>
