@@ -1,0 +1,16 @@
+---
+// CardTitle.astro - Componente para el título de tarjeta
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+  class?: string;
+  as?: string;
+  [key: string]: any;
+}
+
+const { class: className, as: Tag = "h3", ...props } = Astro.props;
+---
+
+<Tag class={cn("text-2xl font-semibold leading-none tracking-tight", className)} {...props}>
+  <slot />
+</Tag>

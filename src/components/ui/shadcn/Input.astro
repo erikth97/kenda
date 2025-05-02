@@ -1,0 +1,43 @@
+---
+// Adaptado de shadcn/ui Input para Astro
+import { cn } from "../../../lib/utils";
+
+export interface InputProps {
+  type?: string;
+  class?: string;
+  id?: string;
+  name?: string;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
+  readonly?: boolean;
+  [key: string]: any;
+}
+
+const {
+  type = "text",
+  class: className,
+  id,
+  name,
+  placeholder,
+  required = false,
+  disabled = false,
+  readonly = false,
+  ...props
+} = Astro.props;
+---
+
+<input
+  type={type}
+  id={id}
+  name={name}
+  placeholder={placeholder}
+  required={required}
+  disabled={disabled}
+  readonly={readonly}
+  class={cn(
+    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+    className
+  )}
+  {...props}
+/>
