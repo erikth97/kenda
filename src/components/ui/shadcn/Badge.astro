@@ -1,0 +1,64 @@
+---
+/**
+ * Badge.astro
+ * 
+ * Componente para mostrar etiquetas o insignias
+ * Basado en el diseño de shadcn/ui
+ */
+
+ interface Props {
+  variant?: 'default' | 'outline' | 'secondary';
+  color?: 'default' | 'red' | 'orange' | 'green' | 'blue';
+  className?: string;
+}
+
+const { 
+  variant = 'default', 
+  color = 'default', 
+  className = '' 
+} = Astro.props;
+
+// Mapeo de variantes a clases
+const variantClasses = {
+  default: 'bg-gray-100 text-gray-800',
+  secondary: 'bg-gray-200 text-gray-900',
+  outline: 'border border-gray-200 text-gray-800 bg-transparent'
+};
+
+// Mapeo de colores a clases
+const colorClasses = {
+  default: '',
+  red: variant === 'default' 
+      ? 'bg-red-100 text-kenda-red' 
+      : variant === 'outline' 
+        ? 'border-kenda-red text-kenda-red' 
+        : 'bg-kenda-red text-white',
+  orange: variant === 'default' 
+      ? 'bg-orange-100 text-kenda-orange' 
+      : variant === 'outline' 
+        ? 'border-kenda-orange text-kenda-orange' 
+        : 'bg-kenda-orange text-white',
+  green: variant === 'default' 
+      ? 'bg-green-100 text-green-800' 
+      : variant === 'outline' 
+        ? 'border-green-500 text-green-700' 
+        : 'bg-green-600 text-white',
+  blue: variant === 'default' 
+      ? 'bg-blue-100 text-blue-800' 
+      : variant === 'outline' 
+        ? 'border-blue-500 text-blue-700' 
+        : 'bg-blue-600 text-white'
+};
+
+// Combinar todas las clases
+const classes = [
+  'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors',
+  variantClasses[variant],
+  colorClasses[color],
+  className
+].filter(Boolean).join(' ');
+---
+
+<span class={classes}>
+  <slot />
+</span>
