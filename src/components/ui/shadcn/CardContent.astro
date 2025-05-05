@@ -1,15 +1,27 @@
 ---
-// CardContent.astro - Componente para el contenido de tarjeta
-import { cn } from "../../../lib/utils";
+/**
+ * CardContent.astro
+ * 
+ * Componente para el contenido principal de la tarjeta
+ * Basado en el diseño de shadcn/ui
+ */
 
-export interface Props {
-  class?: string;
-  [key: string]: any;
+ interface Props {
+  className?: string;
+  padding?: boolean;
 }
 
-const { class: className, ...props } = Astro.props;
+const { 
+  className = '',
+  padding = true
+} = Astro.props;
+
+const classes = [
+  padding ? 'px-6 py-4' : '',
+  className
+].filter(Boolean).join(' ');
 ---
 
-<div class={cn("p-6 pt-0", className)} {...props}>
+<div class={classes}>
   <slot />
 </div>

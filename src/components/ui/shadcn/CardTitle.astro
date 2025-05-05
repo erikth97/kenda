@@ -1,16 +1,27 @@
 ---
-// CardTitle.astro - Componente para el título de tarjeta
-import { cn } from "../../../lib/utils";
+/**
+ * CardTitle.astro
+ * 
+ * Componente para el título de la tarjeta
+ * Basado en el diseño de shadcn/ui
+ */
 
-export interface Props {
-  class?: string;
-  as?: string;
-  [key: string]: any;
+ interface Props {
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  className?: string;
 }
 
-const { class: className, as: Tag = "h3", ...props } = Astro.props;
+const { 
+  as: Element = 'h3', 
+  className = '' 
+} = Astro.props;
+
+const classes = [
+  'text-lg font-bold text-gray-800 leading-none tracking-tight',
+  className
+].filter(Boolean).join(' ');
 ---
 
-<Tag class={cn("text-2xl font-semibold leading-none tracking-tight", className)} {...props}>
+<Element class={classes}>
   <slot />
-</Tag>
+</Element>

@@ -1,15 +1,28 @@
 ---
-// CardHeader.astro - Componente para el encabezado de tarjeta
-import { cn } from "../../../lib/utils";
+/**
+ * CardHeader.astro
+ * 
+ * Componente para el encabezado de la tarjeta
+ * Basado en el diseño de shadcn/ui
+ */
 
-export interface Props {
-  class?: string;
-  [key: string]: any;
+ interface Props {
+  className?: string;
+  padding?: boolean;
 }
 
-const { class: className, ...props } = Astro.props;
+const { 
+  className = '',
+  padding = true
+} = Astro.props;
+
+const classes = [
+  padding ? 'p-6' : '',
+  'flex flex-col space-y-1.5',
+  className
+].filter(Boolean).join(' ');
 ---
 
-<div class={cn("flex flex-col space-y-1.5 p-6", className)} {...props}>
+<div class={classes}>
   <slot />
 </div>

@@ -1,15 +1,23 @@
 ---
-// CardDescription.astro - Componente para la descripción de tarjeta
-import { cn } from "../../../lib/utils";
+/**
+ * CardDescription.astro
+ * 
+ * Componente para la descripción de la tarjeta
+ * Basado en el diseño de shadcn/ui
+ */
 
-export interface Props {
-  class?: string;
-  [key: string]: any;
+ interface Props {
+  className?: string;
 }
 
-const { class: className, ...props } = Astro.props;
+const { className = '' } = Astro.props;
+
+const classes = [
+  'text-sm text-gray-600 font-light',
+  className
+].filter(Boolean).join(' ');
 ---
 
-<p class={cn("text-sm text-muted-foreground", className)} {...props}>
+<p class={classes}>
   <slot />
 </p>
