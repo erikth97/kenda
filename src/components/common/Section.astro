@@ -1,26 +1,105 @@
 ---
-interface Props {
+/**
+ * Section.astro
+ * 
+ * Componente para crear secciones de página con distintos fondos,
+ * espaciados y configuraciones de contenedor.
+ */
+
+ interface Props {
   id: string;
-  // Definición de los valores permitidos para background
-  background?: 'white' | 'light' | 'dark' | 'gradient';
+  // Fondos disponibles
+  background?: 'white' | 'light' | 'dark' | 'gradient' | 'red' | 'orange' | 'transparent';
+  // Control de espaciado
+  spacing?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  // Altura de sección
+  height?: 'auto' | 'full' | 'screen' | 'min-screen';
+  // Si la sección debe usar container para el contenido
+  container?: boolean;
+  // Tamaño del container
+  containerSize?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  // Clases adicionales para la sección
   className?: string;
+  // Clases adicionales para el container
+  containerClass?: string;
 }
 
-const { id, background = 'white', className = '' } = Astro.props;
+const { 
+  id, 
+  background = 'white', 
+  spacing = 'lg',
+  height = 'auto',
+  container = true,
+  containerSize = 'lg',
+  className = '',
+  containerClass = ''
+} = Astro.props;
 
 // Mapeo de estilos para cada tipo de fondo
 const bgClasses = {
   white: 'bg-white',
   light: 'bg-gray-100',
   dark: 'bg-gray-900 text-white',
-  gradient: 'bg-gradient-to-r from-kenda-red to-kenda-orange text-white'
+  gradient: 'bg-gradient-to-r from-kenda-red to-kenda-orange text-white',
+  red: 'bg-kenda-red text-white',
+  orange: 'bg-kenda-orange text-white',
+  transparent: 'bg-transparent'
 };
 
+// Mapeo de espaciado vertical
+const spacingClasses = {
+  none: '',
+  sm: 'py-6 md:py-8',
+  md: 'py-10 md:py-12',
+  lg: 'py-16 md:py-24',
+  xl: 'py-20 md:py-32'
+};
+
+// Mapeo de altura
+const heightClasses = {
+  auto: '',
+  full: 'h-full',
+  screen: 'h-screen',
+  'min-screen': 'min-h-screen'
+};
+
+// Mapeo de tamaños de contenedor
+const containerSizeClasses = {
+  sm: 'max-w-3xl',
+  md: 'max-w-4xl',
+  lg: 'max-w-6xl',
+  xl: 'max-w-7xl',
+  full: 'max-w-full'
+};
+
+// Construcción de clases
 const bgClass = bgClasses[background];
+const spacingClass = spacingClasses[spacing];
+const heightClass = heightClasses[height];
+
+// Clases para la sección
+const sectionClasses = [
+  bgClass,
+  spacingClass,
+  heightClass,
+  'relative', // Para permitir posicionamiento absoluto dentro
+  className
+].filter(Boolean).join(' ');
+
+// Clases para el contenedor
+const containerClasses = [
+  'mx-auto px-4 sm:px-6 lg:px-8',
+  containerSizeClasses[containerSize],
+  containerClass
+].filter(Boolean).join(' ');
 ---
 
-<section id={id} class={`py-16 md:py-24 ${bgClass} ${className}`}>
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<section id={id} class={sectionClasses}>
+  {container ? (
+    <div class={containerClasses}>
+      <slot />
+    </div>
+  ) : (
     <slot />
-  </div>
+  )}
 </section>
