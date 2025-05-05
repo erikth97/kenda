@@ -5,11 +5,60 @@ import Section from '../components/common/Section.astro';
 import SectionHeading from '../components/common/SectionHeading.astro';
 import HeroSection from '../components/home/HeroSection.astro';
 import BrandsSection from '../components/home/BrandsSection.astro';
-// Asegúrate de importar todas las secciones que necesitas
-// Por ejemplo, si tienes secciones adicionales:
-// import ProductsSection from '../components/home/ProductsSection.astro';
-// import TestimonialsSection from '../components/home/TestimonialsSection.astro';
-// import ContactSection from '../components/home/ContactSection.astro';
+import Container from '../layouts/Container.astro';
+import ProductCard from '../components/ui/custom/ProductCard.astro';
+import BenefitCard from '../components/ui/custom/BenefitCard.astro';
+
+// Iconos para beneficios
+const benefitIcons = {
+  precios: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-kenda-red"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+  calidad: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-kenda-red"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" /></svg>',
+  soporte: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-kenda-red"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.031.352 5.988 5.988 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 01-2.031.352 5.989 5.989 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971z" /></svg>'
+};
+
+// Datos de productos
+const productos = [
+  {
+    name: "K761 - Off-road",
+    image: "/images/productos/placeholder-tire.jpg",
+    category: "Todoterreno",
+    description: "Neumático para terrenos difíciles con excelente tracción",
+    url: "/productos/k761"
+  },
+  {
+    name: "K555 - Street",
+    image: "/images/productos/placeholder-tire.jpg",
+    category: "Urbano",
+    description: "Diseñado para un rendimiento superior en asfalto",
+    url: "/productos/k555"
+  },
+  {
+    name: "K677 - Dual Sport",
+    image: "/images/productos/placeholder-tire.jpg",
+    category: "Mixto",
+    description: "Versátil para uso urbano y caminos rurales",
+    url: "/productos/k677"
+  }
+];
+
+// Datos de beneficios
+const beneficios = [
+  {
+    title: "Precios Competitivos",
+    description: "Optimiza tus ganancias con los mejores precios del mercado",
+    icon: benefitIcons.precios
+  },
+  {
+    title: "Calidad Garantizada",
+    description: "Productos de alta calidad respaldados por una marca líder",
+    icon: benefitIcons.calidad
+  },
+  {
+    title: "Soporte Técnico",
+    description: "Acompañamiento y apoyo para tu negocio",
+    icon: benefitIcons.soporte
+  }
+];
 ---
 
 <BaseLayout title="Distribuidor KENDA - Motos y Equipos">
@@ -17,116 +66,58 @@ import BrandsSection from '../components/home/BrandsSection.astro';
   <HeroSection />
   
   <!-- Sección de Beneficios -->
-  <Section id="beneficios" background="light">
-    <SectionHeading
-      title="Beneficios"
-      description="En Motocicletas y Equipos, ofrecemos precios competitivos respaldados por 66 años de experiencia en calidad y servicio."
-    />
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Tarjetas de beneficios con mejor estilo -->
-      <div class="h-48 bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-6 hover:shadow-lg transition-shadow">
-        <div class="w-14 h-14 bg-kenda-red bg-opacity-10 rounded-full flex items-center justify-center mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-kenda-red">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <h3 class="text-lg font-bold text-gray-800 mb-2">Precios Competitivos</h3>
-        <p class="text-gray-600 text-center text-sm font-light">Optimiza tus ganancias con los mejores precios del mercado</p>
-      </div>
+  <Section id="beneficios" background="light" spacing="lg">
+    <Container>
+      <SectionHeading
+        title="Beneficios"
+        description="En Motocicletas y Equipos, ofrecemos precios competitivos respaldados por 66 años de experiencia en calidad y servicio."
+      />
       
-      <div class="h-48 bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-6 hover:shadow-lg transition-shadow">
-        <div class="w-14 h-14 bg-kenda-red bg-opacity-10 rounded-full flex items-center justify-center mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-kenda-red">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-          </svg>
-        </div>
-        <h3 class="text-lg font-bold text-gray-800 mb-2">Calidad Garantizada</h3>
-        <p class="text-gray-600 text-center text-sm font-light">Productos de alta calidad respaldados por una marca líder</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {beneficios.map(beneficio => (
+          <BenefitCard
+            title={beneficio.title}
+            description={beneficio.description}
+            icon={beneficio.icon}
+          />
+        ))}
       </div>
-      
-      <div class="h-48 bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-6 hover:shadow-lg transition-shadow">
-        <div class="w-14 h-14 bg-kenda-red bg-opacity-10 rounded-full flex items-center justify-center mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-kenda-red">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.031.352 5.988 5.988 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 01-2.031.352 5.989 5.989 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971z" />
-          </svg>
-        </div>
-        <h3 class="text-lg font-bold text-gray-800 mb-2">Soporte Técnico</h3>
-        <p class="text-gray-600 text-center text-sm font-light">Acompañamiento y apoyo para tu negocio</p>
-      </div>
-    </div>
+    </Container>
   </Section>
   
   <!-- Sección de Productos -->
-  <Section id="productos" background="white">
-    <SectionHeading
-      title="Nuestros Productos"
-      description="Descubre la amplia gama de neumáticos KENDA para todo tipo de motocicletas"
-    />
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Aquí irían los productos -->
-      <div class="rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <div class="h-48 bg-gray-100 flex items-center justify-center">
-          <img src="/images/productos/placeholder-tire.jpg" alt="Neumático KENDA" class="h-40 object-contain" />
-        </div>
-        <div class="p-4">
-          <h3 class="text-lg font-semibold text-gray-800 mb-2">K761 - Off-road</h3>
-          <p class="text-gray-600 text-sm mb-4">Neumático para terrenos difíciles con excelente tracción</p>
-          <button class="text-kenda-red font-medium text-sm flex items-center">
-            Ver detalles
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-            </svg>
-          </button>
-        </div>
-      </div>
+  <Section id="productos" background="white" spacing="lg">
+    <Container>
+      <SectionHeading
+        title="Nuestros Productos"
+        description="Descubre la amplia gama de neumáticos KENDA para todo tipo de motocicletas"
+      />
       
-      <div class="rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <div class="h-48 bg-gray-100 flex items-center justify-center">
-          <img src="/images/productos/placeholder-tire.jpg" alt="Neumático KENDA" class="h-40 object-contain" />
-        </div>
-        <div class="p-4">
-          <h3 class="text-lg font-semibold text-gray-800 mb-2">K555 - Street</h3>
-          <p class="text-gray-600 text-sm mb-4">Diseñado para un rendimiento superior en asfalto</p>
-          <button class="text-kenda-red font-medium text-sm flex items-center">
-            Ver detalles
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-            </svg>
-          </button>
-        </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {productos.map(producto => (
+          <ProductCard
+            name={producto.name}
+            image={producto.image}
+            category={producto.category}
+            description={producto.description}
+            url={producto.url}
+          />
+        ))}
       </div>
-      
-      <div class="rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <div class="h-48 bg-gray-100 flex items-center justify-center">
-          <img src="/images/productos/placeholder-tire.jpg" alt="Neumático KENDA" class="h-40 object-contain" />
-        </div>
-        <div class="p-4">
-          <h3 class="text-lg font-semibold text-gray-800 mb-2">K677 - Dual Sport</h3>
-          <p class="text-gray-600 text-sm mb-4">Versátil para uso urbano y caminos rurales</p>
-          <button class="text-kenda-red font-medium text-sm flex items-center">
-            Ver detalles
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
+    </Container>
   </Section>
   
   <!-- Sección de Marcas -->
   <BrandsSection />
   
-  <!-- Sección de Contacto - corregido el valor de background -->
-  <Section id="contacto" background="light">
-    <SectionHeading
-      title="Contacto"
-      description="Estamos listos para responder tus preguntas y comenzar tu proceso de distribución"
-    />
-    
-    <div class="max-w-3xl mx-auto">
+  <!-- Sección de Contacto -->
+  <Section id="contacto" background="light" spacing="lg">
+    <Container size="md">
+      <SectionHeading
+        title="Contacto"
+        description="Estamos listos para responder tus preguntas y comenzar tu proceso de distribución"
+      />
+      
       <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
         <form class="space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -155,30 +146,6 @@ import BrandsSection from '../components/home/BrandsSection.astro';
           </button>
         </form>
       </div>
-    </div>
+    </Container>
   </Section>
 </BaseLayout>
-
-<style>
-  /* Definición de colores personalizados para la página */
-  :root {
-    --kenda-red: #E32726;
-    --kenda-orange: #F7941D;
-  }
-  
-  .bg-kenda-red {
-    background-color: var(--kenda-red);
-  }
-  
-  .bg-kenda-orange {
-    background-color: var(--kenda-orange);
-  }
-  
-  .text-kenda-red {
-    color: var(--kenda-red);
-  }
-  
-  .focus\:ring-kenda-orange:focus {
-    --tw-ring-color: var(--kenda-orange);
-  }
-</style>
