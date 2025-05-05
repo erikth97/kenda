@@ -1,0 +1,158 @@
+---
+import Section from '../common/Section.astro';
+import SectionHeading from '../common/SectionHeading.astro';
+
+// Lista de marcas para las cintas
+const brands = [
+    { name: "Michelin", logo: "/images/brands/michelin.svg" },
+    { name: "Motul", logo: "/images/brands/motul.svg" },
+    { name: "Promoto", logo: "/images/brands/promoto.svg" },
+    { name: "Kenda", logo: "/images/brands/kenda.svg" },
+    { name: "Riffel", logo: "/images/brands/riffel.svg" },
+    { name: "Kohl", logo: "/images/brands/kohl.svg" },
+    { name: "Kumoto", logo: "/images/brands/kumoto.svg" },
+    { name: "Shad", logo: "/images/brands/shad.svg" },
+    { name: "O.S.A.K.", logo: "/images/brands/osak.svg" },
+];
+
+// Duplicar la lista para asegurar que haya suficientes elementos para la animación continua
+const ticker1Brands = [...brands, ...brands];
+const ticker2Brands = [...brands, ...brands];
+---
+
+<Section id="marcas" background="white" className="py-12 overflow-hidden">
+    <div class="space-y-12">
+        <!-- Primera cinta (derecha a izquierda) -->
+        <div class="ticker-container relative">
+            <div class="ticker-track ticker-scroll flex animate-ticker-1">
+                {ticker1Brands.map((brand) => (
+                    <div class="ticker-item flex items-center justify-center min-w-[180px] h-20 mx-4">
+                        <img 
+                            src={brand.logo} 
+                            alt={`Logo de ${brand.name}`} 
+                            class="max-h-12 max-w-[120px] grayscale hover:grayscale-0 transition-all duration-300"
+                            width="120"
+                            height="48"
+                            loading="lazy"
+                        />
+                    </div>
+                ))}
+            </div>
+        </div>
+        
+        <!-- Segunda cinta (izquierda a derecha) -->
+        <div class="ticker-container relative">
+            <div class="ticker-track ticker-scroll flex animate-ticker-2">
+                {ticker2Brands.map((brand) => (
+                    <div class="ticker-item flex items-center justify-center min-w-[180px] h-20 mx-4">
+                        <img 
+                            src={brand.logo} 
+                            alt={`Logo de ${brand.name}`} 
+                            class="max-h-12 max-w-[120px] grayscale hover:grayscale-0 transition-all duration-300"
+                            width="120"
+                            height="48"
+                            loading="lazy"
+                        />
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+</Section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tickerTracks = document.querySelectorAll('.ticker-scroll');
+    let scrollPosition = 0;
+    let scrollDirection = 0;
+    let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Variable local para manejar el temporizador
+    let scrollTimer: number | null = null;
+    
+    // Factor de velocidad para las cintas (ajustar según sea necesario)
+    const scrollSpeedFactor = 0.2;
+    
+    window.addEventListener('scroll', () => {
+      const st = window.pageYOffset || document.documentElement.scrollTop;
+      
+      // Determinar dirección del scroll
+      scrollDirection = st > lastScrollTop ? 1 : -1;
+      
+      // Calcular el cambio en la posición de scroll
+      const scrollDelta = Math.abs(st - lastScrollTop) * scrollSpeedFactor;
+      
+      // Actualizar posición total
+      scrollPosition += scrollDelta * scrollDirection;
+      
+      // Aplicar el desplazamiento adicional a las cintas
+      if (tickerTracks.length >= 2) {
+        // Primera cinta - se mueve más rápido al hacer scroll hacia abajo
+        const track1 = tickerTracks[0] as HTMLElement;
+        track1.style.animationPlayState = 'paused';
+        track1.style.transform = `translateX(${-scrollPosition}px)`;
+        
+        // Segunda cinta - se mueve más rápido al hacer scroll hacia arriba
+        const track2 = tickerTracks[1] as HTMLElement;
+        track2.style.animationPlayState = 'paused';
+        track2.style.transform = `translateX(${scrollPosition}px)`;
+      }
+      
+      // Restablecer animación cuando no se hace scroll
+      if (scrollTimer !== null) {
+        clearTimeout(scrollTimer);
+      }
+      
+      scrollTimer = setTimeout(() => {
+        tickerTracks.forEach(track => {
+          const htmlTrack = track as HTMLElement;
+          htmlTrack.style.animationPlayState = 'running';
+          htmlTrack.style.transform = '';
+        });
+      }, 100) as unknown as number;
+      
+      lastScrollTop = st <= 0 ? 0 : st; // Evitar valores negativos
+    }, { passive: true });
+  });
+</script>
+
+<style>
+    .ticker-container {
+        overflow: hidden;
+        white-space: nowrap;
+        width: 100%;
+    }
+
+    .ticker-track {
+        display: inline-block;
+        white-space: nowrap;
+    }
+
+    .ticker-item {
+        display: inline-flex;
+    }
+
+    /* Pausar la animación al pasar el mouse */
+    .ticker-container:hover .ticker-track {
+        animation-play-state: paused;
+    }
+    
+    /* Definir las animaciones para las cintas */
+    @keyframes ticker-scroll-1 {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-100%); }
+    }
+    
+    @keyframes ticker-scroll-2 {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(0); }
+    }
+    
+    .animate-ticker-1 {
+        animation: ticker-scroll-1 30s linear infinite;
+    }
+    
+    .animate-ticker-2 {
+        animation: ticker-scroll-2 30s linear infinite;
+    }
+</style>
