@@ -1,0 +1,624 @@
+---
+/**
+ * FormSection.astro
+ * 
+ * Componente que implementa la sección de formulario para distribuidores KENDA.
+ * Incluye validación de campos y manejo de envío mediante JSON.
+ * Con diseño responsive optimizado para dispositivos móviles.
+ */
+import Section from '../common/Section.astro';
+import Container from '../../layouts/Container.astro';
+---
+
+<Section id="formulario" background="transparent" spacing="lg" className="bg-[#f5f5f5]">
+  <!-- Cuadrícula uniforme sin degradados -->
+  <div class="absolute inset-0 w-full h-full uniform-grid"></div>
+  
+  <!-- Contenido del formulario -->
+  <Container size="md" className="max-w-3xl px-4 sm:px-6 md:px-8 relative z-10">
+    <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+      <!-- Título y subtítulo con tamaño adaptativo -->
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-2">Formulario</h2>
+        <p class="text-lg text-gray-600">Más de 5,000 distribuidores</p>
+      </div>
+      
+      <form id="distributor-form" class="space-y-8">
+        <!-- Campo Nombre con etiqueta fija -->
+        <div class="mb-8">
+          <label for="nombre" class="block text-gray-700 font-medium mb-2">Nombre</label>
+          <input 
+            type="text" 
+            id="nombre" 
+            name="nombre" 
+            class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none" 
+            required 
+          />
+          <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-nombre">Este campo es obligatorio</p>
+        </div>
+        
+        <!-- Fila de Email y Teléfono con etiquetas fijas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <!-- Campo Email -->
+          <div>
+            <label for="email" class="block text-gray-700 font-medium mb-2">Mail</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none" 
+              required 
+            />
+            <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-email">Ingrese un correo electrónico válido</p>
+          </div>
+          
+          <!-- Campo Celular/Teléfono -->
+          <div>
+            <label for="telefono" class="block text-gray-700 font-medium mb-2">Celular o teléfono</label>
+            <input 
+              type="tel" 
+              id="telefono" 
+              name="telefono" 
+              class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none" 
+              required 
+              pattern="[0-9\s\-\+\(\)]{10,15}"
+            />
+            <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-telefono">Ingrese un número telefónico válido</p>
+          </div>
+        </div>
+        
+        <!-- Campos de selección (3) con etiquetas fijas y más espacio entre ellos -->
+        <div class="space-y-8 mb-8">
+          <div>
+            <label for="seleccion1" class="block text-gray-700 font-medium mb-2">Lorem ipsum</label>
+            <div class="relative">
+              <select 
+                id="seleccion1" 
+                name="seleccion1" 
+                class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none appearance-none" 
+                required
+              >
+                <option value="" disabled selected>Selecciona la opción</option>
+                <option value="opcion1">Opción 1</option>
+                <option value="opcion2">Opción 2</option>
+                <option value="opcion3">Opción 3</option>
+              </select>
+              <!-- Ícono de flecha para el select -->
+              <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+              <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-seleccion1">Seleccione una opción</p>
+            </div>
+          </div>
+          
+          <div>
+            <label for="seleccion2" class="block text-gray-700 font-medium mb-2">Lorem ipsum</label>
+            <div class="relative">
+              <select 
+                id="seleccion2" 
+                name="seleccion2" 
+                class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none appearance-none" 
+                required
+              >
+                <option value="" disabled selected>Selecciona la opción</option>
+                <option value="opcion1">Opción 1</option>
+                <option value="opcion2">Opción 2</option>
+                <option value="opcion3">Opción 3</option>
+              </select>
+              <!-- Ícono de flecha para el select -->
+              <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+              <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-seleccion2">Seleccione una opción</p>
+            </div>
+          </div>
+          
+          <div>
+            <label for="seleccion3" class="block text-gray-700 font-medium mb-2">Lorem ipsum</label>
+            <div class="relative">
+              <select 
+                id="seleccion3" 
+                name="seleccion3" 
+                class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none appearance-none" 
+                required
+              >
+                <option value="" disabled selected>Selecciona la opción</option>
+                <option value="opcion1">Opción 1</option>
+                <option value="opcion2">Opción 2</option>
+                <option value="opcion3">Opción 3</option>
+              </select>
+              <!-- Ícono de flecha para el select -->
+              <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+              <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-seleccion3">Seleccione una opción</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Botón de envío centrado -->
+        <div class="flex justify-center mt-12">
+          <button 
+            type="submit" 
+            id="submit-button"
+            class="px-16 py-3.5 bg-kenda-orange hover:bg-orange-600 text-white font-medium rounded-full transition-all duration-300"
+          >
+            <span class="flex items-center justify-center">
+              <span id="button-text">Enviar formulario</span>
+              <span id="button-spinner" class="ml-2 hidden animate-spin-once">
+                <svg class="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              </span>
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </Container>
+</Section>
+
+<!-- Toast notification con botón de cierre -->
+<div id="toast-notification" class="fixed bottom-4 right-4 bg-green-500 text-white p-3 sm:p-4 rounded-lg shadow-lg z-50 hidden w-56 sm:w-64 max-w-[90vw]">
+  <div class="relative">
+    <!-- Botón de cierre X -->
+    <button id="close-toast" class="absolute -top-2 -right-2 bg-white text-green-500 rounded-full w-6 h-6 flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    
+    <div class="flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+      <span class="text-sm sm:text-base">Formulario enviado correctamente.</span>
+    </div>
+  </div>
+</div>
+
+<!-- Canvas para el confeti -->
+<canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-40 hidden"></canvas>
+
+<style>
+  /* Cuadrícula uniforme sin degradados */
+  .uniform-grid {
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 1) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center;
+    z-index: 1;
+  }
+  
+  /* Animación de un solo giro para el botón */
+  @keyframes spin-once {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .animate-spin-once {
+    animation: spin-once 0.5s ease-in-out forwards;
+  }
+  
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Transiciones suaves para los campos y errores */
+  .error-message {
+    transition: all 0.3s ease;
+  }
+  
+  input:focus, select:focus {
+    transition: all 0.3s ease;
+  }
+</style>
+
+<script is:inline>
+  // Script para validación y envío del formulario
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('distributor-form');
+    const toastNotification = document.getElementById('toast-notification');
+    const closeToastButton = document.getElementById('close-toast');
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const submitButton = document.getElementById('submit-button');
+    const buttonText = document.getElementById('button-text');
+    const buttonSpinner = document.getElementById('button-spinner');
+    
+    if (!form || !toastNotification || !confettiCanvas || !submitButton) {
+      console.error("Algunos elementos no se encontraron");
+      return;
+    }
+    
+    // Función para mostrar/ocultar mensajes de error
+    function showError(fieldId, show) {
+      const errorElement = document.getElementById(`error-${fieldId}`);
+      const fieldElement = document.getElementById(fieldId);
+      
+      if (errorElement && fieldElement) {
+        if (show) {
+          errorElement.classList.remove('hidden');
+          fieldElement.classList.add('ring-2', 'ring-red-500');
+          fieldElement.classList.remove('ring-kenda-orange');
+        } else {
+          errorElement.classList.add('hidden');
+          fieldElement.classList.remove('ring-2', 'ring-red-500');
+        }
+      }
+    }
+    
+    // Función para validar un campo específico
+    function validateField(field) {
+      const fieldId = field.id;
+      
+      // Ocultar mensaje de error al iniciar validación
+      showError(fieldId, false);
+      
+      // Validar usando la API de validación de HTML5
+      const isValid = field.checkValidity();
+      
+      // Mostrar mensaje de error si no es válido
+      if (!isValid) {
+        showError(fieldId, true);
+      }
+      
+      return isValid;
+    }
+    
+    // Agregar eventos de validación a los campos
+    const formFields = form.querySelectorAll('input, select');
+    formFields.forEach(field => {
+      // Validar al perder el foco
+      field.addEventListener('blur', function() {
+        validateField(this);
+      });
+      
+      // Limpiar mensaje de error al editar
+      field.addEventListener('input', function() {
+        showError(this.id, false);
+      });
+      
+      // Para los selects, añadir evento de cambio
+      if (field.tagName === 'SELECT') {
+        field.addEventListener('change', function() {
+          validateField(this);
+        });
+      }
+    });
+    
+    // Variable para almacenar el temporizador del toast
+    let toastTimer;
+    
+    // Función para mostrar el toast
+    function showToast() {
+      // Limpiar cualquier temporizador anterior
+      if (toastTimer) {
+        clearTimeout(toastTimer);
+      }
+      
+      // Mostrar el toast
+      toastNotification.classList.remove('hidden');
+      
+      // Configurar el temporizador para ocultar después de 15 segundos
+      toastTimer = setTimeout(function() {
+        toastNotification.classList.add('hidden');
+      }, 15000); // 15 segundos
+    }
+    
+    // Manejador para cerrar el toast al hacer clic en X
+    closeToastButton.addEventListener('click', function() {
+      if (toastTimer) {
+        clearTimeout(toastTimer);
+      }
+      toastNotification.classList.add('hidden');
+    });
+    
+    // Optimizar animación para móviles
+    const isMobile = window.innerWidth < 768;
+    
+    // Animación de confeti mejorada
+    const confettiAnimation = {
+      canvas: confettiCanvas,
+      ctx: null,
+      particles: [],
+      running: false,
+      colors: [
+        '#FF5722', '#FFC107', '#2196F3', 
+        '#4CAF50', '#9C27B0', '#E91E63',
+        '#FFEB3B', '#03A9F4', '#8BC34A'
+      ],
+      shapes: ['circle', 'square', 'triangle', 'line', 'star'],
+      
+      // Inicializar el canvas
+      init: function() {
+        this.ctx = this.canvas.getContext('2d');
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+      },
+      
+      // Ajustar tamaño del canvas
+      resize: function() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      },
+      
+      // Crear una partícula de confeti
+      createParticle: function(x, y) {
+        // Reducir tamaño en móviles
+        const sizeMultiplier = isMobile ? 0.7 : 1;
+        const shape = this.shapes[Math.floor(Math.random() * this.shapes.length)];
+        return {
+          x: x || Math.random() * this.canvas.width,
+          y: y || Math.random() * this.canvas.height * 0.5,
+          size: (Math.random() * 10 + 5) * sizeMultiplier,
+          color: this.colors[Math.floor(Math.random() * this.colors.length)],
+          opacity: 1,
+          shape: shape,
+          velocity: {
+            x: Math.random() * 6 - 3,
+            y: Math.random() * -7 - 3
+          },
+          rotation: Math.random() * 360,
+          rotationSpeed: Math.random() * 10 - 5,
+          gravity: 0.1 + Math.random() * 0.1,
+          friction: 0.95 + Math.random() * 0.04,
+          wobble: Math.random() * 0.2,
+          wobbleSpeed: Math.random() * 0.1,
+          bounceLimit: Math.floor(Math.random() * 3) + 2,
+          bounceCount: 0
+        };
+      },
+      
+      // Dibujar una partícula según su forma
+      drawParticle: function(p) {
+        this.ctx.save();
+        this.ctx.translate(p.x, p.y);
+        this.ctx.rotate(p.rotation * Math.PI / 180);
+        this.ctx.globalAlpha = p.opacity;
+        this.ctx.fillStyle = p.color;
+        
+        switch(p.shape) {
+          case 'circle':
+            this.ctx.beginPath();
+            this.ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+            this.ctx.fill();
+            break;
+            
+          case 'square':
+            this.ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            break;
+            
+          case 'triangle':
+            this.ctx.beginPath();
+            this.ctx.moveTo(0, -p.size / 2);
+            this.ctx.lineTo(-p.size / 2, p.size / 2);
+            this.ctx.lineTo(p.size / 2, p.size / 2);
+            this.ctx.closePath();
+            this.ctx.fill();
+            break;
+            
+          case 'line':
+            this.ctx.strokeStyle = p.color;
+            this.ctx.lineWidth = p.size / 5;
+            this.ctx.beginPath();
+            this.ctx.moveTo(-p.size, 0);
+            this.ctx.lineTo(p.size, 0);
+            this.ctx.stroke();
+            break;
+            
+          case 'star':
+            this.ctx.beginPath();
+            const spikes = 5;
+            const outerRadius = p.size / 2;
+            const innerRadius = p.size / 4;
+            
+            for (let i = 0; i < spikes * 2; i++) {
+              const radius = i % 2 === 0 ? outerRadius : innerRadius;
+              const angle = (i / (spikes * 2)) * Math.PI * 2;
+              const x = Math.cos(angle) * radius;
+              const y = Math.sin(angle) * radius;
+              
+              if (i === 0) {
+                this.ctx.moveTo(x, y);
+              } else {
+                this.ctx.lineTo(x, y);
+              }
+            }
+            
+            this.ctx.closePath();
+            this.ctx.fill();
+            break;
+        }
+        
+        this.ctx.restore();
+      },
+      
+      // Actualizar una partícula
+      updateParticle: function(p) {
+        // Aplicar wobble (movimiento ondulante)
+        p.x += Math.sin(Date.now() * p.wobbleSpeed) * p.wobble;
+        
+        // Actualizar velocidad con gravedad
+        p.velocity.y += p.gravity;
+        
+        // Aplicar fricción
+        p.velocity.x *= p.friction;
+        p.velocity.y *= p.friction;
+        
+        // Actualizar posición
+        p.x += p.velocity.x;
+        p.y += p.velocity.y;
+        
+        // Actualizar rotación
+        p.rotation += p.rotationSpeed;
+        
+        // Reducir opacidad gradualmente
+        p.opacity -= 0.005;
+        
+        // Rebote en los bordes
+        if (p.y >= this.canvas.height - p.size && p.bounceCount < p.bounceLimit) {
+          p.velocity.y *= -0.6;
+          p.y = this.canvas.height - p.size;
+          p.bounceCount++;
+          
+          // Reducir tamaño en cada rebote
+          p.size *= 0.9;
+        }
+        
+        // Rebote en los lados (con menos intensidad)
+        if (p.x <= p.size || p.x >= this.canvas.width - p.size) {
+          p.velocity.x *= -0.5;
+          if (p.x <= p.size) p.x = p.size;
+          if (p.x >= this.canvas.width - p.size) p.x = this.canvas.width - p.size;
+        }
+        
+        // Retornar true si la partícula sigue siendo válida
+        return p.opacity > 0.05 && p.size > 1;
+      },
+      
+      // Animar el confeti
+      animate: function() {
+        if (!this.running) return;
+        
+        // Limpiar el canvas
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Actualizar y dibujar cada partícula
+        for (let i = 0; i < this.particles.length; i++) {
+          const p = this.particles[i];
+          if (this.updateParticle(p)) {
+            this.drawParticle(p);
+          } else {
+            // Eliminar partículas que ya no son visibles
+            this.particles.splice(i, 1);
+            i--;
+          }
+        }
+        
+        // Detener la animación si no quedan partículas
+        if (this.particles.length === 0) {
+          this.running = false;
+          this.canvas.classList.add('hidden');
+          return;
+        }
+        
+        // Continuar la animación
+        requestAnimationFrame(() => this.animate());
+      },
+      
+      // Iniciar la animación de confeti
+      start: function() {
+        this.canvas.classList.remove('hidden');
+        this.resize();
+        this.particles = [];
+        this.running = true;
+        
+        // Crear partículas desde varios puntos superiores para un efecto más natural
+        const numPoints = isMobile ? 3 : 5; // Menos puntos de origen en móviles
+        const particlesPerPoint = isMobile ? 20 : 30; // Menos partículas en móviles
+        const pointSpacing = this.canvas.width / numPoints;
+        
+        for (let j = 0; j < numPoints; j++) {
+          const originX = pointSpacing * j + (pointSpacing / 2) + (Math.random() * 100 - 50);
+          const originY = -20 + (Math.random() * 40);
+          
+          // Crear varias partículas desde este punto
+          for (let i = 0; i < particlesPerPoint; i++) {
+            this.particles.push(this.createParticle(originX, originY));
+          }
+        }
+        
+        // Iniciar la animación
+        this.animate();
+      }
+    };
+    
+    // Inicializar la animación de confeti
+    confettiAnimation.init();
+    
+    // Manejar el envío del formulario
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      // Ocultar todos los mensajes de error
+      const errorMessages = document.querySelectorAll('.error-message');
+      errorMessages.forEach(msg => {
+        msg.classList.add('hidden');
+      });
+      
+      // Validar todos los campos
+      let isValid = true;
+      formFields.forEach(field => {
+        if (!validateField(field)) {
+          isValid = false;
+        }
+      });
+      
+      if (!isValid) {
+        // Si el formulario no es válido, detener el envío
+        return;
+      }
+      
+      // Mostrar estado de carga en el botón
+      submitButton.disabled = true;
+      buttonText.textContent = 'Enviando...';
+      buttonSpinner.classList.remove('hidden');
+      
+      try {
+        // Recolectar datos del formulario
+        const formData = new FormData(form);
+        const formObject = {};
+        
+        formData.forEach(function(value, key) {
+          formObject[key] = value;
+        });
+        
+        console.log("Datos del formulario:", JSON.stringify(formObject, null, 2));
+        
+        // Simular tiempo de procesamiento (remove este timeout en producción)
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Mostrar toast y confeti
+        showToast();
+        confettiAnimation.start();
+        
+        // Resetear formulario
+        form.reset();
+      } catch (error) {
+        console.error("Error al enviar el formulario:", error);
+      } finally {
+        // Restaurar estado del botón
+        submitButton.disabled = false;
+        buttonText.textContent = 'Enviar formulario';
+        buttonSpinner.classList.add('hidden');
+      }
+    });
+    
+    // Funciones para pruebas
+    window.testToast = function() {
+      showToast();
+    };
+    
+    window.testConfetti = function() {
+      confettiAnimation.start();
+    };
+    
+    window.testBoth = function() {
+      showToast();
+      confettiAnimation.start();
+    };
+  });
+</script>
