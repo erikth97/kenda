@@ -1,0 +1,499 @@
+---
+// Interfaz para los testimoniales
+interface Testimonial {
+  id: number;
+  name: string;
+  location: string;
+  content: string;
+  image: string;
+}
+
+// Datos ficticios de testimoniales
+const testimonials: Testimonial[] = [
+  {
+    id: 1,
+    name: "Ricardo Cantú",
+    location: "Distribuidor Chihuahua",
+    content: "El apoyo constante de KENDA ha sido fundamental para el crecimiento de mi negocio. Los productos de alta calidad atraen más clientes cada día.",
+    image: "/images/hero/person.png"
+  },
+  {
+    id: 2,
+    name: "María González",
+    location: "Distribuidora Guadalajara",
+    content: "Llevo 3 años como distribuidora KENDA y ha sido la mejor decisión. Los márgenes de ganancia son excelentes y el soporte técnico inigualable.",
+    image: "/images/hero/person.png"
+  },
+  {
+    id: 3,
+    name: "José Martínez",
+    location: "Distribuidor Monterrey",
+    content: "La calidad de los neumáticos KENDA supera las expectativas. Mis clientes siempre quedan satisfechos y eso se traduce en más ventas.",
+    image: "/images/hero/person.png"
+  },
+  {
+    id: 4,
+    name: "Ana López",
+    location: "Distribuidora CDMX",
+    content: "La capacitación continua que ofrece KENDA me ha permitido ser una experta en neumáticos. Esto genera confianza en mis clientes.",
+    image: "/images/hero/person.png"
+  },
+  {
+    id: 5,
+    name: "Pedro Ramírez",
+    location: "Distribuidor Querétaro",
+    content: "Con el financiamiento de KENDA pude expandir mi inventario rápidamente. El retorno de inversión ha sido excelente desde el primer mes.",
+    image: "/images/hero/person.png"
+  }
+];
+---
+
+<section id="testimonials" class="relative py-16 md:py-24 overflow-hidden">
+  <!-- Imagen de fondo del almacén con gradient más sutil -->
+  <div class="absolute inset-0 z-0">
+    <img 
+      src="/images/tire_storage.webp" 
+      alt="Almacén KENDA" 
+      class="w-full h-full object-cover opacity-20"
+    />
+    <div class="absolute inset-0 bg-gradient-to-br from-orange-50/90 via-white/80 to-white/90"></div>
+  </div>
+
+  <div class="container mx-auto px-4 relative z-10">
+    <!-- Encabezado -->
+    <div class="text-center mb-12">
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+        Testimoniales
+      </h2>
+      <p class="text-lg text-gray-600">
+        Más de 5,000 distribuidores
+      </p>
+    </div>
+
+    <!-- Carrusel de testimoniales -->
+    <div class="testimonials-carousel relative mx-auto max-w-5xl lg:max-w-7xl px-4 md:px-6">
+      <div class="carousel-viewport relative overflow-hidden h-[380px] md:h-[450px]">
+        <div class="carousel-track relative h-full">
+          {testimonials.map((testimonial, index) => (
+            <div 
+              class="testimonial-card absolute w-[calc(100vw-2rem)] md:w-[360px] h-[350px] md:h-[420px] top-1/2 -translate-y-1/2 cursor-grab"
+              data-testimonial-id={testimonial.id}
+              data-index={index}
+            >
+              <div class="bg-white rounded-2xl md:rounded-3xl shadow-lg p-6 md:p-8 h-full flex flex-col relative">
+                <!-- Avatar -->
+                <div class="flex justify-center mb-4 md:mb-6">
+                  <div class="relative">
+                    <img 
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      class="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover"
+                    />
+                  </div>
+                </div>
+                
+                <!-- Contenido con más espacio -->
+                <div class="text-center flex-1 flex flex-col justify-center">
+                  <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+                    {testimonial.name}
+                  </h3>
+                  <p class="text-gray-600 text-sm mb-4 md:mb-6">
+                    {testimonial.location}
+                  </p>
+                  <p class="text-gray-700 leading-relaxed text-sm md:text-base">
+                    {testimonial.content}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Estilos mínimos necesarios que no se pueden lograr con Tailwind */
+  .testimonials-carousel {
+    position: relative;
+    width: 100%;
+  }
+
+  .testimonial-card {
+    transition: none;
+    will-change: transform, opacity;
+  }
+
+  .testimonial-card:active {
+    cursor: grabbing;
+  }
+
+  /* Card activa con efecto de elevación */
+  .testimonial-card.active .bg-white {
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+  }
+
+  /* Cards ocultas */
+  .testimonial-card.hidden {
+    pointer-events: none;
+  }
+
+  /* Media query para mobile */
+  @media (max-width: 767px) {
+    .testimonial-card.side,
+    .testimonial-card.hidden {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Esperar a que el DOM esté listo
+  document.addEventListener("DOMContentLoaded", async () => {
+    // Importar GSAP dinámicamente
+    const { gsap } = await import("gsap");
+    
+    const carousel = document.querySelector('.testimonials-carousel') as HTMLElement;
+    const viewport = document.querySelector('.carousel-viewport') as HTMLElement;
+    const track = document.querySelector('.carousel-track') as HTMLElement;
+    const cards = Array.from(document.querySelectorAll('.testimonial-card')) as HTMLElement[];
+    const totalCards = cards.length;
+    
+    // Variables de configuración adaptables
+    const getCardDimensions = () => {
+      const isMobile = window.innerWidth < 768;
+      return {
+        cardWidth: isMobile ? window.innerWidth - 32 : 360,
+        cardGap: isMobile ? 0 : 40,
+        cardHeight: isMobile ? 350 : 420
+      };
+    };
+    
+    let { cardWidth, cardGap } = getCardDimensions();
+    
+    let currentIndex = 2; // Comenzar con la card central (José Martínez)
+    let isDragging = false;
+    let isTransitioning = false;
+    let autoplayInterval: ReturnType<typeof setInterval>;
+    let autoplayStopped = false;
+
+    // Función para obtener el modo actual (móvil o desktop)
+    function getMode() {
+      return {
+        isMobile: window.innerWidth < 768,
+        visibleCards: window.innerWidth < 768 ? 1 : 3
+      };
+    }
+
+    // Función unificada para actualizar el carrusel
+    function updateCarousel(animate = true) {
+      const { isMobile } = getMode();
+      const viewportWidth = viewport.offsetWidth;
+      const center = viewportWidth / 2;
+      
+      // Actualizar dimensiones por si cambió el tamaño
+      const dimensions = getCardDimensions();
+      cardWidth = dimensions.cardWidth;
+      cardGap = dimensions.cardGap;
+      
+      cards.forEach((card, index) => {
+        // Calcular posición relativa con corrección para loop infinito
+        let position = (index - currentIndex + totalCards) % totalCards;
+        let relativePosition = position;
+        
+        if (position > totalCards / 2) {
+          relativePosition = position - totalCards;
+        }
+        
+        // Calcular posición X - centrada para móvil
+        let x = center + relativePosition * (cardWidth + cardGap) - cardWidth / 2;
+        
+        // Ajuste especial para móvil - asegurar que esté centrada
+        if (isMobile) {
+          x = center - cardWidth / 2;
+          if (relativePosition !== 0) {
+            x = relativePosition > 0 ? viewportWidth + 50 : -cardWidth - 50;
+          }
+        }
+        
+        // Determinar estado de la card
+        const isActive = relativePosition === 0;
+        const isSide = Math.abs(relativePosition) === 1;
+        const isVisible = isMobile ? isActive : Math.abs(relativePosition) <= 2;
+        
+        // Animación unificada con escala consistente
+        const scaleValue = isActive ? 1.08 : (isSide ? 0.92 : 0.85);
+        const yOffset = isActive ? -20 : 0;
+        
+        gsap.to(card, {
+          x,
+          y: yOffset,
+          scale: isMobile && isActive ? 1 : scaleValue,
+          opacity: isActive ? 1 : (isSide && !isMobile ? 0.85 : (isVisible ? 0.3 : 0)),
+          zIndex: isActive ? 10 : (isSide ? 5 : 1),
+          visibility: isVisible ? 'visible' : 'hidden',
+          duration: animate ? 0.6 : 0,
+          ease: "power2.out"
+        });
+        
+        // Manejo de clases optimizado
+        card.classList.remove('active', 'side', 'hidden');
+        if (isActive) card.classList.add('active');
+        else if (isSide && !isMobile) card.classList.add('side');
+        else card.classList.add('hidden');
+      });
+    }
+
+    // Mover a un índice específico - Simplificado
+    function moveToIndex(newIndex: number, animate = true) {
+      if (isTransitioning) return;
+      
+      isTransitioning = true;
+      currentIndex = ((newIndex % totalCards) + totalCards) % totalCards;
+      updateCarousel(animate);
+      
+      if (animate) {
+        setTimeout(() => {
+          isTransitioning = false;
+        }, 600);
+      } else {
+        isTransitioning = false;
+      }
+    }
+
+    // Funciones de navegación
+    function nextSlide() {
+      moveToIndex(currentIndex + 1);
+    }
+
+    function prevSlide() {
+      moveToIndex(currentIndex - 1);
+    }
+
+    // Control de autoplay mejorado
+    function startAutoplay() {
+      stopAutoplay(); // Limpiar cualquier interval existente
+      if (!autoplayStopped && !isDragging && !isTransitioning) {
+        autoplayInterval = setInterval(nextSlide, 4000);
+      }
+    }
+
+    function stopAutoplay() {
+      if (autoplayInterval) {
+        clearInterval(autoplayInterval);
+        autoplayInterval = null;
+      }
+    }
+
+    // Configurar eventos de swipe/drag
+    let startX = 0;
+    let currentX = 0;
+    let deltaX = 0;
+
+    // Función optimizada para aplicar feedback visual sutil
+    function applySwipeFeedback(distance: number) {
+      const { isMobile } = getMode();
+      const maxDistance = 150;
+      const normalizedDistance = Math.min(Math.abs(distance) / maxDistance, 1);
+      const feedbackOpacity = 1 - (normalizedDistance * 0.2);
+      
+      cards.forEach((card, index) => {
+        const relativeIndex = (index - currentIndex + totalCards) % totalCards;
+        const adjustedRelative = relativeIndex > totalCards / 2 ? relativeIndex - totalCards : relativeIndex;
+        
+        if (adjustedRelative === 0) {
+          // Card central mantiene opacidad completa
+          gsap.to(card, {
+            opacity: 1,
+            duration: 0.1
+          });
+        } else if (!isMobile && Math.abs(adjustedRelative) === 1) {
+          // Cards laterales reducen su opacidad sutilmente
+          gsap.to(card, {
+            opacity: feedbackOpacity * 0.85,
+            duration: 0.1
+          });
+        }
+      });
+    }
+
+    // Función para resetear feedback visual
+    function resetSwipeFeedback() {
+      cards.forEach((card) => {
+        const isActive = card.classList.contains('active');
+        const isSide = card.classList.contains('side');
+        
+        gsap.to(card, {
+          opacity: isActive ? 1 : (isSide ? 0.85 : 0),
+          duration: 0.3
+        });
+      });
+    }
+
+    // Eventos de mouse
+    carousel.addEventListener('mousedown', (e: MouseEvent) => {
+      if (isTransitioning) return;
+      isDragging = true;
+      startX = e.clientX;
+      currentX = startX;
+      carousel.style.cursor = 'grabbing';
+      stopAutoplay();
+    });
+
+    document.addEventListener('mousemove', (e: MouseEvent) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      currentX = e.clientX;
+      deltaX = currentX - startX;
+      
+      // Aplicar solo feedback visual sutil
+      applySwipeFeedback(deltaX);
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      carousel.style.cursor = 'grab';
+      
+      // Determinar dirección basada en el desplazamiento
+      const threshold = 50;
+      if (Math.abs(deltaX) > threshold) {
+        if (deltaX < 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      } else {
+        // Si no se alcanza el umbral, resetear el feedback visual
+        resetSwipeFeedback();
+      }
+      
+      // Reiniciar autoplay
+      setTimeout(startAutoplay, 1000);
+    });
+
+    // Eventos touch para móvil
+    carousel.addEventListener('touchstart', (e: TouchEvent) => {
+      if (isTransitioning) return;
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      currentX = startX;
+      stopAutoplay();
+    }, { passive: true });
+
+    carousel.addEventListener('touchmove', (e: TouchEvent) => {
+      if (!isDragging) return;
+      currentX = e.touches[0].clientX;
+      deltaX = currentX - startX;
+      
+      // Aplicar solo feedback visual sutil
+      applySwipeFeedback(deltaX);
+    }, { passive: true });
+
+    carousel.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      
+      const threshold = 50;
+      if (Math.abs(deltaX) > threshold) {
+        if (deltaX < 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      } else {
+        // Si no se alcanza el umbral, resetear el feedback visual
+        resetSwipeFeedback();
+      }
+      
+      setTimeout(startAutoplay, 1000);
+    });
+
+    // Pausar autoplay al hover
+    carousel.addEventListener('mouseenter', () => {
+      autoplayStopped = true;
+      stopAutoplay();
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+      autoplayStopped = false;
+      if (!isDragging) startAutoplay();
+    });
+
+    // Manejar resize de manera más eficiente con debounce
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (!isDragging && !isTransitioning) {
+          // Actualizar dimensiones
+          const dimensions = getCardDimensions();
+          cardWidth = dimensions.cardWidth;
+          cardGap = dimensions.cardGap;
+          
+          updateCarousel(false);
+        }
+      }, 250);
+    });
+
+    // Prevenir selección de texto durante drag
+    carousel.addEventListener('selectstart', (e) => {
+      if (isDragging) e.preventDefault();
+    });
+
+    // Animación de entrada optimizada con IntersectionObserver
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Primero posicionar las cards sin animación
+          updateCarousel(false);
+          
+          // Luego animar la entrada
+          gsap.fromTo(cards, 
+            { 
+              opacity: 0, 
+              y: 30,
+              scale: 0.9
+            },
+            { 
+              opacity: 1, 
+              y: 0,
+              scale: 1,
+              stagger: {
+                each: 0.1,
+                from: "center"
+              },
+              duration: 0.8,
+              ease: "power2.out",
+              onComplete: () => {
+                // Aplicar el estado final después de la animación
+                updateCarousel(false);
+              }
+            }
+          );
+          
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    observer.observe(carousel);
+
+    // Inicialización corregida
+    // Primero establecer las posiciones iniciales
+    cards.forEach((card) => {
+      gsap.set(card, {
+        opacity: 0,
+        y: 0,
+        scale: 1
+      });
+    });
+    
+    // Comenzar con el índice correcto (José en el centro)
+    currentIndex = 2;
+    
+    // Iniciar autoplay
+    startAutoplay();
+  });
+</script>
