@@ -4,22 +4,27 @@ import Container from '../../layouts/Container.astro';
 // Datos de los requisitos
 const requirements = [
   {
+    id: "req1",
     number: "01",
     description: "Enviar la solicitud y la protección de datos firmada."
   },
   {
+    id: "req2",
     number: "02",
     description: "Presentar documentos: Alta de Hacienda (R1), IFE de Representante Legal, Comprobante de Domicilio."
   },
   {
+    id: "req3",
     number: "03",
     description: "Inversión inicial de $50,000.00 netos con promociones y beneficios."
   },
   {
+    id: "req4",
     number: "04",
     description: "Pedidos mayores a $12,500.00 tienen fletes gratis y 5% de descuento por pago anticipado."
   },
   {
+    id: "req5",
     number: "05",
     description: "Pedido mínimo mensual a $5,700.00 con flete de $495.00 + IVA."
   }
@@ -27,16 +32,10 @@ const requirements = [
 ---
 
 <section id="requisitos" class="w-full relative py-16 md:py-24 overflow-hidden">
-  <!-- Estructura de fondo con color exacto de la imagen -->
   <div class="absolute inset-0 z-0 bg-[#f3f4f6]">
-    <!-- Cuadrícula sobre el fondo -->
     <div class="absolute inset-0 w-full h-full grid-background opacity-30"></div>
-    
-    <!-- Degradados animados con scroll -->
     <div id="yellow-glow" class="absolute left-0 top-0 bottom-0 w-3/5 yellow-glow"></div>
     <div id="orange-glow" class="absolute right-0 top-0 bottom-0 w-3/5 orange-glow"></div>
-    
-    <!-- Imagen de llanta con posición y tamaño actualizados -->
     <img src="/images/tire_2.webp" alt="Llanta Kenda decorativa" class="absolute -top-10 -right-20 md:-top-20 md:-right-32 lg:-right-40 w-1/2 md:w-2/5 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto object-contain opacity-80 z-10 floating-tire" />
   </div>
 
@@ -48,20 +47,46 @@ const requirements = [
       </div>
       
       <div class="relative mx-auto" style="max-width: 1000px;">
-        <!-- Card con fondo sutil según propuesta #2 -->
-        <div class="requirements-container relative bg-white/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 shadow-lg border-2 border-white mb-16 overflow-visible">
-          <!-- Línea vertical central (timeline) con animación mejorada -->
-          <div id="timeline" class="hidden md:block absolute left-1/2 top-12 bottom-12 w-1 bg-gradient-to-b from-orange-400/40 via-orange-500 to-orange-400/40 rounded-full transform -translate-x-1/2 z-0 h-0 transition-[height] duration-1000 ease-out"></div>
+        <div class="requirements-container relative bg-white/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 pb-24 shadow-lg border-2 border-white overflow-visible">
           
-          <!-- Contenido de los requisitos con alternancia izquierda-derecha y espacio reducido -->
+          <!-- Línea vertical central (timeline) con desvanecido y ajuste de altura -->
+          <div 
+            id="timeline" 
+            class="hidden md:block absolute left-1/2 top-12 w-1 bg-gradient-to-b from-orange-500 via-orange-500 to-transparent rounded-full transform -translate-x-1/2 z-0 timeline-progress"
+            style="bottom: 10rem; mask-image: linear-gradient(to bottom, black 85%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);"
+          >
+          </div>
+          
+          <!-- Puntos de la timeline - renderizados por separado para posicionarlos sobre la línea central -->
+          <div class="hidden md:block relative z-20">
+            {requirements.map((req, index) => (
+              <div 
+                class="timeline-point absolute left-1/2 w-5 h-5 bg-orange-500 rounded-full border-3 border-white shadow-lg opacity-0 transition-all duration-300"
+                data-target-req-id={req.id}
+                data-point-index={index}
+                style="transform: translateX(-50%) scale(0.5);"
+              >
+              </div>
+            ))}
+          </div>
+
           <div class="relative space-y-8 md:space-y-16">
             {requirements.map((req, index) => {
               const isEven = index % 2 === 0;
+              const classes = [
+                "requirement-item", "relative", "flex", "items-start", "gap-6", 
+                "opacity-0", "transform", "translate-y-5", 
+                "md:w-[calc(50%-3rem)]",
+                "transition-all", "duration-500", "ease-out",
+                isEven ? 'md:mr-auto md:pr-10 lg:pr-12' : 'md:ml-auto md:pl-10 lg:pl-12'
+              ].join(' ');
+              
               return (
-                <div class={`requirement-item relative flex items-start gap-6 opacity-0 transform translate-y-5 md:w-1/2 transition-all duration-500 ease-out ${isEven ? 'md:mr-auto md:pr-12' : 'md:ml-auto md:pl-12'}`} data-step-index={index}>
-                  <!-- Punto en la timeline mejorado -->
-                  <div class={`timeline-point hidden md:block absolute top-3 -mt-1 w-5 h-5 bg-orange-500 rounded-full border-2 border-white shadow-sm z-20 opacity-0 transition-all duration-300 ${isEven ? 'right-[-15px]' : 'left-[-15px]'}`} style="transform: scale(0.5);"></div>
-                  
+                <div 
+                  class={classes}
+                  data-step-index={index}
+                  id={req.id}
+                >
                   <div class="requirement-number text-5xl md:text-6xl font-bold text-orange-500 leading-none mr-2">
                     {req.number}
                   </div>
@@ -69,27 +94,25 @@ const requirements = [
                     <p class="text-base md:text-lg text-gray-800 mb-3">
                       {req.description}
                     </p>
-                    <!-- Línea de separación horizontal ajustada según propuesta #1 -->
                     {index < requirements.length - 1 && (
-                      <div class={`timeline-separator w-1/2 h-px bg-gray-300 opacity-0 transition-opacity duration-500 ${isEven ? 'ml-auto' : 'mr-auto'}`}></div>
+                      <div class="timeline-separator md:hidden w-1/2 h-px bg-gray-300 opacity-0 transition-opacity duration-500 mx-auto mt-4"></div>
                     )}
                   </div>
                 </div>
               );
             })}
           </div>
-        </div>
-        
-        <!-- Botón de descarga centrado sobre el borde de la card -->
-        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 z-20">
-          <a 
-            id="download-docs" 
-            href="/documentos/requisitos-kenda.pdf" 
-            download="requisitos-distribuidor-kenda.pdf" 
-            class="bg-white text-gray-800 hover:bg-gray-100 font-bold py-3 px-14 rounded-full transition-colors duration-300 inline-block shadow-md whitespace-nowrap"
-          >
-            Descargar documentos
-          </a>
+          
+          <div class="mt-16 text-center">
+            <a 
+              id="download-docs" 
+              href="/documentos/requisitos-kenda.pdf" 
+              download="requisitos-distribuidor-kenda.pdf" 
+              class="bg-white text-gray-800 hover:bg-gray-100 font-bold py-3 px-14 rounded-full transition-colors duration-300 inline-block shadow-md whitespace-nowrap"
+            >
+              Descargar documentos
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -97,7 +120,6 @@ const requirements = [
 </section>
 
 <style>
-  /* Cuadrícula en el fondo - mantenemos en CSS puro por ser complejo para Tailwind */
   .grid-background {
     background-image: 
       linear-gradient(rgba(200, 200, 200, 0.2) 1px, transparent 1px),
@@ -106,7 +128,6 @@ const requirements = [
     background-position: center;
   }
   
-  /* Degradados y efectos complejos que son mejor en CSS puro */
   .yellow-glow {
     background: radial-gradient(circle at left center, rgba(255, 217, 102, 0.8) 0%, rgba(255, 232, 142, 0.4) 30%, rgba(255, 232, 142, 0) 70%);
     transform-origin: left center;
@@ -119,7 +140,6 @@ const requirements = [
     transition: transform 0.5s ease-out;
   }
   
-  /* Animación del neumático flotante mejorada */
   .floating-tire {
     animation: float 8s ease-in-out infinite;
   }
@@ -128,105 +148,142 @@ const requirements = [
     0%, 100% { transform: translateY(0px) rotate(-2deg); }
     50% { transform: translateY(-20px) rotate(3deg); }
   }
+  
+  .timeline-progress {
+    height: 0;
+  }
+
+  .requirements-container {
+    /* El pb-24 ya da espacio, pero la línea ahora termina con 'bottom: 10rem' */
+  }
 </style>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const section = document.getElementById('requisitos');
-    const yellowGlow = document.getElementById('yellow-glow');
-    const orangeGlow = document.getElementById('orange-glow');
-    const timeline = document.getElementById('timeline');
+    const yellowGlow = document.getElementById('yellow-glow') as HTMLElement | null;
+    const orangeGlow = document.getElementById('orange-glow') as HTMLElement | null;
+    const timeline = document.getElementById('timeline') as HTMLElement | null;
+    const requirementsContainer = document.querySelector('.requirements-container') as HTMLElement | null;
+
+    // Posicionar los puntos de la timeline dinámicamente
+    const timelinePoints = document.querySelectorAll('.timeline-point') as NodeListOf<HTMLElement>;
+
+    function positionTimelinePoints() {
+      if (!requirementsContainer || !timeline) return;
+
+      const timelineRect = timeline.getBoundingClientRect();
+      const containerRect = requirementsContainer.getBoundingClientRect();
+
+      timelinePoints.forEach(point => {
+        const targetReqId = point.dataset.targetReqId;
+        const requirementElement = document.getElementById(targetReqId!);
+        if (requirementElement) {
+          const textElement = requirementElement.querySelector('.requirement-text') as HTMLElement | null;
+          if (textElement) {
+            const textRect = textElement.getBoundingClientRect();
+            // Calcular el 'top' del punto relativo al 'requirementsContainer'
+            const relativeTextTop = textRect.top - containerRect.top; 
+            const pointTop = relativeTextTop + (textElement.offsetHeight / 4) - (point.offsetHeight / 2);
+            
+            // Asegurarse de que el punto no se salga de la línea de tiempo visible
+            const timelineTopOffset = timeline.offsetTop;
+            const timelineBottomLimit = timeline.offsetTop + timeline.offsetHeight - point.offsetHeight;
+
+            point.style.top = `${Math.max(timelineTopOffset, Math.min(pointTop, timelineBottomLimit))}px`;
+          }
+        }
+      });
+    }
     
-    if (section && yellowGlow && orangeGlow && timeline) {
-      // Función para actualizar el tamaño de los efectos de luz según la posición de scroll
+    if (section && yellowGlow && orangeGlow && timeline && requirementsContainer) {
       function updateGlowEffects() {
         const rect = section.getBoundingClientRect();
         const windowHeight = window.innerHeight;
         
-        // Calcular qué tan centrada está la sección en la pantalla
         const sectionMiddle = rect.top + rect.height / 2;
         const viewportMiddle = windowHeight / 2;
         const distanceFromCenter = Math.abs(sectionMiddle - viewportMiddle);
         const maxDistance = windowHeight / 2 + rect.height / 2;
         const visibilityRatio = 1 - Math.min(1, distanceFromCenter / maxDistance);
         
-        // Escalar los efectos de luz basados en la posición de scroll
         const minScale = 0.85;
         const maxScale = 1.15;
         const scale = minScale + visibilityRatio * (maxScale - minScale);
         
-        // Aplicar transformaciones con type assertion para evitar errores de TS
-        (yellowGlow as HTMLElement).style.transform = `scale(${scale})`;
-        (orangeGlow as HTMLElement).style.transform = `scale(${scale})`;
+        yellowGlow.style.transform = `scale(${scale})`;
+        orangeGlow.style.transform = `scale(${scale})`;
         
-        // Ajustar la opacidad para un efecto más dramático
         const minOpacity = 0.7;
         const maxOpacity = 1.0;
         const opacity = minOpacity + visibilityRatio * (maxOpacity - minOpacity);
         
-        (yellowGlow as HTMLElement).style.opacity = opacity.toString();
-        (orangeGlow as HTMLElement).style.opacity = opacity.toString();
+        yellowGlow.style.opacity = opacity.toString();
+        orangeGlow.style.opacity = opacity.toString();
         
-        // Animar la línea de tiempo con base en el scroll
-        const card = section.querySelector('.requirements-container');
-        if (card) {
-          const cardRect = card.getBoundingClientRect();
-          const progress = (windowHeight - cardRect.top) / (windowHeight + cardRect.height);
-          const timelineHeight = Math.min(1, Math.max(0, progress)) * 100;
-          (timeline as HTMLElement).style.height = `${timelineHeight}%`;
-        }
+        const cardRect = requirementsContainer.getBoundingClientRect();
+        const cardTop = cardRect.top;
+        let scrollProgress = (windowHeight - cardTop) / (windowHeight * 0.66);
+        scrollProgress = Math.min(1, Math.max(0, scrollProgress));
+
+        const easedProgress = easeInOutCubic(scrollProgress);
+        const timelineMaxHeight = requirementsContainer.offsetHeight - timeline.offsetTop - parseFloat(timeline.style.bottom || '0');
+        timeline.style.height = `${easedProgress * timelineMaxHeight}px`;
+
+        positionTimelinePoints(); 
       }
       
-      // Actualizar inicialmente
-      updateGlowEffects();
+      function easeInOutCubic(t: number): number {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      }
       
-      // Actualizar cuando se hace scroll
+      updateGlowEffects(); 
+      setTimeout(positionTimelinePoints, 50);
+
       window.addEventListener('scroll', updateGlowEffects);
-      window.addEventListener('resize', updateGlowEffects);
+      window.addEventListener('resize', () => {
+        updateGlowEffects();
+        setTimeout(positionTimelinePoints, 50);
+      });
     }
     
-    // Animación de los pasos y sus elementos según scroll
     const itemObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.target) return;
           
           const item = entry.target as HTMLElement;
-          const point = item.querySelector('.timeline-point') as HTMLElement | null;
+          const targetReqId = item.id;
+          const point = document.querySelector(`.timeline-point[data-target-req-id="${targetReqId}"]`) as HTMLElement | null;
           const separator = item.querySelector('.timeline-separator') as HTMLElement | null;
           const index = parseInt(item.getAttribute('data-step-index') || '0', 10);
           
           if (entry.isIntersecting) {
-            // Animar con suavidad (usando timeout escalonado para efecto secuencial)
             setTimeout(() => {
-              // Animar el contenido principal con transición suave
               item.style.opacity = '1';
               item.style.transform = 'translateY(0)';
               
-              // Animar el punto de la línea con escala
               if (point) {
                 setTimeout(() => {
                   point.style.opacity = '1';
-                  point.style.transform = 'scale(1)';
+                  point.style.transform = 'translateX(-50%) scale(1)';
                 }, 100);
               }
               
-              // Animar la línea separadora
-              if (separator) {
+              if (separator && window.innerWidth < 768) {
                 setTimeout(() => {
                   separator.style.opacity = '1';
                 }, 200);
               }
-            }, index * 150); // Escalonar la aparición de cada paso
+            }, index * 150);
           } else {
-            // Reiniciar las animaciones cuando el elemento sale del viewport
             item.style.opacity = '0';
             item.style.transform = 'translateY(20px)';
             if (point) {
               point.style.opacity = '0';
-              point.style.transform = 'scale(0.5)';
+              point.style.transform = 'translateX(-50%) scale(0.5)';
             }
-            if (separator) {
+            if (separator && window.innerWidth < 768) {
               separator.style.opacity = '0';
             }
           }
@@ -238,9 +295,14 @@ const requirements = [
       }
     );
     
-    // Observar todos los elementos de requisitos
     document.querySelectorAll('.requirement-item').forEach((item) => {
       itemObserver.observe(item);
     });
+
+    if (document.readyState === 'complete') {
+        setTimeout(positionTimelinePoints, 100);
+    } else {
+        window.addEventListener('load', () => setTimeout(positionTimelinePoints, 100));
+    }
   });
 </script>
