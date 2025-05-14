@@ -3,7 +3,7 @@
  * FormSection.astro
  * 
  * Componente que implementa la sección de formulario para distribuidores KENDA.
- * Incluye validación de campos y manejo de envío mediante JSON.
+ * Incluye validación de campos y manejo de envío mediante JSON a Make webhook.
  * Con diseño responsive optimizado para dispositivos móviles.
  */
 import Section from '../common/Section.astro';
@@ -26,62 +26,69 @@ import Container from '../../layouts/Container.astro';
       <form id="distributor-form" class="space-y-8">
         <!-- Campo Nombre con etiqueta fija -->
         <div class="mb-8">
-          <label for="nombre" class="block text-gray-700 font-medium mb-2">Nombre</label>
+          <label for="nombre" class="block text-gray-700 font-medium mb-2">Nombre completo</label>
           <input 
             type="text" 
             id="nombre" 
             name="nombre" 
             class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none" 
             required 
+            pattern="^[a-zA-ZÀ-ÿ\s]+\s+[a-zA-ZÀ-ÿ\s]+$"
+            title="Por favor ingrese nombre y apellido"
           />
-          <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-nombre">Este campo es obligatorio</p>
+          <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-nombre">Por favor ingrese nombre y apellido completos</p>
         </div>
         
         <!-- Fila de Email y Teléfono con etiquetas fijas -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <!-- Campo Email -->
           <div>
-            <label for="email" class="block text-gray-700 font-medium mb-2">Mail</label>
+            <label for="email" class="block text-gray-700 font-medium mb-2">Correo electrónico</label>
             <input 
               type="email" 
               id="email" 
               name="email" 
               class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none" 
               required 
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
             />
             <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-email">Ingrese un correo electrónico válido</p>
           </div>
           
           <!-- Campo Celular/Teléfono -->
           <div>
-            <label for="telefono" class="block text-gray-700 font-medium mb-2">Celular o teléfono</label>
+            <label for="telefono" class="block text-gray-700 font-medium mb-2">Teléfono</label>
             <input 
               type="tel" 
               id="telefono" 
               name="telefono" 
               class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none" 
               required 
-              pattern="[0-9\s\-\+\(\)]{10,15}"
+              pattern="[0-9]{10}"
+              maxlength="10"
+              title="Ingrese 10 dígitos sin espacios ni guiones"
             />
-            <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-telefono">Ingrese un número telefónico válido</p>
+            <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-telefono">El teléfono debe tener exactamente 10 dígitos</p>
           </div>
         </div>
         
         <!-- Campos de selección (3) con etiquetas fijas y más espacio entre ellos -->
         <div class="space-y-8 mb-8">
           <div>
-            <label for="seleccion1" class="block text-gray-700 font-medium mb-2">Lorem ipsum</label>
+            <label for="giroComercial" class="block text-gray-700 font-medium mb-2">¿Tienes un negocio enfocado al sector de motocicletas o autos? </label>
             <div class="relative">
               <select 
-                id="seleccion1" 
-                name="seleccion1" 
+                id="giroComercial" 
+                name="giroComercial" 
                 class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none appearance-none" 
                 required
               >
                 <option value="" disabled selected>Selecciona la opción</option>
-                <option value="opcion1">Opción 1</option>
-                <option value="opcion2">Opción 2</option>
-                <option value="opcion3">Opción 3</option>
+                <option value="refaccionaria">Agencia de autos</option>
+                <option value="taller">Taller mecánico</option>
+                <option value="distribuidor">Refaccionaria</option>
+                <option value="otro">Otro</option>
+                <option value="no">No</option>
               </select>
               <!-- Ícono de flecha para el select -->
               <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
@@ -89,47 +96,76 @@ import Container from '../../layouts/Container.astro';
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </div>
-              <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-seleccion1">Seleccione una opción</p>
+              <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-giroComercial">Seleccione una opción</p>
             </div>
           </div>
           
-          <div>
-            <label for="seleccion2" class="block text-gray-700 font-medium mb-2">Lorem ipsum</label>
-            <div class="relative">
-              <select 
-                id="seleccion2" 
-                name="seleccion2" 
-                class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none appearance-none" 
-                required
-              >
-                <option value="" disabled selected>Selecciona la opción</option>
-                <option value="opcion1">Opción 1</option>
-                <option value="opcion2">Opción 2</option>
-                <option value="opcion3">Opción 3</option>
-              </select>
-              <!-- Ícono de flecha para el select -->
-              <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </div>
-              <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-seleccion2">Seleccione una opción</p>
-            </div>
-          </div>
+<div>
+  <label for="estado" class="block text-gray-700 font-medium mb-2">Estado</label>
+  <div class="relative">
+    <select 
+      id="estado" 
+      name="estado" 
+      class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none appearance-none" 
+      required
+    >
+      <option value="" disabled selected>Selecciona la opción</option>
+      <option value="aguascalientes">Aguascalientes</option>
+      <option value="baja-california">Baja California</option>
+      <option value="baja-california-sur">Baja California Sur</option>
+      <option value="campeche">Campeche</option>
+      <option value="chiapas">Chiapas</option>
+      <option value="chihuahua">Chihuahua</option>
+      <option value="ciudad-de-mexico">Ciudad de México</option>
+      <option value="coahuila">Coahuila</option>
+      <option value="colima">Colima</option>
+      <option value="durango">Durango</option>
+      <option value="guanajuato">Guanajuato</option>
+      <option value="guerrero">Guerrero</option>
+      <option value="hidalgo">Hidalgo</option>
+      <option value="jalisco">Jalisco</option>
+      <option value="mexico">México</option>
+      <option value="michoacan">Michoacán</option>
+      <option value="morelos">Morelos</option>
+      <option value="nayarit">Nayarit</option>
+      <option value="nuevo-leon">Nuevo León</option>
+      <option value="oaxaca">Oaxaca</option>
+      <option value="puebla">Puebla</option>
+      <option value="queretaro">Querétaro</option>
+      <option value="quintana-roo">Quintana Roo</option>
+      <option value="san-luis-potosi">San Luis Potosí</option>
+      <option value="sinaloa">Sinaloa</option>
+      <option value="sonora">Sonora</option>
+      <option value="tabasco">Tabasco</option>
+      <option value="tamaulipas">Tamaulipas</option>
+      <option value="tlaxcala">Tlaxcala</option>
+      <option value="veracruz">Veracruz</option>
+      <option value="yucatan">Yucatán</option>
+      <option value="zacatecas">Zacatecas</option>
+    </select>
+    <!-- Ícono de flecha para el select -->
+    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+      <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </div>
+    <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-estado">Seleccione una opción</p>
+  </div>
+</div>
           
           <div>
-            <label for="seleccion3" class="block text-gray-700 font-medium mb-2">Lorem ipsum</label>
+            <label for="tipoNegocio" class="block text-gray-700 font-medium mb-2">¿Cuál es tu capital de inversión? </label>
             <div class="relative">
               <select 
-                id="seleccion3" 
-                name="seleccion3" 
+                id="tipoNegocio" 
+                name="tipoNegocio" 
                 class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none appearance-none" 
                 required
               >
                 <option value="" disabled selected>Selecciona la opción</option>
-                <option value="opcion1">Opción 1</option>
-                <option value="opcion2">Opción 2</option>
-                <option value="opcion3">Opción 3</option>
+                <option value="propio">$1,500,000 MXN</option>
+                <option value="franquicia">$2,000,000 MXN</option>
+                <option value="sociedad">$2,000,000 MXN</option>
               </select>
               <!-- Ícono de flecha para el select -->
               <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
@@ -137,7 +173,32 @@ import Container from '../../layouts/Container.astro';
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </div>
-              <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-seleccion3">Seleccione una opción</p>
+              <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-tipoNegocio">Seleccione una opción</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+            <label for="iniciarOperaciones" class="block text-gray-700 font-medium mb-2">¿Cuándo te gustaría iniciar operaciones?</label>
+            <div class="relative">
+              <select 
+                id="iniciarOperaciones" 
+                name="inicioOperaciones" 
+                class="w-full px-4 py-3.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-kenda-orange focus:outline-none appearance-none" 
+                required
+              >
+                <option value="" disabled selected>Selecciona la opción</option>
+                <option value="propio">3 meses</option>
+                <option value="franquicia">6 meses</option>
+                <option value="sociedad">12 meses</option>
+              </select>
+              <!-- Ícono de flecha para el select -->
+              <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+              <p class="error-message text-red-500 text-sm mt-1 ml-4 hidden" id="error-tipoNegocio">Seleccione una opción</p>
             </div>
           </div>
         </div>
@@ -179,7 +240,7 @@ import Container from '../../layouts/Container.astro';
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
       </svg>
-      <span class="text-sm sm:text-base">Formulario enviado correctamente.</span>
+      <span class="text-sm sm:text-base text-sm">Formulario enviado correctamente.</span>
     </div>
   </div>
 </div>
@@ -267,6 +328,25 @@ import Container from '../../layouts/Container.astro';
       // Ocultar mensaje de error al iniciar validación
       showError(fieldId, false);
       
+      // Validación especial para nombre completo
+      if (fieldId === 'nombre') {
+        const value = field.value.trim();
+        const nombrePattern = /^[a-zA-ZÀ-ÿ\s]+\s+[a-zA-ZÀ-ÿ\s]+$/;
+        if (!nombrePattern.test(value)) {
+          showError(fieldId, true);
+          return false;
+        }
+      }
+      
+      // Validación especial para teléfono (10 dígitos exactos)
+      if (fieldId === 'telefono') {
+        const value = field.value.replace(/\D/g, ''); // Quitar todo excepto números
+        if (value.length !== 10) {
+          showError(fieldId, true);
+          return false;
+        }
+      }
+      
       // Validar usando la API de validación de HTML5
       const isValid = field.checkValidity();
       
@@ -288,6 +368,10 @@ import Container from '../../layouts/Container.astro';
       
       // Limpiar mensaje de error al editar
       field.addEventListener('input', function() {
+        // Para el teléfono, solo permitir números
+        if (this.id === 'telefono') {
+          this.value = this.value.replace(/\D/g, '').slice(0, 10);
+        }
         showError(this.id, false);
       });
       
@@ -303,11 +387,30 @@ import Container from '../../layouts/Container.astro';
     let toastTimer;
     
     // Función para mostrar el toast
-    function showToast() {
+    function showToast(type = 'success', message = 'Formulario enviado correctamente.') {
       // Limpiar cualquier temporizador anterior
       if (toastTimer) {
         clearTimeout(toastTimer);
       }
+      
+      // Actualizar el contenido y color del toast según el tipo
+      const toastEl = toastNotification;
+      const iconEl = toastEl.querySelector('svg');
+      const textEl = toastEl.querySelector('span.text-sm');
+      
+      if (type === 'error') {
+        toastEl.classList.remove('bg-green-500');
+        toastEl.classList.add('bg-red-500');
+        // Cambiar el icono a X
+        iconEl.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
+      } else {
+        toastEl.classList.remove('bg-red-500');
+        toastEl.classList.add('bg-green-500');
+        // Cambiar el icono a checkmark
+        iconEl.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />';
+      }
+      
+      textEl.textContent = message;
       
       // Mostrar el toast
       toastNotification.classList.remove('hidden');
@@ -588,17 +691,29 @@ import Container from '../../layouts/Container.astro';
         
         console.log("Datos del formulario:", JSON.stringify(formObject, null, 2));
         
-        // Simular tiempo de procesamiento (remove este timeout en producción)
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Enviar datos a Make webhook
+        const response = await fetch('https://hook.us2.make.com/3mknzgigjscwegtansipvrz0163zko73', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formObject)
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Error HTTP: ${response.status}`);
+        }
         
         // Mostrar toast y confeti
-        showToast();
+        showToast('success', 'Formulario enviado correctamente.');
         confettiAnimation.start();
         
         // Resetear formulario
         form.reset();
       } catch (error) {
         console.error("Error al enviar el formulario:", error);
+        // Mostrar mensaje de error al usuario
+        showToast('error', 'Hubo un error al enviar el formulario. Por favor, intente nuevamente.');
       } finally {
         // Restaurar estado del botón
         submitButton.disabled = false;
