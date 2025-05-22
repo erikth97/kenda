@@ -203,23 +203,23 @@ import Container from '../../layouts/Container.astro';
           </div>
         </div>
         
-        <!-- Botón de envío centrado -->
-        <div class="flex justify-center mt-12">
-          <button 
-            type="submit" 
-            id="submit-button"
-            class="px-16 py-3.5 bg-kenda-orange hover:bg-orange-600 text-white font-medium rounded-full transition-all duration-300"
-          >
-            <span class="flex items-center justify-center">
-              <span id="button-text">Enviar formulario</span>
-              <span id="button-spinner" class="ml-2 hidden animate-spin-once">
-                <svg class="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-              </span>
-            </span>
-          </button>
+<!-- Botón de envío centrado -->
+<!-- ✅ CORRECTO -->
+<button 
+  type="submit" 
+  id="submit-button"
+  class="px-16 py-3.5 bg-kenda-orange hover:bg-orange-600 text-white font-medium rounded-full transition-all duration-300 led-glow-effect"
+>
+  <span class="flex items-center justify-center">
+    <span id="button-text">Enviar formulario</span>
+    <span id="button-spinner" class="ml-2 hidden animate-spin-once">
+      <svg class="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </span>
+  </span>
+</button>
         </div>
       </form>
     </div>
@@ -286,6 +286,102 @@ import Container from '../../layouts/Container.astro';
   input:focus, select:focus {
     transition: all 0.3s ease;
   }
+
+/* Animación de contorno LED luminoso */
+@keyframes led-glow {
+  0%, 100% {
+    box-shadow: 
+      0 0 5px rgba(255, 87, 34, 0.4),
+      0 0 10px rgba(255, 87, 34, 0.3),
+      0 0 15px rgba(255, 87, 34, 0.2),
+      0 0 20px rgba(255, 87, 34, 0.1),
+      inset 0 0 5px rgba(255, 87, 34, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 0 10px rgba(255, 87, 34, 0.8),
+      0 0 20px rgba(255, 87, 34, 0.6),
+      0 0 30px rgba(255, 87, 34, 0.4),
+      0 0 40px rgba(255, 87, 34, 0.2),
+      inset 0 0 10px rgba(255, 87, 34, 0.2);
+  }
+}
+
+/* Animación de pulso LED más sutil */
+@keyframes led-pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 8px rgba(255, 87, 34, 0.5),
+      0 0 16px rgba(255, 87, 34, 0.3),
+      0 0 24px rgba(255, 87, 34, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 0 12px rgba(255, 87, 34, 0.7),
+      0 0 24px rgba(255, 87, 34, 0.5),
+      0 0 36px rgba(255, 87, 34, 0.3);
+  }
+}
+
+/* Animación de onda LED que recorre el contorno */
+@keyframes led-wave {
+  0% {
+    box-shadow: 
+      2px 0 8px rgba(255, 87, 34, 0.8) inset,
+      0 0 15px rgba(255, 87, 34, 0.4);
+  }
+  25% {
+    box-shadow: 
+      0 -2px 8px rgba(255, 87, 34, 0.8) inset,
+      0 0 15px rgba(255, 87, 34, 0.4);
+  }
+  50% {
+    box-shadow: 
+      -2px 0 8px rgba(255, 87, 34, 0.8) inset,
+      0 0 15px rgba(255, 87, 34, 0.4);
+  }
+  75% {
+    box-shadow: 
+      0 2px 8px rgba(255, 87, 34, 0.8) inset,
+      0 0 15px rgba(255, 87, 34, 0.4);
+  }
+  100% {
+    box-shadow: 
+      2px 0 8px rgba(255, 87, 34, 0.8) inset,
+      0 0 15px rgba(255, 87, 34, 0.4);
+  }
+}
+
+/* Clase principal para el efecto LED */
+.led-glow-effect {
+  position: relative;
+  animation: led-glow 2s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+/* Efecto al hacer hover */
+.led-glow-effect:hover {
+  animation: led-pulse 1s ease-in-out infinite;
+  transform: translateY(-1px);
+}
+
+/* Efecto cuando está enviando (desactivar animación) */
+.led-glow-effect:disabled {
+  animation: none;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+/* Variante de pulso más intenso */
+.led-intense {
+  animation: led-glow 1.5s ease-in-out infinite;
+}
+
+/* Variante de onda */
+.led-wave {
+  animation: led-wave 3s linear infinite;
+}
+
 </style>
 
 <script is:inline>
@@ -651,6 +747,50 @@ import Container from '../../layouts/Container.astro';
     
     // Inicializar la animación de confeti
     confettiAnimation.init();
+
+    // Control dinámico de la animación LED ===
+    function controlLedAnimation() {
+      const submitBtn = document.getElementById('submit-button');
+      
+      // Cambiar intensidad basado en el estado del formulario
+      function updateLedIntensity() {
+        const formFields = document.querySelectorAll('#distributor-form input, #distributor-form select');
+        let filledFields = 0;
+        
+        formFields.forEach(field => {
+          if (field.value.trim() !== '') {
+            filledFields++;
+          }
+        });
+        
+        const completion = filledFields / formFields.length;
+        
+        // Remover clases LED existentes
+        submitBtn.classList.remove('led-glow-effect', 'led-intense', 'led-wave');
+        
+        // Aplicar clase según el progreso
+        if (completion < 0.3) {
+          submitBtn.classList.add('led-glow-effect');
+        } else if (completion < 0.7) {
+          submitBtn.classList.add('led-intense');
+        } else {
+          submitBtn.classList.add('led-wave');
+        }
+      }
+      
+      // Actualizar animación cuando cambian los campos
+      const formFields = document.querySelectorAll('#distributor-form input, #distributor-form select');
+      formFields.forEach(field => {
+        field.addEventListener('input', updateLedIntensity);
+        field.addEventListener('change', updateLedIntensity);
+      });
+      
+      // Llamar inicialmente
+      updateLedIntensity();
+    }
+    
+    // Ejecutar el control LED
+    controlLedAnimation();
     
     // Manejar el envío del formulario
     form.addEventListener('submit', async function(e) {
