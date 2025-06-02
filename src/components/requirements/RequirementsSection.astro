@@ -41,19 +41,19 @@ const requirements = [
 
   <Container>
     <div class="relative z-10">
-      <div class="text-center mb-10">
-        <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-2">Requisitos de distribución</h2>
-        <p class="text-lg text-gray-700">Más de 5,000 distribuidores</p>
+      <div class="text-center mb-12 md:mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">Requisitos de distribución</h2>
+        <p class="text-lg text-gray-800 font-medium">Más de 5,000 distribuidores</p>
       </div>
       
       <div class="relative mx-auto" style="max-width: 1000px;">
-        <div class="requirements-container relative bg-white/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 pb-24 shadow-lg border-2 border-white overflow-visible">
+        <div class="requirements-container relative bg-white/15 backdrop-blur-xl rounded-3xl p-8 md:p-12 pb-20 shadow-xl border border-white/30 overflow-visible">
           
-          <!-- Línea vertical central (timeline) con desvanecido y ajuste de altura -->
+          <!-- Línea vertical central (timeline) con mejor terminación -->
           <div 
             id="timeline" 
-            class="hidden md:block absolute left-1/2 top-12 w-1 bg-gradient-to-b from-orange-500 via-orange-500 to-transparent rounded-full transform -translate-x-1/2 z-0 timeline-progress"
-            style="bottom: 10rem; mask-image: linear-gradient(to bottom, black 85%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);"
+            class="hidden md:block absolute left-1/2 w-1 bg-gradient-to-b from-orange-500 via-orange-500 to-orange-300 rounded-full transform -translate-x-1/2 z-0 timeline-progress"
+            style="top: 3rem; bottom: 6rem; mask-image: linear-gradient(to bottom, black 0%, black 90%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 0%, black 90%, transparent 100%);"
           >
           </div>
           
@@ -61,7 +61,7 @@ const requirements = [
           <div class="hidden md:block relative z-20">
             {requirements.map((req, index) => (
               <div 
-                class="timeline-point absolute left-1/2 w-5 h-5 bg-orange-500 rounded-full border-3 border-white shadow-lg opacity-0 transition-all duration-300"
+                class="timeline-point absolute left-1/2 w-6 h-6 bg-orange-500 rounded-full border-4 border-white shadow-xl opacity-0 transition-all duration-500 ease-out"
                 data-target-req-id={req.id}
                 data-point-index={index}
                 style="transform: translateX(-50%) scale(0.5);"
@@ -70,14 +70,14 @@ const requirements = [
             ))}
           </div>
 
-          <div class="relative space-y-8 md:space-y-16">
+          <div class="relative space-y-12 md:space-y-20">
             {requirements.map((req, index) => {
               const isEven = index % 2 === 0;
               const classes = [
-                "requirement-item", "relative", "flex", "items-start", "gap-6", 
+                "requirement-item", "relative", "flex", "items-center", "gap-6", 
                 "opacity-0", "transform", "translate-y-5", 
                 "md:w-[calc(50%-3rem)]",
-                "transition-all", "duration-500", "ease-out",
+                "transition-all", "duration-700", "ease-out",
                 isEven ? 'md:mr-auto md:pr-10 lg:pr-12' : 'md:ml-auto md:pl-10 lg:pl-12'
               ].join(' ');
               
@@ -87,15 +87,15 @@ const requirements = [
                   data-step-index={index}
                   id={req.id}
                 >
-                  <div class="requirement-number text-5xl md:text-6xl font-bold text-orange-500 leading-none mr-2">
+                  <div class="requirement-number text-5xl md:text-6xl font-bold text-orange-500 leading-none mr-4 flex-shrink-0">
                     {req.number}
                   </div>
                   <div class="requirement-text flex-1 relative">
-                    <p class="text-base md:text-lg text-gray-800 mb-3">
+                    <p class="text-base md:text-lg text-gray-900 font-medium leading-relaxed">
                       {req.description}
                     </p>
                     {index < requirements.length - 1 && (
-                      <div class="timeline-separator md:hidden w-1/2 h-px bg-gray-300 opacity-0 transition-opacity duration-500 mx-auto mt-4"></div>
+                      <div class="timeline-separator md:hidden w-1/2 h-px bg-gray-400 opacity-0 transition-opacity duration-500 mx-auto mt-6"></div>
                     )}
                   </div>
                 </div>
@@ -103,12 +103,12 @@ const requirements = [
             })}
           </div>
           
-          <div class="mt-16 text-center">
+          <div class="mt-16 flex justify-center relative z-10">
             <a 
               id="download-docs" 
               href="/documentos/requisitos-kenda.pdf" 
               download="requisitos-distribuidor-kenda.pdf" 
-              class="bg-white text-gray-800 hover:bg-gray-100 font-bold py-3 px-14 rounded-full transition-colors duration-300 inline-block shadow-md whitespace-nowrap"
+              class="bg-white text-gray-900 hover:bg-gray-50 font-bold py-4 px-12 md:px-16 rounded-full transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 text-center border border-gray-200"
             >
               Descargar documentos
             </a>
@@ -131,13 +131,13 @@ const requirements = [
   .yellow-glow {
     background: radial-gradient(circle at left center, rgba(255, 217, 102, 0.8) 0%, rgba(255, 232, 142, 0.4) 30%, rgba(255, 232, 142, 0) 70%);
     transform-origin: left center;
-    transition: transform 0.5s ease-out;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .orange-glow {
     background: radial-gradient(circle at right center, rgba(255, 145, 0, 0.8) 0%, rgba(255, 170, 0, 0.4) 30%, rgba(255, 170, 0, 0) 70%);
     transform-origin: right center;
-    transition: transform 0.5s ease-out;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .floating-tire {
@@ -151,10 +151,16 @@ const requirements = [
   
   .timeline-progress {
     height: 0;
+    transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .requirements-container {
-    /* El pb-24 ya da espacio, pero la línea ahora termina con 'bottom: 10rem' */
+  .timeline-point {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .timeline-point:hover {
+    transform: translateX(-50%) scale(1.2) !important;
+    box-shadow: 0 0 20px rgba(255, 145, 0, 0.6);
   }
 </style>
 
@@ -166,32 +172,38 @@ const requirements = [
     const timeline = document.getElementById('timeline') as HTMLElement | null;
     const requirementsContainer = document.querySelector('.requirements-container') as HTMLElement | null;
 
-    // Posicionar los puntos de la timeline dinámicamente
+    // Constantes para mejorar la precisión
+    const TIMELINE_TOP_OFFSET = 48; // 3rem
+    const TIMELINE_BOTTOM_OFFSET = 96; // 6rem
+    const POINT_VERTICAL_ADJUSTMENT = 0.3; // Para centrar mejor con el texto
+
+    // Posicionar los puntos de la timeline dinámicamente con mejor precisión
     const timelinePoints = document.querySelectorAll('.timeline-point') as NodeListOf<HTMLElement>;
 
     function positionTimelinePoints() {
       if (!requirementsContainer || !timeline) return;
 
-      const timelineRect = timeline.getBoundingClientRect();
       const containerRect = requirementsContainer.getBoundingClientRect();
 
       timelinePoints.forEach(point => {
         const targetReqId = point.dataset.targetReqId;
         const requirementElement = document.getElementById(targetReqId!);
         if (requirementElement) {
-          const textElement = requirementElement.querySelector('.requirement-text') as HTMLElement | null;
-          if (textElement) {
-            const textRect = textElement.getBoundingClientRect();
-            // Calcular el 'top' del punto relativo al 'requirementsContainer'
-            const relativeTextTop = textRect.top - containerRect.top; 
-            const pointTop = relativeTextTop + (textElement.offsetHeight / 4) - (point.offsetHeight / 2);
-            
-            // Asegurarse de que el punto no se salga de la línea de tiempo visible
-            const timelineTopOffset = timeline.offsetTop;
-            const timelineBottomLimit = timeline.offsetTop + timeline.offsetHeight - point.offsetHeight;
-
-            point.style.top = `${Math.max(timelineTopOffset, Math.min(pointTop, timelineBottomLimit))}px`;
-          }
+          const requirementRect = requirementElement.getBoundingClientRect();
+          
+          // Calcular el centro vertical del elemento de requisito
+          const requirementCenter = requirementRect.top + (requirementRect.height * POINT_VERTICAL_ADJUSTMENT);
+          const relativeCenter = requirementCenter - containerRect.top;
+          
+          // Posicionar el punto centrado verticalmente con el texto
+          const pointTop = relativeCenter - (point.offsetHeight / 2);
+          
+          // Asegurar que el punto esté dentro de los límites de la timeline
+          const minTop = TIMELINE_TOP_OFFSET;
+          const maxTop = requirementsContainer.offsetHeight - TIMELINE_BOTTOM_OFFSET - point.offsetHeight;
+          
+          const finalTop = Math.max(minTop, Math.min(pointTop, maxTop));
+          point.style.top = `${finalTop}px`;
         }
       });
     }
@@ -221,29 +233,42 @@ const requirements = [
         yellowGlow.style.opacity = opacity.toString();
         orangeGlow.style.opacity = opacity.toString();
         
+        // Mejorar la progresión de la timeline
         const cardRect = requirementsContainer.getBoundingClientRect();
         const cardTop = cardRect.top;
-        let scrollProgress = (windowHeight - cardTop) / (windowHeight * 0.66);
+        let scrollProgress = (windowHeight - cardTop) / (windowHeight * 0.7);
         scrollProgress = Math.min(1, Math.max(0, scrollProgress));
 
-        const easedProgress = easeInOutCubic(scrollProgress);
-        const timelineMaxHeight = requirementsContainer.offsetHeight - timeline.offsetTop - parseFloat(timeline.style.bottom || '0');
+        // Usar una curva de animación más suave
+        const easedProgress = easeInOutQuart(scrollProgress);
+        const timelineMaxHeight = requirementsContainer.offsetHeight - TIMELINE_TOP_OFFSET - TIMELINE_BOTTOM_OFFSET;
         timeline.style.height = `${easedProgress * timelineMaxHeight}px`;
 
         positionTimelinePoints(); 
       }
       
-      function easeInOutCubic(t: number): number {
-        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      // Función de easing más suave
+      function easeInOutQuart(t: number): number {
+        return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
       }
       
       updateGlowEffects(); 
-      setTimeout(positionTimelinePoints, 50);
+      setTimeout(positionTimelinePoints, 100);
 
-      window.addEventListener('scroll', updateGlowEffects);
+      // Throttle para mejor performance
+      let ticking = false;
+      function requestTick() {
+        if (!ticking) {
+          requestAnimationFrame(updateGlowEffects);
+          ticking = true;
+          setTimeout(() => { ticking = false; }, 16);
+        }
+      }
+
+      window.addEventListener('scroll', requestTick);
       window.addEventListener('resize', () => {
         updateGlowEffects();
-        setTimeout(positionTimelinePoints, 50);
+        setTimeout(positionTimelinePoints, 100);
       });
     }
     
@@ -267,15 +292,15 @@ const requirements = [
                 setTimeout(() => {
                   point.style.opacity = '1';
                   point.style.transform = 'translateX(-50%) scale(1)';
-                }, 100);
+                }, 150);
               }
               
               if (separator && window.innerWidth < 768) {
                 setTimeout(() => {
                   separator.style.opacity = '1';
-                }, 200);
+                }, 300);
               }
-            }, index * 150);
+            }, index * 200); // Mayor stagger para mejor efecto
           } else {
             item.style.opacity = '0';
             item.style.transform = 'translateY(20px)';
@@ -290,8 +315,8 @@ const requirements = [
         });
       },
       {
-        threshold: 0.2,
-        rootMargin: "-50px 0px"
+        threshold: 0.15,
+        rootMargin: "-80px 0px"
       }
     );
     
@@ -299,10 +324,11 @@ const requirements = [
       itemObserver.observe(item);
     });
 
+    // Inicialización mejorada
     if (document.readyState === 'complete') {
-        setTimeout(positionTimelinePoints, 100);
+        setTimeout(positionTimelinePoints, 150);
     } else {
-        window.addEventListener('load', () => setTimeout(positionTimelinePoints, 100));
+        window.addEventListener('load', () => setTimeout(positionTimelinePoints, 150));
     }
   });
 </script>
