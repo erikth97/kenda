@@ -48,16 +48,8 @@ const testimonials: Testimonial[] = [
 ];
 ---
 
-<section id="testimonials" class="relative py-16 md:py-24 overflow-hidden">
-  <!-- Imagen de fondo del almacén con gradient más sutil -->
-  <div class="absolute inset-0 z-0">
-    <img 
-      src="/images/tire_storage.webp" 
-      alt="Almacén KENDA" 
-      class="w-full h-full object-cover opacity-20"
-    />
-    <div class="absolute inset-0 bg-gradient-to-br from-orange-50/90 via-white/80 to-white/90"></div>
-  </div>
+<section id="testimonials" class="relative py-24 md:py-32 overflow-hidden">
+  <!-- El fondo de malla ya está aplicado globalmente en el BaseLayout -->
 
   <div class="container mx-auto px-4 relative z-10">
     <!-- Encabezado -->
@@ -72,11 +64,11 @@ const testimonials: Testimonial[] = [
 
     <!-- Carrusel de testimoniales -->
     <div class="testimonials-carousel relative mx-auto max-w-5xl lg:max-w-7xl px-4 md:px-6">
-      <div class="carousel-viewport relative overflow-hidden h-[380px] md:h-[450px]">
+      <div class="carousel-viewport relative overflow-hidden h-[450px] md:h-[550px]">
         <div class="carousel-track relative h-full">
           {testimonials.map((testimonial, index) => (
             <div 
-              class="testimonial-card absolute w-[calc(100vw-2rem)] md:w-[360px] h-[350px] md:h-[420px] top-1/2 -translate-y-1/2 cursor-grab"
+              class="testimonial-card absolute w-[calc(100vw-2rem)] md:w-[360px] h-[400px] md:h-[500px] top-1/2 -translate-y-1/2 cursor-grab"
               data-testimonial-id={testimonial.id}
               data-index={index}
             >
@@ -166,7 +158,7 @@ const testimonials: Testimonial[] = [
       return {
         cardWidth: isMobile ? window.innerWidth - 32 : 360,
         cardGap: isMobile ? 0 : 40,
-        cardHeight: isMobile ? 350 : 420
+        cardHeight: isMobile ? 400 : 500
       };
     };
     
