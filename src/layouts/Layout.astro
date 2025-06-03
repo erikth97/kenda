@@ -7,7 +7,10 @@
     <meta name="generator" content={Astro.generator} />
     <title>Astro Basics</title>
   </head>
-  <body>
+  <body class="relative">
+    <!-- Fondo tipo malla con z-index bajo para que esté detrás de todo -->
+    <div class="fixed inset-0 w-full h-full pointer-events-none z-0" 
+         style="background-image: url('/images/background.png'); background-repeat: repeat; background-color: #F5F5F5; opacity: 0.3;"></div>
     <slot />
   </body>
 </html>
@@ -18,5 +21,6 @@
     margin: 0;
     width: 100%;
     height: 100%;
+    background-color: #F5F5F5;
   }
 </style>

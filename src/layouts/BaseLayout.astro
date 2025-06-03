@@ -3,6 +3,7 @@
 import '../styles/global.css';
 import ProgressBar from '../components/ui/custom/ProgressBar.astro';
 import Footer from '../components/common/Footer.astro';
+import FloatingTire from '../components/common/FloatingTire.astro';
 
 // Props e interfaces
 export interface Props {
@@ -59,7 +60,10 @@ const {
     <!-- Inyección de scripts -->
     <slot name="head" />
   </head>
-  <body class="bg-white text-kenda-dark flex flex-col min-h-screen">
+  <body class="bg-[#F5F5F5] text-kenda-dark flex flex-col min-h-screen relative">
+    <!-- Fondo tipo malla con z-index bajo para que esté detrás de todo, pero no afecte al footer -->
+    <div class="fixed inset-0 w-full h-full pointer-events-none z-0" 
+         style="background-image: url('/images/background.png'); background-repeat: repeat; background-color: #F5F5F5; opacity: 0.3;"></div>
     <!-- Barra de progreso horizontal -->
     <ProgressBar />
     

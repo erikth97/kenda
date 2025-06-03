@@ -9,7 +9,7 @@
  interface Props {
   id: string;
   // Fondos disponibles
-  background?: 'white' | 'light' | 'dark' | 'gradient' | 'red' | 'orange' | 'transparent';
+  background?: 'white' | 'light' | 'dark' | 'gradient' | 'red' | 'orange' | 'transparent' | 'kenda-bg';
   // Control de espaciado
   spacing?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
   // Altura de sección
@@ -43,7 +43,8 @@ const bgClasses = {
   gradient: 'bg-gradient-to-r from-kenda-red to-kenda-orange text-white',
   red: 'bg-kenda-red text-white',
   orange: 'bg-kenda-orange text-white',
-  transparent: 'bg-transparent'
+  transparent: 'bg-transparent',
+  'kenda-bg': 'bg-[#F5F5F5]'
 };
 
 // Mapeo de espaciado vertical
