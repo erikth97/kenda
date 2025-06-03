@@ -10,6 +10,7 @@ import BenefitCard from '../components/ui/custom/BenefitCard.astro';
 import RequirementsSection from "../components/requirements/RequirementsSection.astro";
 import TestimonialsSection from '../components/TestimonialsSection.astro';
 import FormSection from "../components/form/FormSection.astro";
+import TireSection from "../components/TireSection.astro";
 
 // Iconos para beneficios - Iconos negros simples
 const benefitIcons = {
@@ -91,9 +92,14 @@ const benefits = [
       </div>
     </Container>
   </div>
-  
+
+  <!-- Sección de la llanta flotante entre beneficios y requisitos -->
+  <TireSection />
+
   <!-- Sección de Requisitos -->
   <RequirementsSection />
+  
+
 
   <!-- Sección de Testimoniales -->
   <TestimonialsSection />

@@ -1,0 +1,40 @@
+---
+/**
+ * TireSection.astro
+ * 
+ * Sección independiente que contiene la llanta flotante, diseñada para colocarse
+ * entre la sección de beneficios y la sección de requisitos.
+ */
+---
+
+<!-- Sección de la llanta flotante que aparece encima de ambas secciones -->
+<div class="relative w-full h-0 overflow-visible z-[9999]">
+  <!-- Llanta flotante encima de ambas secciones -->
+  <img 
+    src="/images/tire_2.webp" 
+    alt="Llanta Kenda decorativa" 
+    class="absolute hidden md:block md:right-[10%] lg:right-[-5%] md:w-[35%] lg:w-[50%] max-w-md h-auto object-contain opacity-80 floating-tire md:top-[-150px]" 
+    style="transform-origin: center center;"
+  />
+</div>
+
+
+
+<style>
+  /* Animación flotante para la llanta */
+  .floating-tire {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+</style>
