@@ -850,14 +850,13 @@ import Container from '../../layouts/Container.astro';
         console.log("Datos del formulario a enviar:", JSON.stringify(formObject, null, 2));
         
         // TODO: Reemplazar con tu endpoint real de Make
-        const MAKE_WEBHOOK_URL = 'https://hook.us1.make.com/EXAMPLE-WEBHOOK-ID';
+        const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/3mknzgigjscwegtansipvrz0163zko73';
         
         // MODO DESARROLLO: Simular envío exitoso
         console.log("MODO DESARROLLO: Simulando envío exitoso...");
         await new Promise(resolve => setTimeout(resolve, 2000));
         
-        // MODO PRODUCCIÓN: Descomenta esto cuando tengas el endpoint real
-        /*
+
         const response = await fetch(MAKE_WEBHOOK_URL, {
           method: 'POST',
           headers: {
@@ -874,7 +873,6 @@ import Container from '../../layouts/Container.astro';
         
         const responseData = await response.json();
         console.log("Respuesta del servidor:", responseData);
-        */
         
         // Éxito
         showToast('success', 'Tu solicitud fue enviada exitosamente. Nuestro equipo se pondrá en contacto contigo pronto.', '¡Gracias por tu interés!');
