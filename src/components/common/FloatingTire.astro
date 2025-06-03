@@ -1,0 +1,59 @@
+---
+/**
+ * FloatingTire.astro
+ * 
+ * Componente para mostrar una llanta flotante que puede posicionarse
+ * por encima de cualquier sección del sitio.
+ */
+
+interface Props {
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'custom';
+  customClass?: string;
+  imageSrc?: string;
+  zIndex?: number;
+}
+
+const { 
+  position = 'top-right',
+  customClass = '',
+  imageSrc = '/images/tire_2.webp',
+  zIndex = 50
+} = Astro.props;
+
+// Mapeo de posiciones predefinidas
+const positionClasses = {
+  'top-right': '-top-10 -right-20 md:-top-20 md:-right-32 lg:-right-40',
+  'top-left': '-top-10 -left-20 md:-top-20 md:-left-32 lg:-left-40',
+  'bottom-right': '-bottom-10 -right-20 md:-bottom-20 md:-right-32 lg:-right-40',
+  'bottom-left': '-bottom-10 -left-20 md:-bottom-20 md:-left-32 lg:-left-40',
+  'custom': ''
+};
+
+// Construir clases CSS
+const classes = [
+  'absolute',
+  position !== 'custom' ? positionClasses[position] : '',
+  'w-1/2 md:w-2/5 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg',
+  'h-auto object-contain opacity-80',
+  'floating-tire',
+  customClass
+].filter(Boolean).join(' ');
+---
+
+<img 
+  src={imageSrc} 
+  alt="Llanta Kenda decorativa" 
+  class={classes}
+  style={`z-index: ${zIndex};`}
+/>
+
+<style>
+  .floating-tire {
+    animation: float 8s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(-2deg); }
+    50% { transform: translateY(-20px) rotate(3deg); }
+  }
+</style>
