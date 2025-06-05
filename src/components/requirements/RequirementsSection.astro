@@ -58,15 +58,37 @@ const requirements = [
           
           <!-- Puntos de la timeline - renderizados por separado para posicionarlos sobre la línea central -->
           <div class="hidden md:block relative z-20">
-            {requirements.map((req, index) => (
-              <div 
-                class="timeline-point absolute left-1/2 w-6 h-6 bg-orange-500 rounded-full border-2 border-white shadow-xl opacity-0 transition-all duration-500 ease-out"
-                data-target-req-id={req.id}
-                data-point-index={index}
-                style="transform: translateX(-50%) scale(0.5);"
-              >
-              </div>
-            ))}
+            {requirements.map((req, index) => {
+              const isEven = index % 2 === 0;
+              const arrowDirection = isEven ? 'left' : 'right';
+              
+              return (
+                <div 
+                  class="timeline-point absolute left-1/2 w-10 h-10 flex items-center justify-center opacity-0 transition-all duration-500 ease-out"
+                  data-target-req-id={req.id}
+                  data-point-index={index}
+                  style="transform: translateX(-50%) scale(0.5);"
+                >
+                  <!-- Círculo de fondo -->
+                  <div class="absolute inset-0 bg-orange-500 rounded-full shadow-xl"></div>
+                  
+                  <!-- Icono de flecha -->
+                  <svg 
+                    class="relative z-10 w-6 h-6 text-white"
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                    stroke-width="3"
+                  >
+                    {arrowDirection === 'right' ? (
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    ) : (
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                    )}
+                  </svg>
+                </div>
+              );
+            })}
           </div>
 
           <div class="relative space-y-12 md:space-y-20">
@@ -103,14 +125,13 @@ const requirements = [
           </div>
           
           <div class="mt-16 flex justify-center relative z-10">
-            <a 
+            <button 
               id="download-docs" 
-              href="/documentos/requisitos-kenda.pdf" 
-              download="requisitos-distribuidor-kenda.pdf" 
-              class="bg-white text-gray-900 hover:bg-gray-50 font-bold py-4 px-12 md:px-16 rounded-full transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 text-center border border-gray-200"
+              type="button"
+              class="bg-white text-gray-900 hover:bg-gray-50 font-bold py-4 px-12 md:px-16 rounded-full transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 text-center border border-gray-200 cursor-pointer"
             >
               Descargar documentos
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -180,6 +201,9 @@ const requirements = [
 
   .timeline-point:hover {
     transform: translateX(-50%) scale(1.2) !important;
+  }
+  
+  .timeline-point:hover > div:first-child {
     box-shadow: 0 0 20px rgba(255, 145, 0, 0.6);
   }
 </style>
@@ -349,6 +373,36 @@ const requirements = [
         setTimeout(positionTimelinePoints, 150);
     } else {
         window.addEventListener('load', () => setTimeout(positionTimelinePoints, 150));
+    }
+  });
+
+  // Función para descargar múltiples archivos
+  document.addEventListener('DOMContentLoaded', () => {
+    const downloadButton = document.getElementById('download-docs');
+    
+    if (downloadButton) {
+      downloadButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Lista de archivos a descargar
+        const files = [
+          { url: '/documents/alta-cliente.pdf', name: 'alta-cliente.pdf' },
+          { url: '/documents/proteccion-de-datos.pdf', name: 'proteccion-de-datos.pdf' }
+        ];
+        
+        // Descargar cada archivo con un pequeño retraso
+        files.forEach((file, index) => {
+          setTimeout(() => {
+            const link = document.createElement('a');
+            link.href = file.url;
+            link.download = file.name;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }, index * 500); // 500ms de retraso entre cada descarga
+        });
+      });
     }
   });
 </script>
