@@ -36,7 +36,6 @@ const requirements = [
     <div class="absolute inset-0 w-full h-full grid-background opacity-30"></div>
     <div id="yellow-glow" class="absolute left-0 top-0 bottom-0 w-3/5 yellow-glow"></div>
     <div id="orange-glow" class="absolute right-0 top-0 bottom-0 w-3/5 orange-glow"></div>
-    <img src="/images/tire_2.webp" alt="Llanta Kenda decorativa" class="absolute -top-10 -right-20 md:-top-20 md:-right-32 lg:-right-40 w-1/2 md:w-2/5 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto object-contain opacity-80 z-10 floating-tire" />
   </div>
 
   <Container>
@@ -117,7 +116,28 @@ const requirements = [
       </div>
     </div>
   </Container>
+
+
 </section>
+
+<style>
+  /* Animación flotante para la llanta */
+  .floating-tire {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+</style>
 
 <style>
   .grid-background {
@@ -332,3 +352,22 @@ const requirements = [
     }
   });
 </script>
+
+<style>
+  /* Animación flotante para la llanta */
+  .floating-tire {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+</style>
