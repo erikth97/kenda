@@ -1,0 +1,31 @@
+<!-- Componente separador con llanta flotante para colocar entre secciones -->
+<div class="relative w-full h-24 md:h-32 overflow-visible">
+  <!-- Llanta flotante en el lado izquierdo -->
+  <div class="absolute left-0 top-0 w-full h-0 overflow-visible z-10">
+    <img 
+      src="/images/tire_1.webp" 
+      alt="Llanta Kenda decorativa" 
+      class="absolute hidden md:block left-[-15%] md:w-[35%] lg:w-[30%] max-w-md h-auto object-contain opacity-80 floating-tire" 
+      style="transform-origin: center center;"
+    />
+  </div>
+</div>
+
+<style>
+  /* Animación flotante para la llanta */
+  .floating-tire {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+</style>

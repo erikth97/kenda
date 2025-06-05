@@ -21,6 +21,7 @@ const secondLine = titleParts.slice(3).join(" "); // "Distribuidor KENDA?"
 ---
 
 <section id="hero" class="h-screen w-full relative overflow-hidden">
+
   <!-- Estructura de fondo -->
   <div class="absolute inset-0 z-0">
     <!-- Fondo izquierdo con estadio y cuadrícula blanca -->
@@ -271,5 +272,21 @@ const secondLine = titleParts.slice(3).join(" "); // "Distribuidor KENDA?"
   #scroll-to-form-button:focus-visible {
     outline: 2px solid #F7941D;
     outline-offset: 2px;
+  }
+  /* Animación flotante para la llanta */
+  .floating-tire {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0);
+    }
   }
 </style>

@@ -37,6 +37,7 @@ const testimonials: Testimonial[] = [
 ---
 <section id="testimonials" class="relative py-24 md:py-32 overflow-hidden">
   <!-- El fondo de malla ya está aplicado globalmente en el BaseLayout -->
+  
 
   <div class="container mx-auto px-4 relative z-10">
     <!-- Encabezado -->
@@ -490,3 +491,22 @@ const testimonials: Testimonial[] = [
     startAutoplay();
   });
 </script>
+
+<style>
+  /* Animación flotante para la llanta */
+  .floating-tire {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+</style>

@@ -11,6 +11,7 @@ import RequirementsSection from "../components/requirements/RequirementsSection.
 import TestimonialsSection from '../components/TestimonialsSection.astro';
 import FormSection from "../components/form/FormSection.astro";
 import TireSection from "../components/TireSection.astro";
+import TireSeparator from "../components/TireSeparator.astro";
 
 // Iconos para beneficios - Iconos negros simples
 const benefitIcons = {
@@ -54,6 +55,9 @@ const benefits = [
 <BaseLayout title="Distribuidor KENDA - Motos y Equipos">
   <!-- Hero Section con la implementación actualizada -->
   <HeroSection />
+  
+  <!-- Separador con llanta flotante entre Hero y Beneficios -->
+  <TireSeparator />
   
   <!-- Sección de Beneficios con fondo gris claro cuadriculado -->
   <div class="benefits-section relative overflow-hidden py-16">
