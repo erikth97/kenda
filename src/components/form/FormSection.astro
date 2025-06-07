@@ -219,22 +219,24 @@ import Container from '../../layouts/Container.astro';
         
         <!-- Botón de envío más prominente y centrado con responsive mejorado -->
         <div class="flex justify-center pt-6 sm:pt-8 pb-4">
-          <button 
-            type="submit" 
-            id="submit-button"
-            class="w-full sm:w-auto px-8 sm:px-12 md:px-16 lg:px-20 py-3 sm:py-4 md:py-5 bg-kenda-orange hover:bg-orange-600 text-white font-bold text-base sm:text-lg rounded-full transition-all duration-300 led-glow-effect transform hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-orange-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none max-w-sm sm:max-w-none"
-            aria-describedby="submit-status"
-          >
-            <span class="flex items-center justify-center">
-              <span id="button-text">Enviar formulario</span>
-              <span id="button-spinner" class="ml-3 hidden animate-spin-once">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-              </span>
-            </span>
-          </button>
+<button 
+  type="submit" 
+  id="submit-button"
+  class="w-full sm:w-auto px-8 sm:px-12 md:px-16 lg:px-20 py-3 sm:py-4 md:py-5 bg-kenda-orange hover:bg-orange-600 text-white font-bold text-base sm:text-lg rounded-full transition-all duration-300 pulse-effect transform hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-orange-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none max-w-sm sm:max-w-none"
+  aria-describedby="submit-status"
+>
+  <span class="flex items-center justify-center">
+    <span id="button-text">Enviar formulario</span>
+    <span id="button-spinner" class="ml-3 hidden animate-spin-once">
+      <svg class="w-5 h-5 sm:w-6 sm:h-6 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </span>
+  </span>
+</button>
+
+
         </div>
         <div id="submit-status" class="sr-only" aria-live="polite"></div>
       </form>
@@ -242,26 +244,39 @@ import Container from '../../layouts/Container.astro';
   </Container>
 </Section>
 
-<!-- Toast notification con diseño mejorado -->
-<div id="toast-notification" class="fixed bottom-4 right-4 bg-green-500 text-white rounded-xl shadow-xl z-50 hidden w-72 sm:w-80 max-w-[90vw] overflow-hidden" role="alert" aria-live="assertive">
-  <div class="flex items-center p-4">
-    <!-- Ícono en cuadro redondeado -->
-    <div class="flex-shrink-0 w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-      <span id="toast-icon" class="text-2xl text-white" aria-hidden="true">✓</span>
+<!-- Toast notification con diseño mejorado y responsive -->
+<div id="toast-notification" class="fixed bottom-4 left-4 right-4 sm:bottom-4 sm:right-4 sm:left-auto bg-green-500 text-white rounded-xl shadow-xl z-50 hidden w-full sm:w-80 md:w-96 max-w-[calc(100vw-2rem)] sm:max-w-none overflow-hidden" role="alert" aria-live="assertive">
+  <div class="flex items-start p-4 sm:p-5">
+    <!-- Ícono SVG en cuadro redondeado -->
+    <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-3 sm:mr-4 mt-0.5">
+      <!-- Ícono de éxito -->
+      <svg id="toast-success-icon" class="w-6 h-6 sm:w-7 sm:h-7 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+      </svg>
+      
+      <!-- Ícono de error -->
+      <svg id="toast-error-icon" class="w-6 h-6 sm:w-7 sm:h-7 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
     </div>
     
     <!-- Contenido del texto -->
-    <div class="flex-1">
-      <h4 id="toast-title" class="text-lg font-semibold text-white mb-1">¡Gracias por tu interés!</h4>
-      <p id="toast-message" class="text-sm text-white opacity-90">Tu solicitud fue enviada exitosamente. Nuestro equipo se pondrá en contacto contigo pronto.</p>
+    <div class="flex-1 min-w-0">
+      <h4 id="toast-title" class="text-base sm:text-lg font-semibold text-white mb-1 leading-tight">¡Gracias por tu interés!</h4>
+      <p id="toast-message" class="text-sm sm:text-base text-white opacity-90 leading-relaxed pr-2">Tu solicitud fue enviada exitosamente. Nuestro equipo se pondrá en contacto contigo pronto.</p>
     </div>
     
     <!-- Botón de cierre -->
-    <button id="close-toast" class="flex-shrink-0 ml-4 w-6 h-6 text-white hover:text-gray-200 transition-colors" aria-label="Cerrar notificación">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <button id="close-toast" class="flex-shrink-0 ml-2 sm:ml-4 w-6 h-6 sm:w-7 sm:h-7 text-white hover:text-gray-200 transition-colors duration-200 rounded-md hover:bg-white hover:bg-opacity-10 flex items-center justify-center" aria-label="Cerrar notificación">
+      <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
+  </div>
+  
+  <!-- Barra de progreso opcional -->
+  <div class="h-1 bg-white bg-opacity-20">
+    <div id="toast-progress" class="h-full bg-white bg-opacity-40 transition-all duration-300 ease-linear" style="width: 100%"></div>
   </div>
 </div>
 
@@ -323,99 +338,6 @@ import Container from '../../layouts/Container.astro';
     transform: rotate(180deg);
   }
 
-  /* Animación de contorno LED luminoso */
-  @keyframes led-glow {
-    0%, 100% {
-      box-shadow: 
-        0 0 8px rgba(255, 87, 34, 0.5),
-        0 0 16px rgba(255, 87, 34, 0.3),
-        0 0 24px rgba(255, 87, 34, 0.2),
-        0 0 32px rgba(255, 87, 34, 0.1),
-        inset 0 0 8px rgba(255, 87, 34, 0.1);
-    }
-    50% {
-      box-shadow: 
-        0 0 16px rgba(255, 87, 34, 0.8),
-        0 0 32px rgba(255, 87, 34, 0.6),
-        0 0 48px rgba(255, 87, 34, 0.4),
-        0 0 64px rgba(255, 87, 34, 0.2),
-        inset 0 0 16px rgba(255, 87, 34, 0.2);
-    }
-  }
-
-  /* Animación de pulso LED más sutil */
-  @keyframes led-pulse {
-    0%, 100% {
-      box-shadow: 
-        0 0 12px rgba(255, 87, 34, 0.6),
-        0 0 24px rgba(255, 87, 34, 0.4),
-        0 0 36px rgba(255, 87, 34, 0.2);
-    }
-    50% {
-      box-shadow: 
-        0 0 20px rgba(255, 87, 34, 0.8),
-        0 0 40px rgba(255, 87, 34, 0.6),
-        0 0 60px rgba(255, 87, 34, 0.4);
-    }
-  }
-
-  /* Animación de onda LED que recorre el contorno */
-  @keyframes led-wave {
-    0% {
-      box-shadow: 
-        3px 0 12px rgba(255, 87, 34, 0.8) inset,
-        0 0 20px rgba(255, 87, 34, 0.5);
-    }
-    25% {
-      box-shadow: 
-        0 -3px 12px rgba(255, 87, 34, 0.8) inset,
-        0 0 20px rgba(255, 87, 34, 0.5);
-    }
-    50% {
-      box-shadow: 
-        -3px 0 12px rgba(255, 87, 34, 0.8) inset,
-        0 0 20px rgba(255, 87, 34, 0.5);
-    }
-    75% {
-      box-shadow: 
-        0 3px 12px rgba(255, 87, 34, 0.8) inset,
-        0 0 20px rgba(255, 87, 34, 0.5);
-    }
-    100% {
-      box-shadow: 
-        3px 0 12px rgba(255, 87, 34, 0.8) inset,
-        0 0 20px rgba(255, 87, 34, 0.5);
-    }
-  }
-
-  /* Clase principal para el efecto LED */
-  .led-glow-effect {
-    position: relative;
-    animation: led-glow 2.5s ease-in-out infinite;
-    transition: all 0.4s ease;
-  }
-
-  /* Efecto al hacer hover */
-  .led-glow-effect:hover {
-    animation: led-pulse 1.2s ease-in-out infinite;
-  }
-
-  /* Efecto cuando está enviando (desactivar animación) */
-  .led-glow-effect:disabled {
-    animation: none;
-    box-shadow: none;
-  }
-
-  /* Variante de pulso más intenso */
-  .led-intense {
-    animation: led-glow 1.8s ease-in-out infinite;
-  }
-
-  /* Variante de onda */
-  .led-wave {
-    animation: led-wave 3.5s linear infinite;
-  }
-
   /* Mejorar contraste de placeholders */
   ::placeholder {
     color: #9CA3AF;
@@ -434,6 +356,30 @@ import Container from '../../layouts/Container.astro';
     white-space: nowrap;
     border: 0;
   }
+  /* Animación de pulso simple y elegante */
+@keyframes pulse-gentle {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(255, 87, 34, 0.4);
+  }
+}
+
+.pulse-effect {
+  animation: pulse-gentle 2s ease-in-out infinite;
+}
+
+.pulse-effect:hover {
+  animation: pulse-gentle 1s ease-in-out infinite;
+}
+
+.pulse-effect:disabled {
+  animation: none;
+  box-shadow: none;
+}
 </style>
 <script is:inline>
   // Script para validación y envío del formulario
@@ -515,41 +461,69 @@ import Container from '../../layouts/Container.astro';
       return true;
     }
     
-    // 5. Función para mostrar el toast mejorada
-    function showToast(type = 'success', message = 'Formulario enviado correctamente.', title = 'Success') {
-      // Limpiar cualquier temporizador anterior
-      if (toastTimer) {
-        clearTimeout(toastTimer);
-      }
-      
-      // Actualizar el contenido y color del toast según el tipo
-      const toastEl = toastNotification;
-      const iconEl = document.getElementById('toast-icon');
-      const titleEl = document.getElementById('toast-title');
-      const messageEl = document.getElementById('toast-message');
-      
-      if (type === 'error') {
-        toastEl.classList.remove('bg-green-500');
-        toastEl.classList.add('bg-red-500');
-        titleEl.textContent = 'Error';
-        iconEl.textContent = '✗';
-      } else {
-        toastEl.classList.remove('bg-red-500');
-        toastEl.classList.add('bg-green-500');
-        titleEl.textContent = title;
-        iconEl.textContent = '✓';
-      }
-      
-      messageEl.textContent = message;
-      
-      // Mostrar el toast
-      toastNotification.classList.remove('hidden');
-      
-      // Configurar el temporizador para ocultar después de 15 segundos
-      toastTimer = setTimeout(function() {
-        toastNotification.classList.add('hidden');
-      }, 15000);
+// 5. Función para mostrar el toast mejorada con iconos SVG
+function showToast(type = 'success', message = 'Formulario enviado correctamente.', title = 'Success') {
+  // Limpiar cualquier temporizador anterior
+  if (toastTimer) {
+    clearTimeout(toastTimer);
+  }
+  
+  // Elementos del toast
+  const toastEl = toastNotification;
+  const titleEl = document.getElementById('toast-title');
+  const messageEl = document.getElementById('toast-message');
+  const successIcon = document.getElementById('toast-success-icon');
+  const errorIcon = document.getElementById('toast-error-icon');
+  const progressBar = document.getElementById('toast-progress');
+  
+  if (type === 'error') {
+    // Configurar para error
+    toastEl.classList.remove('bg-green-500');
+    toastEl.classList.add('bg-red-500');
+    titleEl.textContent = title || 'Error';
+    
+    // Mostrar ícono de error, ocultar éxito
+    if (successIcon) successIcon.classList.add('hidden');
+    if (errorIcon) errorIcon.classList.remove('hidden');
+  } else {
+    // Configurar para éxito
+    toastEl.classList.remove('bg-red-500');
+    toastEl.classList.add('bg-green-500');
+    titleEl.textContent = title || '¡Éxito!';
+    
+    // Mostrar ícono de éxito, ocultar error
+    if (errorIcon) errorIcon.classList.add('hidden');
+    if (successIcon) successIcon.classList.remove('hidden');
+  }
+  
+  messageEl.textContent = message;
+  
+  // Resetear y mostrar barra de progreso
+  if (progressBar) {
+    progressBar.style.width = '100%';
+  }
+  
+  // Mostrar el toast
+  toastNotification.classList.remove('hidden');
+  
+  // Animar barra de progreso
+  if (progressBar) {
+    setTimeout(() => {
+      progressBar.style.width = '0%';
+      progressBar.style.transition = 'width 15s linear';
+    }, 100);
+  }
+  
+  // Configurar el temporizador para ocultar después de 15 segundos
+  toastTimer = setTimeout(function() {
+    toastNotification.classList.add('hidden');
+    // Resetear barra de progreso
+    if (progressBar) {
+      progressBar.style.width = '100%';
+      progressBar.style.transition = 'width 0.3s ease-linear';
     }
+  }, 15000);
+}
     
     // 6. Animación de confeti mejorada
     const confettiAnimation = {
@@ -736,41 +710,16 @@ import Container from '../../layouts/Container.astro';
       }
     };
     
-    // 7. Control dinámico de la animación LED mejorado
-    function controlLedAnimation() {
-      const submitBtn = document.getElementById('submit-button');
-      
-      function updateLedIntensity() {
-        const formFields = document.querySelectorAll('#distributor-form input, #distributor-form select');
-        let filledFields = 0;
-        
-        formFields.forEach(field => {
-          if (field.value.trim() !== '') {
-            filledFields++;
-          }
-        });
-        
-        const completion = filledFields / formFields.length;
-        
-        submitBtn.classList.remove('led-glow-effect', 'led-intense', 'led-wave');
-        
-        if (completion < 0.3) {
-          submitBtn.classList.add('led-glow-effect');
-        } else if (completion < 0.7) {
-          submitBtn.classList.add('led-intense');
-        } else {
-          submitBtn.classList.add('led-wave');
-        }
-      }
-      
-      const formFields = document.querySelectorAll('#distributor-form input, #distributor-form select');
-      formFields.forEach(field => {
-        field.addEventListener('input', updateLedIntensity);
-        field.addEventListener('change', updateLedIntensity);
-      });
-      
-      updateLedIntensity();
-    }
+// 7. Control del botón simplificado
+function controlPulseAnimation() {
+  const submitBtn = document.getElementById('submit-button');
+  
+  // El botón siempre mantiene su animación pulse-effect
+  // No necesita lógica adicional ya que se maneja por CSS
+  if (submitBtn && !submitBtn.classList.contains('pulse-effect')) {
+    submitBtn.classList.add('pulse-effect');
+  }
+}
     
     // 8. Event listeners para campos del formulario mejorados
     const formFields = form.querySelectorAll('input, select');
@@ -809,102 +758,120 @@ import Container from '../../layouts/Container.astro';
       toastNotification.classList.add('hidden');
     });
     
+// Manejar el envío del formulario mejorado
     // Manejar el envío del formulario mejorado
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      // Limpiar mensajes previos
-      submitStatus.textContent = '';
-      const errorMessages = document.querySelectorAll('.error-message');
-      errorMessages.forEach(msg => {
-        msg.classList.add('hidden');
-      });
-      
-      // Validar todos los campos
-      let isValid = true;
-      formFields.forEach(field => {
-        if (!validateField(field)) {
-          isValid = false;
-        }
-      });
-      
-      if (!isValid) {
-        showToast('error', 'Por favor complete todos los campos correctamente.', 'Error');
-        submitStatus.textContent = 'Error: Formulario incompleto';
-        return;
-      }
-      
-      // Estado de carga
-      submitButton.disabled = true;
-      buttonText.textContent = 'Enviando...';
-      buttonSpinner.classList.remove('hidden');
-      submitStatus.textContent = 'Enviando formulario...';
-      
-      try {
-        const formData = new FormData(form);
-        const formObject = {};
-        
-        formData.forEach(function(value, key) {
-          formObject[key] = value;
-        });
-        
-        console.log("Datos del formulario a enviar:", JSON.stringify(formObject, null, 2));
-        
-        // TODO: Reemplazar con tu endpoint real de Make
-        const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/3mknzgigjscwegtansipvrz0163zko73';
-        
-        // MODO PRODUCCIÓN
-        
-        const response = await fetch(MAKE_WEBHOOK_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          body: JSON.stringify(formObject)
-        });
-        
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Error HTTP ${response.status}: ${errorText}`);
-        }
-        
-        const responseData = await response.json();
-        console.log("Respuesta del servidor:", responseData);
-        
-        
-        // Éxito
-        showToast('success', 'Tu solicitud fue enviada exitosamente. Nuestro equipo se pondrá en contacto contigo pronto.', '¡Gracias por tu interés!');
-        confettiAnimation.start();
-        submitStatus.textContent = 'Formulario enviado exitosamente';
-        
-        // Resetear formulario
-        form.reset();
-        
-        // Limpiar estados visuales
-        formFields.forEach(field => {
-          field.classList.remove('field-valid', 'field-invalid');
-          field.setAttribute('aria-invalid', 'false');
-        });
-        
-        setTimeout(() => {
-          controlLedAnimation();
-        }, 100);
-        
-      } catch (error) {
-        console.error("Error al enviar el formulario:", error);
-        showToast('error', 'Hubo un error al enviar el formulario. Por favor, intente nuevamente.', 'Error');
-        submitStatus.textContent = 'Error al enviar el formulario';
-      } finally {
-        submitButton.disabled = false;
-        buttonText.textContent = 'Enviar formulario';
-        buttonSpinner.classList.add('hidden');
-      }
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  // Limpiar mensajes previos
+  submitStatus.textContent = '';
+  const errorMessages = document.querySelectorAll('.error-message');
+  errorMessages.forEach(msg => {
+    msg.classList.add('hidden');
+  });
+  
+  // Validar todos los campos
+  let isValid = true;
+  formFields.forEach(field => {
+    if (!validateField(field)) {
+      isValid = false;
+    }
+  });
+  
+  if (!isValid) {
+    showToast('error', 'Por favor complete todos los campos correctamente.', 'Error');
+    submitStatus.textContent = 'Error: Formulario incompleto';
+    return;
+  }
+  
+  // Estado de carga
+  submitButton.disabled = true;
+  buttonText.textContent = 'Enviando...';
+  buttonSpinner.classList.remove('hidden');
+  submitStatus.textContent = 'Enviando formulario...';
+  
+  try {
+    const formData = new FormData(form);
+    const formObject = {};
+    
+    formData.forEach(function(value, key) {
+      formObject[key] = value;
     });
     
+    console.log("Datos del formulario a enviar:", JSON.stringify(formObject, null, 2));
+    
+    const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/3mknzgigjscwegtansipvrz0163zko73';
+    
+    // ✅ FETCH REQUEST CON VALIDACIÓN MEJORADA PARA MAKE.COM
+    const response = await fetch(MAKE_WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(formObject)
+    });
+    
+    console.log("Status de respuesta:", response.status);
+    
+    // Make.com puede devolver 200, 201, 202, o incluso 204 como éxito
+    if (response.status >= 200 && response.status < 300) {
+      // Respuesta exitosa
+      let responseData = {};
+      
+      try {
+        // Intentar parsear JSON solo si hay contenido
+        const textResponse = await response.text();
+        if (textResponse) {
+          responseData = JSON.parse(textResponse);
+        }
+      } catch (parseError) {
+        // Si no se puede parsear JSON, no es un error crítico
+        console.log("Respuesta sin JSON válido, pero request exitoso");
+        responseData = { status: 'success' };
+      }
+      
+      console.log("Respuesta del servidor:", responseData);
+      
+      // ✅ ÉXITO - Mostrar toast de éxito y confeti
+      showToast('success', 'Tu solicitud fue enviada exitosamente. Nuestro equipo se pondrá en contacto contigo pronto.', '¡Gracias por tu interés!');
+      confettiAnimation.start();
+      submitStatus.textContent = 'Formulario enviado exitosamente';
+      
+      // Resetear formulario
+      form.reset();
+      
+      // Limpiar estados visuales
+      formFields.forEach(field => {
+        field.classList.remove('field-valid', 'field-invalid');
+        field.setAttribute('aria-invalid', 'false');
+      });
+      
+      setTimeout(() => {
+        controlPulseAnimation();
+      }, 100);
+      
+    } else {
+      // ❌ ERROR REAL DEL SERVIDOR
+      const errorText = await response.text();
+      console.error("Error del servidor:", response.status, errorText);
+      throw new Error(`Error HTTP ${response.status}: ${errorText}`);
+    }
+    
+  } catch (error) {
+    console.error("Error al enviar el formulario:", error);
+    showToast('error', 'Hubo un error al enviar el formulario. Por favor, intente nuevamente.', 'Error');
+    submitStatus.textContent = 'Error al enviar el formulario';
+  } finally {
+    submitButton.disabled = false;
+    buttonText.textContent = 'Enviar formulario';
+    buttonSpinner.classList.add('hidden');
+  }
+});
+
     // 10. Inicializaciones
     confettiAnimation.init();
-    controlLedAnimation();
+    controlPulseAnimation();
     
     // 11. Funciones para pruebas
     window.testToast = function() {
