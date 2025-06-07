@@ -1,5 +1,4 @@
 ---
-
 // Interfaz para los testimoniales
 interface Testimonial {
   id: number;
@@ -9,7 +8,7 @@ interface Testimonial {
   image: string;
 }
 
-// Datos ficticios de testimoniales
+// Datos de testimoniales
 const testimonials: Testimonial[] = [
   {
     id: 1,
@@ -32,13 +31,10 @@ const testimonials: Testimonial[] = [
     content: "Cuando empezamos nuestra tienda, teníamos claro que queríamos ofrecer productos de marcas reconocidas, pero necesitábamos un proveedor que confiara en nuestro crecimiento. Motos y Equipos apostó por nosotros desde el día uno. Hoy somos distribuidores autorizados de varias marcas top, con buenos márgenes y apoyo constante.",
     image: "/images/testimonials/rulo.webp"
   }
-
 ];
 ---
-<section id="testimonials" class="relative py-24 md:py-32 overflow-hidden">
-  <!-- El fondo de malla ya está aplicado globalmente en el BaseLayout -->
-  
 
+<section id="testimonials" class="relative py-24 md:py-32 overflow-hidden">
   <div class="container mx-auto px-4 relative z-10">
     <!-- Encabezado -->
     <div class="text-center mb-8">
@@ -52,19 +48,17 @@ const testimonials: Testimonial[] = [
 
     <!-- Carrusel de testimoniales -->
     <div class="testimonials-carousel relative mx-auto max-w-5xl lg:max-w-7xl px-2 md:px-6">
-      <div class="carousel-viewport relative overflow-visible h-[180px] md:h-[400px]">
+      <div class="carousel-viewport relative overflow-visible h-[220px] md:h-[420px]">
         <div class="carousel-track relative h-full">
           {testimonials.map((testimonial, index) => (
             <div 
-              class="testimonial-card absolute w-[calc(100vw-2rem)] md:w-[400px] h-auto min-h-[180px] md:min-h-[350px] top-1/2 -translate-y-1/2 cursor-grab"
+              class="testimonial-card absolute w-[calc(100vw-2rem)] md:w-[400px] h-auto min-h-[200px] md:min-h-[380px] top-1/2 -translate-y-1/2 cursor-grab"
               data-testimonial-id={testimonial.id}
               data-index={index}
             >
-              <div class="bg-white rounded-2xl md:rounded-3xl p-4 md:p-5 h-full flex flex-col relative">
-                <!-- Avatar -->
-                
-                {/* No se muestra el avatar en este componente. Si se desean mostrar avatares, se pueden habilitar estas líneas */}
-                <div class="flex justify-start mb-3 md:mb-4">
+              <div class="bg-white rounded-2xl md:rounded-3xl p-4 md:p-5 h-full flex flex-col relative shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <!-- Avatar centrado -->
+                <div class="flex justify-center mb-3 md:mb-4">
                   <div class="relative">
                     <img 
                       src={testimonial.image}
@@ -74,7 +68,7 @@ const testimonials: Testimonial[] = [
                   </div>
                 </div>
                 
-                <!-- Contenido justificado a la izquierda con espacio optimizado -->
+                <!-- Contenido justificado a la izquierda -->
                 <div class="text-left flex-1 flex flex-col justify-start overflow-hidden px-1">
                   <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-1">
                     {testimonial.name}
@@ -94,419 +88,228 @@ const testimonials: Testimonial[] = [
     </div>
   </div>
 </section>
-<style>
-  /* Estilos mínimos necesarios que no se pueden lograr con Tailwind */
-  .testimonials-carousel {
-    position: relative;
-    width: 100%;
-  }
-
-  .testimonial-card {
-    transition: none;
-    will-change: transform, opacity;
-  }
-
-  .testimonial-card:active {
-    cursor: grabbing;
-  }
-
-
-
-  /* Cards ocultas */
-  .testimonial-card.hidden {
-    pointer-events: none;
-  }
-
-  /* Media query para mobile */
-  @media (max-width: 767px) {
-    .testimonial-card.side,
-    .testimonial-card.hidden {
-      display: none;
-    }
-  }
-</style>
 
 <script>
-  // Esperar a que el DOM esté listo
-  document.addEventListener("DOMContentLoaded", async () => {
-    // Importar GSAP dinámicamente
-    const { gsap } = await import("gsap");
-    
-    const carousel = document.querySelector('.testimonials-carousel') as HTMLElement;
-    const viewport = document.querySelector('.carousel-viewport') as HTMLElement;
-    const track = document.querySelector('.carousel-track') as HTMLElement;
-    const cards = Array.from(document.querySelectorAll('.testimonial-card')) as HTMLElement[];
-    const totalCards = cards.length;
-    
-    // Variables de configuración adaptables
-    const getCardDimensions = () => {
-      const isMobile = window.innerWidth < 768;
-      return {
-        cardWidth: isMobile ? window.innerWidth - 32 : 400, // Tarjetas más anchas
-        cardGap: isMobile ? 30 : 60, // Mayor separación entre tarjetas
-        cardHeight: isMobile ? 'auto' : 'auto' // Altura automática para adaptarse al contenido
-      };
-    };
-    
-    let { cardWidth, cardGap } = getCardDimensions();
-    
-    let currentIndex = 2; // Comenzar con la card central (José Martínez)
-    let isDragging = false;
-    let isTransitioning = false;
-    let autoplayInterval: ReturnType<typeof setInterval>;
-    let autoplayStopped = false;
-
-    // Función para obtener el modo actual (móvil o desktop)
-    function getMode() {
-      return {
-        isMobile: window.innerWidth < 768,
-        visibleCards: window.innerWidth < 768 ? 1 : 3
-      };
-    }
-
-    // Función unificada para actualizar el carrusel
-    function updateCarousel(animate = true) {
-      const { isMobile } = getMode();
-      const viewportWidth = viewport.offsetWidth;
-      const center = viewportWidth / 2;
-      
-      // Actualizar dimensiones por si cambió el tamaño
-      const dimensions = getCardDimensions();
-      cardWidth = dimensions.cardWidth;
-      cardGap = dimensions.cardGap;
-      
-      cards.forEach((card, index) => {
-        // Calcular posición relativa con corrección para loop infinito
-        let position = (index - currentIndex + totalCards) % totalCards;
-        let relativePosition = position;
-        
-        if (position > totalCards / 2) {
-          relativePosition = position - totalCards;
-        }
-        
-        // Calcular posición X - centrada para móvil
-        // Ajustamos para que haya más espacio entre tarjetas y se vean completas
-        let x = center + relativePosition * (cardWidth + cardGap) - cardWidth / 2;
-        
-        // Ajuste especial para móvil - asegurar que esté centrada
-        if (isMobile) {
-          x = center - cardWidth / 2;
-          if (relativePosition !== 0) {
-            x = relativePosition > 0 ? viewportWidth + 50 : -cardWidth - 50;
-          }
-        }
-        
-        // Determinar estado de la card
-        const isActive = relativePosition === 0;
-        const isSide = Math.abs(relativePosition) === 1;
-        const isVisible = isMobile ? isActive : Math.abs(relativePosition) <= 2;
-        
-        // Animación unificada con escala consistente
-        const scaleValue = isActive ? 1.08 : (isSide ? 0.92 : 0.85);
-        const yOffset = isActive ? -20 : 0;
-        
-        gsap.to(card, {
-          x,
-          y: yOffset,
-          scale: isMobile && isActive ? 1 : scaleValue,
-          opacity: isActive ? 1 : (isSide && !isMobile ? 0.85 : (isVisible ? 0.3 : 0)),
-          zIndex: isActive ? 10 : (isSide ? 5 : 1),
-          visibility: isVisible ? 'visible' : 'hidden',
-          duration: animate ? 0.6 : 0,
-          ease: "power2.out"
-        });
-        
-        // Manejo de clases optimizado
-        card.classList.remove('active', 'side', 'hidden');
-        if (isActive) card.classList.add('active');
-        else if (isSide && !isMobile) card.classList.add('side');
-        else card.classList.add('hidden');
-      });
-    }
-
-    // Mover a un índice específico - Simplificado
-    function moveToIndex(newIndex: number, animate = true) {
-      if (isTransitioning) return;
-      
-      isTransitioning = true;
-      currentIndex = ((newIndex % totalCards) + totalCards) % totalCards;
-      updateCarousel(animate);
-      
-      if (animate) {
-        setTimeout(() => {
-          isTransitioning = false;
-        }, 600);
-      } else {
-        isTransitioning = false;
-      }
-    }
-
-    // Funciones de navegación
-    function nextSlide() {
-      moveToIndex(currentIndex + 1);
-    }
-
-    function prevSlide() {
-      moveToIndex(currentIndex - 1);
-    }
-
-    // Control de autoplay mejorado
-    function startAutoplay() {
-      stopAutoplay(); // Limpiar cualquier interval existente
-      if (!autoplayStopped && !isDragging && !isTransitioning) {
-        autoplayInterval = setInterval(nextSlide, 4000);
-      }
-    }
-
-    function stopAutoplay() {
-      if (autoplayInterval) {
-        clearInterval(autoplayInterval);
-        autoplayInterval = null;
-      }
-    }
-
-    // Configurar eventos de swipe/drag
-    let startX = 0;
-    let currentX = 0;
-    let deltaX = 0;
-
-    // Función para actualizar la posición de las tarjetas durante el deslizamiento
-    function updateCardPositionsDuringDrag(dragAmount: number) {
-      const viewportWidth = viewport.offsetWidth;
-      const center = viewportWidth / 2;
-      
-      cards.forEach((card, index) => {
-        // Calcular posición relativa
-        let position = (index - currentIndex + totalCards) % totalCards;
-        let relativePosition = position;
-        if (position > totalCards / 2) relativePosition = position - totalCards;
-        
-        // Solo mover las tarjetas visibles
-        if (Math.abs(relativePosition) <= 1) {
-          // Calcular posición base
-          const baseX = center + relativePosition * (cardWidth + cardGap) - cardWidth / 2;
-          
-          // El efecto de arrastre es mayor en la tarjeta activa y menor en las laterales
-          const dragEffect = dragAmount * (1 - Math.abs(relativePosition) * 0.3);
-          
-          // Aplicar posición inmediatamente sin animación para seguir el cursor/dedo
-          gsap.set(card, {
-            x: baseX + dragEffect
-          });
-        }
-      });
-    }
-
-    // Eventos de mouse - optimizados para deslizamiento natural
-    carousel.addEventListener('mousedown', (e: MouseEvent) => {
-      if (isTransitioning) return;
-      isDragging = true;
-      startX = e.clientX;
-      currentX = startX;
-      carousel.style.cursor = 'grabbing';
-      stopAutoplay();
-      
-      // Detener animaciones en curso para un deslizamiento más fluido
-      cards.forEach(card => {
-        gsap.killTweensOf(card);
-      });
-    });
-
-    document.addEventListener('mousemove', (e: MouseEvent) => {
-      if (!isDragging) return;
-      e.preventDefault();
-      currentX = e.clientX;
-      deltaX = currentX - startX;
-      
-      // Factor de resistencia para que el deslizamiento se sienta natural
-      const dragFactor = 0.8;
-      const dragAmount = deltaX * dragFactor;
-      
-      // Usar la función refactorizada para actualizar posiciones
-      updateCardPositionsDuringDrag(dragAmount);
-    });
-
-    document.addEventListener('mouseup', () => {
-      if (!isDragging) return;
-      isDragging = false;
-      carousel.style.cursor = 'grab';
-      
-      // Umbral adaptativo basado en el ancho de la tarjeta
-      const threshold = cardWidth * 0.15; // 15% del ancho de la tarjeta
-      
-      if (Math.abs(deltaX) > threshold) {
-        // Determinar dirección del deslizamiento
-        if (deltaX < 0) {
-          // Deslizamiento a la izquierda - siguiente slide
-          nextSlide();
-        } else {
-          // Deslizamiento a la derecha - slide anterior
-          prevSlide();
-        }
-      } else {
-        // Si el deslizamiento no alcanza el umbral, volver a la posición original
-        updateCarousel(true);
-      }
-      
-      // Reiniciar autoplay
-      setTimeout(startAutoplay, 1000);
-    });
-
-    // Eventos touch para móvil - optimizados para deslizamiento natural
-    carousel.addEventListener('touchstart', (e: TouchEvent) => {
-      if (isTransitioning) return;
-      isDragging = true;
-      startX = e.touches[0].clientX;
-      currentX = startX;
-      stopAutoplay();
-      
-      // Detener animaciones en curso para un deslizamiento más fluido
-      cards.forEach(card => {
-        gsap.killTweensOf(card);
-      });
-    }, { passive: true });
-
-    carousel.addEventListener('touchmove', (e: TouchEvent) => {
-      if (!isDragging) return;
-      currentX = e.touches[0].clientX;
-      deltaX = currentX - startX;
-      
-      // Factor de resistencia para que el deslizamiento se sienta natural
-      const dragFactor = 0.8;
-      const dragAmount = deltaX * dragFactor;
-      
-      // Usar la función refactorizada para actualizar posiciones
-      updateCardPositionsDuringDrag(dragAmount);
-    }, { passive: true });
-
-    carousel.addEventListener('touchend', () => {
-      if (!isDragging) return;
-      isDragging = false;
-      
-      // Umbral adaptativo basado en el ancho de la tarjeta
-      const threshold = cardWidth * 0.15; // 15% del ancho de la tarjeta
-      
-      if (Math.abs(deltaX) > threshold) {
-        // Determinar dirección del deslizamiento
-        if (deltaX < 0) {
-          // Deslizamiento a la izquierda - siguiente slide
-          nextSlide();
-        } else {
-          // Deslizamiento a la derecha - slide anterior
-          prevSlide();
-        }
-      } else {
-        // Si el deslizamiento no alcanza el umbral, volver a la posición original
-        updateCarousel(true);
-      }
-      
-      // Retrasar el inicio del autoplay
-      setTimeout(startAutoplay, 1000);
-    });
-
-    // Pausar autoplay al hover
-    carousel.addEventListener('mouseenter', () => {
-      autoplayStopped = true;
-      stopAutoplay();
-    });
-
-    carousel.addEventListener('mouseleave', () => {
-      autoplayStopped = false;
-      if (!isDragging) startAutoplay();
-    });
-
-    // Manejar resize de manera más eficiente con debounce
-    let resizeTimeout: ReturnType<typeof setTimeout>;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        if (!isDragging && !isTransitioning) {
-          // Actualizar dimensiones
-          const dimensions = getCardDimensions();
-          cardWidth = dimensions.cardWidth;
-          cardGap = dimensions.cardGap;
-          
-          updateCarousel(false);
-        }
-      }, 250);
-    });
-
-    // Prevenir selección de texto durante drag
-    carousel.addEventListener('selectstart', (e) => {
-      if (isDragging) e.preventDefault();
-    });
-
-    // Animación de entrada optimizada con IntersectionObserver
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // Primero posicionar las cards sin animación
-          updateCarousel(false);
-          
-          // Luego animar la entrada
-          gsap.fromTo(cards, 
-            { 
-              opacity: 0, 
-              y: 30,
-              scale: 0.9
-            },
-            { 
-              opacity: 1, 
-              y: 0,
-              scale: 1,
-              stagger: {
-                each: 0.1,
-                from: "center"
-              },
-              duration: 0.8,
-              ease: "power2.out",
-              onComplete: () => {
-                // Aplicar el estado final después de la animación
-                updateCarousel(false);
-              }
-            }
-          );
-          
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    observer.observe(carousel);
-
-    // Inicialización corregida
-    // Primero establecer las posiciones iniciales
-    cards.forEach((card) => {
-      gsap.set(card, {
-        opacity: 0,
-        y: 0,
-        scale: 1
-      });
-    });
-    
-    // Comenzar con el índice correcto (José en el centro)
-    currentIndex = 2;
-    
-    // Iniciar autoplay
-    startAutoplay();
+document.addEventListener("DOMContentLoaded", async () => {
+  // Importar GSAP dinámicamente
+  const { gsap } = await import("gsap");
+  
+  const carousel = document.querySelector('.testimonials-carousel') as HTMLElement;
+  const viewport = document.querySelector('.carousel-viewport') as HTMLElement;
+  const cards = Array.from(document.querySelectorAll('.testimonial-card')) as HTMLElement[];
+  const totalCards = cards.length;
+  
+  let currentIndex = 0;
+  let isDragging = false;
+  let isTransitioning = false;
+  let autoplayInterval: ReturnType<typeof setInterval>;
+  let autoplayStopped = false;
+  
+  // Configuración responsive
+  const getConfig = () => ({
+    isMobile: window.innerWidth < 768,
+    cardWidth: window.innerWidth < 768 ? window.innerWidth - 32 : 400,
+    cardGap: window.innerWidth < 768 ? 30 : 60
   });
+  
+  let config = getConfig();
+
+  // Actualizar carrusel
+  function updateCarousel(animate = true) {
+    const viewportWidth = viewport.offsetWidth;
+    const center = viewportWidth / 2;
+    config = getConfig();
+    
+    cards.forEach((card, index) => {
+      // Calcular posición relativa
+      let relativePosition = (index - currentIndex + totalCards) % totalCards;
+      if (relativePosition > totalCards / 2) {
+        relativePosition = relativePosition - totalCards;
+      }
+      
+      // Calcular posición X
+      let x = center + relativePosition * (config.cardWidth + config.cardGap) - config.cardWidth / 2;
+      
+      // Ajuste para móvil
+      if (config.isMobile) {
+        x = center - config.cardWidth / 2;
+        if (relativePosition !== 0) {
+          x = relativePosition > 0 ? viewportWidth + 50 : -config.cardWidth - 50;
+        }
+      }
+      
+      // Estados de la card
+      const isActive = relativePosition === 0;
+      const isSide = Math.abs(relativePosition) === 1;
+      const isVisible = config.isMobile ? isActive : Math.abs(relativePosition) <= 1;
+      
+      // Animación
+      const scaleValue = isActive ? 1.08 : (isSide ? 0.92 : 0.85);
+      const yOffset = isActive ? -20 : 0;
+      
+      gsap.to(card, {
+        x,
+        y: yOffset,
+        scale: config.isMobile && isActive ? 1 : scaleValue,
+        opacity: isActive ? 1 : (isSide && !config.isMobile ? 0.85 : (isVisible ? 0.3 : 0)),
+        zIndex: isActive ? 10 : (isSide ? 5 : 1),
+        visibility: isVisible ? 'visible' : 'hidden',
+        duration: animate ? 0.6 : 0,
+        ease: "power2.out"
+      });
+      
+      // Manejo de clases para CSS
+      card.classList.remove('active', 'side', 'hidden');
+      if (isActive) card.classList.add('active');
+      else if (isSide && !config.isMobile) card.classList.add('side');
+      else card.classList.add('hidden');
+    });
+  }
+
+  // Navegación
+  function moveToIndex(newIndex: number) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    currentIndex = ((newIndex % totalCards) + totalCards) % totalCards;
+    updateCarousel();
+    setTimeout(() => { isTransitioning = false; }, 600);
+  }
+
+  function nextSlide() { moveToIndex(currentIndex + 1); }
+  function prevSlide() { moveToIndex(currentIndex - 1); }
+
+  // Autoplay
+  function startAutoplay() {
+    if (autoplayInterval) clearInterval(autoplayInterval);
+    if (!autoplayStopped && !isDragging) {
+      autoplayInterval = setInterval(nextSlide, 4000);
+    }
+  }
+
+  function stopAutoplay() {
+    if (autoplayInterval) clearInterval(autoplayInterval);
+  }
+
+  // Drag/Swipe
+  let startX = 0, deltaX = 0;
+
+  function handleStart(clientX: number) {
+    if (isTransitioning) return;
+    isDragging = true;
+    startX = clientX;
+    stopAutoplay();
+  }
+
+  function handleMove(clientX: number) {
+    if (!isDragging) return;
+    deltaX = clientX - startX;
+    
+    // Aplicar arrastre visual
+    const dragAmount = deltaX * 0.8;
+    const center = viewport.offsetWidth / 2;
+    
+    cards.forEach((card, index) => {
+      let relativePosition = (index - currentIndex + totalCards) % totalCards;
+      if (relativePosition > totalCards / 2) relativePosition -= totalCards;
+      
+      if (Math.abs(relativePosition) <= 1) {
+        const baseX = center + relativePosition * (config.cardWidth + config.cardGap) - config.cardWidth / 2;
+        gsap.set(card, { x: baseX + dragAmount });
+      }
+    });
+  }
+
+  function handleEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    
+    const threshold = config.cardWidth * 0.15;
+    if (Math.abs(deltaX) > threshold) {
+      deltaX < 0 ? nextSlide() : prevSlide();
+    } else {
+      updateCarousel();
+    }
+    
+    setTimeout(startAutoplay, 1000);
+  }
+
+  // Event listeners
+  carousel.addEventListener('mousedown', (e: MouseEvent) => {
+    handleStart(e.clientX);
+    carousel.classList.add('cursor-grabbing');
+  });
+
+  document.addEventListener('mousemove', (e: MouseEvent) => {
+    if (isDragging) {
+      e.preventDefault();
+      handleMove(e.clientX);
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (isDragging) {
+      handleEnd();
+      carousel.classList.remove('cursor-grabbing');
+    }
+  });
+
+  // Touch events
+  carousel.addEventListener('touchstart', (e: TouchEvent) => {
+    handleStart(e.touches[0].clientX);
+  }, { passive: true });
+
+  carousel.addEventListener('touchmove', (e: TouchEvent) => {
+    if (isDragging) handleMove(e.touches[0].clientX);
+  }, { passive: true });
+
+  carousel.addEventListener('touchend', handleEnd);
+
+  // Hover pause
+  carousel.addEventListener('mouseenter', () => {
+    autoplayStopped = true;
+    stopAutoplay();
+  });
+
+  carousel.addEventListener('mouseleave', () => {
+    autoplayStopped = false;
+    if (!isDragging) startAutoplay();
+  });
+
+  // Resize
+  window.addEventListener('resize', () => {
+    if (!isDragging && !isTransitioning) updateCarousel(false);
+  });
+
+  // Prevenir selección de texto
+  carousel.addEventListener('selectstart', (e) => {
+    if (isDragging) e.preventDefault();
+  });
+
+  // Inicialización
+  updateCarousel(false);
+  startAutoplay();
+});
 </script>
 
 <style>
-  /* Animación flotante para la llanta */
-  .floating-tire {
-    animation: float 6s ease-in-out infinite;
+.testimonials-carousel {
+  position: relative;
+  width: 100%;
+}
+
+.testimonial-card {
+  will-change: transform, opacity;
+}
+
+.testimonial-card:active {
+  cursor: grabbing;
+}
+
+/* Ocultar cards que no sean visibles, pero mantener la activa en móvil */
+@media (max-width: 767px) {
+  .testimonial-card.side,
+  .testimonial-card.hidden {
+    display: none;
   }
-  
-  @keyframes float {
-    0% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-    100% {
-      transform: translateY(0);
-    }
-  }
+}
 </style>
