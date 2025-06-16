@@ -84,65 +84,64 @@ const secondLine = titleParts.slice(3).join(" "); // "Distribuidor KENDA?"
     <p class="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-black my-6 sm:my-4 md:my-6 lg:my-8 font-light">
       <span class="md:whitespace-nowrap">{subtitle}</span>
     </p>
+    
+    <!-- Nuevo CTA limpio y organizado -->
+    <div class="mt-8 md:mt-12">
+      <button 
+        type="button"
+        id="registro-cta-button"
+        aria-label="Iniciar proceso de registro como distribuidor"
+        class="group relative bg-white/95 backdrop-blur-sm rounded-full pl-8 pr-3 py-3 shadow-lg hover:shadow-xl transition-all duration-300 ease-out hover:bg-white border border-gray-200/50 focus:outline-none focus:ring-4 focus:ring-orange-300/50 inline-flex items-center min-w-[280px] sm:min-w-[320px]"
+      >
+        <!-- Texto del botón -->
+        <span class="text-gray-700 font-medium text-lg md:text-xl group-hover:text-gray-900 transition-colors duration-300 mr-6 flex-1">
+          Iniciar registro
+        </span>
         
-        <!-- Tarjeta CTA con Shine Border Effect -->
-        <div class="relative mx-auto md:mx-0 w-full max-w-[280px] sm:max-w-xs">
-          <!-- Efecto de brillo animado del borde -->
-          <div class="absolute -inset-[1px] rounded-xl sm:rounded-2xl bg-gradient-to-r from-red-500 via-[#F7941D] to-red-500 opacity-75 blur-sm animate-shine-border"></div>
-          
-          <!-- Tarjeta principal -->
-          <div class="relative bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-3 shadow-lg w-full border border-gray-100/50 backdrop-blur-sm">
-            <div class="text-center">
-              <p class="block text-sm sm:text-base font-medium text-gray-700 mb-3 sm:mb-4">Empezar registro</p>
-              
-              <!-- Botón scroll animado responsive -->
-              <button
-                type="button"
-                id="scroll-to-form-button"
-                aria-label="Ir al formulario de registro"
-                class="mx-auto bg-[#F7941D] hover:bg-[#e8841a] text-white rounded-full flex items-center justify-center transition-all duration-300 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300"
-              >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke-width="2.5" 
-                  stroke="currentColor" 
-                  class="w-7 h-7 md:w-8 md:h-8 animate-bounce-gentle" 
-                  id="arrow-down-icon"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
-                </svg>
-              </button>
-              
-              <!-- Texto de ayuda responsive -->
-              <p class="text-gray-500 text-xs sm:text-sm mt-2 sm:mt-3">
-                Haz clic para completar tu registro
-              </p>
-            </div>
-          </div>
+        <!-- Círculo naranja con flecha -->
+        <div class="w-10 h-10 md:w-12 md:h-12 bg-[#F7941D] rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-[#e8841a] group-hover:scale-110 animate-pulse-soft flex-shrink-0">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke-width="2.5" 
+            stroke="currentColor" 
+            class="w-5 h-5 md:w-6 md:h-6 text-white transform transition-transform duration-300 group-hover:translate-x-1 animate-float-arrow" 
+            id="arrow-right-icon"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
         </div>
-      </div>
+      </button>
     </div>
+  </div>
+</div>
   </div>
   
 
 </section>
 
-<!-- Script simplificado para scroll suave -->
+
+
+<!-- Script para el nuevo CTA -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const scrollButton = document.getElementById('scroll-to-form-button');
-    const arrowIcon = document.getElementById('arrow-down-icon');
+    const registroButton = document.getElementById('registro-cta-button');
+    const arrowIcon = document.getElementById('arrow-right-icon');
     
-    if (scrollButton && arrowIcon) {
-      scrollButton.addEventListener('click', function() {
-        // Añadir efecto de click
-        scrollButton.classList.add('animate-pulse');
-        arrowIcon.classList.remove('animate-bounce-gentle');
-        arrowIcon.classList.add('animate-spin');
+    if (registroButton && arrowIcon) {
+      registroButton.addEventListener('click', function() {
+        // Animación sutil de la flecha al hacer click
+        arrowIcon.classList.add('animate-arrow-click');
         
-        // Scroll suave al formulario
+        // Pausar temporalmente las animaciones continuas durante el click
+        const circleContainer = arrowIcon.closest('.animate-pulse-soft') as HTMLElement;
+        if (circleContainer) {
+          circleContainer.style.animationPlayState = 'paused';
+          (arrowIcon as HTMLElement).style.animationPlayState = 'paused';
+        }
+        
+        // Scroll automático al formulario
         setTimeout(() => {
           const formularioSection = document.getElementById('formulario');
           if (formularioSection) {
@@ -156,28 +155,85 @@ const secondLine = titleParts.slice(3).join(" "); // "Distribuidor KENDA?"
             history.pushState(null, '', '#formulario');
           }
           
-          // Restaurar animaciones después del scroll
+          // Remover la animación después del scroll y reanudar las continuas
           setTimeout(() => {
-            scrollButton.classList.remove('animate-pulse');
-            arrowIcon.classList.remove('animate-spin');
-            arrowIcon.classList.add('animate-bounce-gentle');
-          }, 1000);
-        }, 200);
-      });
-      
-      // Efectos hover mejorados
-      scrollButton.addEventListener('mouseenter', () => {
-        arrowIcon.style.transform = 'translateY(2px)';
-      });
-      
-      scrollButton.addEventListener('mouseleave', () => {
-        arrowIcon.style.transform = 'translateY(0)';
+            arrowIcon.classList.remove('animate-arrow-click');
+            
+            // Reanudar animaciones continuas
+            const circleContainer = arrowIcon.closest('.animate-pulse-soft') as HTMLElement;
+            if (circleContainer) {
+              circleContainer.style.animationPlayState = 'running';
+              (arrowIcon as HTMLElement).style.animationPlayState = 'running';
+            }
+          }, 800);
+        }, 150);
       });
     }
   });
 </script>
 
 <style>
+  /* Animación continua de palpitación suave para el círculo */
+  .animate-pulse-soft {
+    animation: pulseSoft 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulseSoft {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(247, 148, 29, 0.4);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 8px rgba(247, 148, 29, 0);
+    }
+  }
+  
+  /* Animación flotante sutil para la flecha */
+  .animate-float-arrow {
+    animation: floatArrow 3s ease-in-out infinite;
+  }
+  
+  @keyframes floatArrow {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(2px);
+    }
+  }
+  
+  /* Animación sutil para la flecha al hacer click */
+  .animate-arrow-click {
+    animation: arrowClick 0.6s ease-out;
+  }
+  
+  @keyframes arrowClick {
+    0% {
+      transform: translateX(0) scale(1);
+    }
+    30% {
+      transform: translateX(4px) scale(1.1);
+    }
+    60% {
+      transform: translateX(-2px) scale(0.95);
+    }
+    100% {
+      transform: translateX(0) scale(1);
+    }
+  }
+  
+  /* Mejoras adicionales para el CTA */
+  #registro-cta-button:hover .bg-\[#F7941D\] {
+    transform: scale(1.05);
+  }
+  
+  /* Estados de focus mejorados */
+  #registro-cta-button:focus-visible {
+    outline: 2px solid #F7941D;
+    outline-offset: 3px;
+  }
+
   /* Filtro para la imagen de las gradas */
   .filter-img {
     filter: brightness(0.9) contrast(0.9);
@@ -202,78 +258,13 @@ const secondLine = titleParts.slice(3).join(" "); // "Distribuidor KENDA?"
     background-position: center;
   }
   
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  
-  /* Animaciones para el botón CTA */
-  .animated-pulse-glow {
-    animation: pulseGlow 2s ease-in-out infinite;
-  }
-  
-  @keyframes pulseGlow {
-    0%, 100% {
-      box-shadow: 0 0 20px rgba(247, 148, 29, 0.5);
-    }
-    50% {
-      box-shadow: 0 0 30px rgba(247, 148, 29, 0.8);
-    }
-  }
-  
-  /* Animación suave de bounce para la flecha */
-  .animate-bounce-gentle {
-    animation: bounceGentle 2s ease-in-out infinite;
-  }
-  
-  @keyframes bounceGentle {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-4px);
-    }
-  }
-  
-  /* Transiciones suaves */
-  #scroll-to-form-button {
-    transition: all 0.3s ease;
-  }
-  
-  #arrow-down-icon {
-    transition: transform 0.2s ease;
-  }
-  
-  /* Shine Border Animation */
-  @keyframes shine-border {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-  
-  .animate-shine-border {
-    background-size: 200% 200%;
-    animation: shine-border 3s ease-in-out infinite;
-  }
-  
   /* Responsive adjustments */
   @media (max-width: 768px) {
     .grid-background {
       background-size: 60px 60px;
     }
   }
-    
-  /* Focus states para accesibilidad */
-  #scroll-to-form-button:focus-visible {
-    outline: 2px solid #F7941D;
-    outline-offset: 2px;
-  }
+  
   /* Animación flotante para la llanta */
   .floating-tire {
     animation: float 6s ease-in-out infinite;

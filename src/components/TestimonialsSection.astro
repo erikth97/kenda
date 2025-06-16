@@ -1,35 +1,39 @@
 ---
-// Interfaz para los testimoniales
+// Interfaz mejorada para los testimoniales
 interface Testimonial {
   id: number;
   name: string;
-  location: string;
+  role?: string; // Separar rol del nombre
+  company: string; // Más claro que "location"
   content: string;
   image: string;
 }
 
-// Datos de testimoniales
+// Datos de testimoniales actualizados
 const testimonials: Testimonial[] = [
   {
     id: 1,
-    name: "Carlos Rivas",
-    location: "Distribuidor Motozone CDMX",
-    content: "Llevamos más de 6 años trabajando con Motos y Equipos, y la diferencia se nota. El surtido de marcas es impresionante y siempre están a la vanguardia con lo último en protección y refacciones. Para nosotros, contar con un proveedor confiable y puntual es clave, y ellos no fallan. Nuestro catálogo creció y nuestros clientes lo notan.",
-    image: "/images/testimonials/carlos.webp"
+    name: "Elsa Antonia Navarro",
+    role: "Cliente 706202",
+    company: "El Pedal Dorado",
+    content: "La número 1 pedida y recomendada por los clientes.",
+    image: "/images/testimonials/elpedal.jpeg"
   },
   {
     id: 2,
-    name: "Lucía Méndez",
-    location: "Distribuidora Garage 76 Custom",
-    content: "Lo que más valoramos de Motos y Equipos es su conocimiento técnico. No solo venden, te asesoran sobre compatibilidad, materiales y stock real. Nosotros trabajamos con marcas premium y ellos son el enlace perfecto para tener acceso a esas refacciones de calidad que no se consiguen fácil. Además, sus tiempos de entrega son buenísimos.",
-    image: "/images/testimonials/lucia.webp"
+    name: "Santiago Amador Chan Catzin",
+    role: "Cliente 706502",
+    company: "Moto Repuestos del Poniente",
+    content: "Una llanta resistente, de buen amarre, confiable y duradera, le tiene mucha confianza nuestros clientes.",
+    image: "/images/testimonials/motorepuestos.jpeg"
   },
   {
     id: 3,
-    name: "Raúl Ortega",
-    location: "Distribuidor Ruta Libre Wear",
-    content: "Cuando empezamos nuestra tienda, teníamos claro que queríamos ofrecer productos de marcas reconocidas, pero necesitábamos un proveedor que confiara en nuestro crecimiento. Motos y Equipos apostó por nosotros desde el día uno. Hoy somos distribuidores autorizados de varias marcas top, con buenos márgenes y apoyo constante.",
-    image: "/images/testimonials/rulo.webp"
+    name: "José Baas",
+    role: "Cliente 705902",
+    company: "Refaccionaria Los Ositos",
+    content: "Toma la mejor decisión y vive la experiencia rodando con llantas Kenda. Excelente calidad y durabilidad, contamos con variedad de medidas.",
+    image: "/images/testimonials/losositos.jpeg"
   }
 ];
 ---
@@ -37,48 +41,65 @@ const testimonials: Testimonial[] = [
 <section id="testimonials" class="relative py-24 md:py-32 overflow-hidden">
   <div class="container mx-auto px-4 relative z-10">
     <!-- Encabezado -->
-    <div class="text-center mb-8">
-      <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+    <div class="text-center mb-12 md:mb-16">
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
         Testimoniales
       </h2>
-      <p class="text-lg text-gray-600">
+      <p class="text-base md:text-lg text-gray-600">
         Más de 5,000 distribuidores
       </p>
     </div>
 
     <!-- Carrusel de testimoniales -->
-    <div class="testimonials-carousel relative mx-auto max-w-5xl lg:max-w-7xl px-2 md:px-6">
-      <div class="carousel-viewport relative overflow-visible h-[220px] md:h-[420px]">
+    <div class="testimonials-carousel relative mx-auto max-w-[320px] xs:max-w-[360px] sm:max-w-[640px] md:max-w-5xl lg:max-w-7xl px-2 sm:px-4 md:px-6">
+      <div class="carousel-viewport relative overflow-visible h-[280px] sm:h-[320px] md:h-[450px]">
         <div class="carousel-track relative h-full">
           {testimonials.map((testimonial, index) => (
             <div 
-              class="testimonial-card absolute w-[calc(100vw-2rem)] md:w-[400px] h-auto min-h-[200px] md:min-h-[380px] top-1/2 -translate-y-1/2 cursor-grab"
+              class="testimonial-card absolute w-[280px] xs:w-[300px] sm:w-[320px] md:w-[400px] h-[260px] sm:h-[280px] md:h-[420px] top-1/2 -translate-y-1/2 cursor-grab"
               data-testimonial-id={testimonial.id}
               data-index={index}
             >
-              <div class="bg-white rounded-2xl md:rounded-3xl p-4 md:p-5 h-full flex flex-col relative shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div class="bg-white rounded-xl md:rounded-2xl lg:rounded-3xl p-3 xs:p-3.5 sm:p-4 md:p-5 h-full flex flex-col relative shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <!-- Quote Icon -->
+                <div class="absolute top-2 left-2 text-gray-200">
+                  <svg class="w-6 h-6 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                  </svg>
+                </div>
+
                 <!-- Avatar centrado -->
-                <div class="flex justify-center mb-3 md:mb-4">
+                <div class="flex justify-center mb-2 sm:mb-3 md:mb-4">
                   <div class="relative">
                     <img 
                       src={testimonial.image}
                       alt={testimonial.name}
-                      class="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover"
+                      class="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full object-cover"
                     />
                   </div>
                 </div>
                 
                 <!-- Contenido justificado a la izquierda -->
                 <div class="text-left flex-1 flex flex-col justify-start overflow-hidden px-1">
-                  <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-1">
-                    {testimonial.name}
-                  </h3>
-                  <p class="text-gray-600 text-xs mb-2">
-                    {testimonial.location}
+                  <div class="mb-2">
+                    <h3 class="text-[11px] sm:text-xs md:text-sm lg:text-base font-medium text-gray-800 leading-tight">
+                      {testimonial.name}
+                    </h3>
+                    {testimonial.role && (
+                      <p class="text-[9px] sm:text-[10px] md:text-xs font-light text-gray-500">
+                        {testimonial.role}
+                      </p>
+                    )}
+                  </div>
+                  <p class="text-gray-600 text-[9px] sm:text-[10px] md:text-xs mb-2 font-medium">
+                    {testimonial.company}
                   </p>
-                  <p class="text-gray-700 leading-relaxed text-[10px] md:text-xs overflow-y-auto pr-1">
-                    {testimonial.content}
-                  </p>
+                  
+                  <div class="flex-1 overflow-y-auto">
+                    <p class="text-gray-700 leading-relaxed text-[10px] sm:text-xs md:text-sm lg:text-base pr-1">
+                      {testimonial.content}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -105,11 +126,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   let autoplayInterval: ReturnType<typeof setInterval>;
   let autoplayStopped = false;
   
-  // Configuración responsive
+  // Configuración responsive mejorada
   const getConfig = () => ({
-    isMobile: window.innerWidth < 768,
-    cardWidth: window.innerWidth < 768 ? window.innerWidth - 32 : 400,
-    cardGap: window.innerWidth < 768 ? 30 : 60
+    isMobile: window.innerWidth < 640,
+    isTablet: window.innerWidth >= 640 && window.innerWidth < 768,
+    cardWidth: window.innerWidth < 360 ? 280 : 
+               window.innerWidth < 480 ? 300 :
+               window.innerWidth < 640 ? 320 : 
+               window.innerWidth < 768 ? 320 : 400,
+    cardGap: window.innerWidth < 640 ? 12 : // Reducir gap en móvil
+             window.innerWidth < 768 ? 40 : 60
   });
   
   let config = getConfig();
@@ -130,12 +156,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Calcular posición X
       let x = center + relativePosition * (config.cardWidth + config.cardGap) - config.cardWidth / 2;
       
-      // Ajuste para móvil
+      // Ajuste para móvil y tablet
       if (config.isMobile) {
         x = center - config.cardWidth / 2;
         if (relativePosition !== 0) {
           x = relativePosition > 0 ? viewportWidth + 50 : -config.cardWidth - 50;
         }
+      } else if (config.isTablet) {
+        // En tablet, permitir ver parcialmente las cards adyacentes
+        x = center + relativePosition * (config.cardWidth + config.cardGap) - config.cardWidth / 2;
       }
       
       // Estados de la card
@@ -143,14 +172,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       const isSide = Math.abs(relativePosition) === 1;
       const isVisible = config.isMobile ? isActive : Math.abs(relativePosition) <= 1;
       
-      // Animación
-      const scaleValue = isActive ? 1.08 : (isSide ? 0.92 : 0.85);
-      const yOffset = isActive ? -20 : 0;
+      // Animación responsive
+      let scaleValue, yOffset;
+      
+      if (config.isMobile) {
+        scaleValue = isActive ? 1 : 0.9;
+        yOffset = isActive ? -10 : 0;
+      } else if (config.isTablet) {
+        scaleValue = isActive ? 1.05 : (isSide ? 0.95 : 0.9);
+        yOffset = isActive ? -15 : 0;
+      } else {
+        scaleValue = isActive ? 1.08 : (isSide ? 0.92 : 0.85);
+        yOffset = isActive ? -20 : 0;
+      }
       
       gsap.to(card, {
         x,
         y: yOffset,
-        scale: config.isMobile && isActive ? 1 : scaleValue,
+        scale: scaleValue,
         opacity: isActive ? 1 : (isSide && !config.isMobile ? 0.85 : (isVisible ? 0.3 : 0)),
         zIndex: isActive ? 10 : (isSide ? 5 : 1),
         visibility: isVisible ? 'visible' : 'hidden',
@@ -299,17 +338,38 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 .testimonial-card {
   will-change: transform, opacity;
+  transition: filter 0.3s ease;
 }
 
 .testimonial-card:active {
   cursor: grabbing;
 }
 
-/* Ocultar cards que no sean visibles, pero mantener la activa en móvil */
-@media (max-width: 767px) {
+/* Efecto de blur en cards no activas */
+.testimonial-card.side {
+  filter: blur(0.5px);
+}
+
+.testimonial-card.hidden {
+  filter: blur(1px);
+}
+
+/* Responsive design mejorado */
+@media (max-width: 639px) {
   .testimonial-card.side,
   .testimonial-card.hidden {
     display: none;
   }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  .testimonial-card.hidden {
+    opacity: 0.2;
+  }
+}
+
+/* Quote icon styling */
+.testimonial-card .absolute svg {
+  opacity: 0.5;
 }
 </style>

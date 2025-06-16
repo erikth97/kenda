@@ -2,7 +2,7 @@
 /**
  * Footer.astro
  * 
- * Footer para la landing page de KENDA
+ * Footer rediseñado para la landing page de KENDA
  */
 
 // Año actual para el copyright
@@ -10,53 +10,58 @@ const currentYear = new Date().getFullYear();
 
 // Logos de empresas
 const companyLogos = {
-  motomex: '/images/motomex.png',
-  motosyequipos: '/images/motos_equipos.webp'
+  motomex: '/images/motomex.png'
 };
 
 // Redes sociales
 const socialLinks = [
   { platform: 'facebook', url: 'https://www.facebook.com/MotoYEquip.SA', icon: 'facebook' },
+  { platform: 'linkedin', url: '#', icon: 'linkedin' },
   { platform: 'youtube', url: 'https://www.youtube.com/@MotosYEquiposSA', icon: 'youtube' },
   { platform: 'instagram', url: 'https://www.instagram.com/motosyequiposmonterrey', icon: 'instagram' }
 ];
 
-// Dirección
-const address = "Pino Suárez Nte. 750, Centro 64000, Monterrey N.L., México.";
+// Información de contacto
+const contactInfo = {
+  address: "Pino Suárez Nte. 750, Centro 64000 , Monterrey N.L., México.",
+  phone: "6562764032"
+};
 ---
 
-<footer class="bg-kenda-orange text-white w-full pt-10 pb-8 md:pt-12 relative z-10">
+<footer class="bg-kenda-orange text-white w-full py-10 md:py-14 relative z-10">
   <div class="w-full px-6 sm:px-8 md:px-16 lg:px-24">
-    <!-- Dirección y Copyright -->
-    <div class="text-center mb-12 md:mb-16">
-      <p class="text-sm sm:text-base mb-6 md:mb-8">{address}</p>
-      <p class="text-sm sm:text-base text-white text-opacity-70">Copyright © {currentYear} Motos y Equipos</p>
+    <!-- Información de contacto centrada (arriba) -->
+    <div class="text-center mb-10 md:mb-14">
+      <p class="text-sm sm:text-base mb-2 font-medium">{contactInfo.address}</p>
+      <p class="text-sm sm:text-base font-medium">{contactInfo.phone}</p>
     </div>
     
     <!-- Línea separadora -->
-    <div class="border-t border-white border-opacity-20 my-8 md:my-12"></div>
+    <div class="border-t border-white border-opacity-30 mb-10 md:mb-14"></div>
     
-    <!-- Logos y redes sociales -->
-    <div class="flex flex-col md:flex-row justify-between items-center">
-      <!-- Logos de empresas (izquierda) -->
-      <div class="flex flex-col sm:flex-row items-center space-y-8 sm:space-y-0 sm:space-x-16 md:space-x-24 lg:space-x-32 mb-8 md:mb-0">
-        <a href="https://motomex.com" target="_blank" rel="noopener noreferrer">
-          <img src={companyLogos.motomex} alt="Motomex" class="h-10 sm:h-12">
-        </a>
-        <a href="#">
-          <img src={companyLogos.motosyequipos} alt="Motos y Equipos" class="h-5 sm:h-6">
+    <!-- Contenedor inferior: logos, copyright y redes sociales -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-0 items-center">
+      <!-- Logo de empresa (izquierda) -->
+      <div class="flex justify-center md:justify-start">
+        <a href="https://motomex.com" target="_blank" rel="noopener noreferrer" class="transition-transform hover:scale-105">
+          <img src={companyLogos.motomex} alt="Motomex" class="h-12 sm:h-16 md:h-18">
         </a>
       </div>
       
+      <!-- Copyright (centro) -->
+      <div class="flex justify-center order-first md:order-none">
+        <p class="text-sm text-white font-light text-center">Copyright © {currentYear} Motos y Equipos</p>
+      </div>
+      
       <!-- Redes sociales (derecha) -->
-      <div class="flex justify-center space-x-5 sm:space-x-6">
+      <div class="flex justify-center md:justify-end space-x-4 sm:space-x-5">
         {socialLinks.map(social => (
           <a 
             href={social.url} 
             target="_blank" 
             rel="noopener noreferrer" 
             aria-label={`Síguenos en ${social.platform}`}
-            class="text-white hover:text-gray-200 transition-colors"
+            class="text-white hover:text-gray-200 transition-all duration-200 hover:scale-110"
           >
             {social.platform === 'facebook' && (
               <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="currentColor" viewBox="0 0 24 24">
