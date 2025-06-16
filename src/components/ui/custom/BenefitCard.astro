@@ -1,39 +1,85 @@
 ---
 /**
  * BenefitCard.astro
- *   
- * Componente para mostrar beneficios de ser distribuidor KENDA
- * Adaptado para coincidir con el diseño final
+ * 
+ * Componente modular y optimizado para mostrar beneficios
+ * Consume datos tipados desde benefits.ts
  */
 
-interface Props {
+import type { Benefit } from '../../../data/benefits';
+
+interface Props extends Partial<Benefit> {
+  // Props requeridas
   title: string;
   description: string;
-  icon: string; // Código SVG 
+  icon: string;
+  
+  // Props opcionales para flexibilidad
+  id?: string;
   className?: string;
+  
+  // Deprecated props (mantener por compatibilidad)
   isHtml?: boolean;
 }
 
-const { 
-  title, 
-  description, 
-  icon, 
+const {
+  title,
+  description,
+  icon,
+  id,
   className = '',
-  isHtml = true
+  isHtml = true // Mantener por compatibilidad
 } = Astro.props;
 ---
 
-<div class={`bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-8 ${className}`}>
+<div class={`group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 p-6 md:p-8 border border-gray-100 ${className}`}>
   <div class="flex flex-col items-start h-full">
-    <!-- Icono negro -->
-    <div class="mb-4">
+    <!-- Icono con hover effect (mantiene compatibilidad) -->
+    <div class="mb-4 transition-transform duration-300 group-hover:scale-110">
       {isHtml && <Fragment set:html={icon} />}
+      {!isHtml && <span class="icon text-4xl" set:html={icon}></span>}
     </div>
     
-    <!-- Título -->
-    <h3 class="text-xl font-bold text-[#333333] mb-2">{title}</h3>
+    <!-- Título con clase CSS custom para forzar el tamaño -->
+    <h3 class="benefit-title font-bold text-gray-900 mb-3">
+      {title}
+    </h3>
     
-    <!-- Descripción -->
-    <p class="text-gray-600 text-sm leading-relaxed">{description}</p>
+    <!-- Descripción optimizada -->
+    <p class="text-gray-600 text-sm md:text-base leading-relaxed flex-1">
+      {description}
+    </p>
   </div>
 </div>
+
+<style>
+  /* Microinteracciones para mejor UX */
+  .group:hover .icon-container {
+    transform: scale(1.05);
+  }
+  
+  /* Asegurar que las cards mantengan altura uniforme */
+  .group {
+    min-height: 280px;
+  }
+  
+  /* Forzar el tamaño del título con CSS custom */
+  .benefit-title {
+    font-size: 1.125rem !important; /* 18px - text-lg */
+    line-height: 1.25 !important;
+  }
+  
+  /* Responsive para título */
+  @media (min-width: 768px) {
+    .benefit-title {
+      font-size: 1.25rem !important; /* 20px - text-xl */
+    }
+  }
+  
+  /* Optimización para móvil */
+  @media (max-width: 768px) {
+    .group {
+      min-height: 240px;
+    }
+  }
+</style>

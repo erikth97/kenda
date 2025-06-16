@@ -1,0 +1,74 @@
+---
+/**
+ * BenefitsSection.astro
+ * 
+ * Sección modular de beneficios que consume datos desde benefits.ts
+ * Layout optimizado con grid responsivo 3+2
+ */
+
+import Container from '../../layouts/Container.astro';
+import SectionHeading from '../common/SectionHeading.astro';
+import BenefitCard from '../ui/custom/BenefitCard.astro';
+import { benefits } from '../../data/benefits';
+
+interface Props {
+  title?: string;
+  description?: string;
+  className?: string;
+}
+
+const {
+  title = "Beneficios",
+  description = "En Motocicletas y Equipos, ofrecemos precios competitivos respaldados por 66 años de experiencia en calidad y servicio.",
+  className = ""
+} = Astro.props;
+---
+
+<!-- Sección de Beneficios con fondo gris claro cuadriculado -->
+<section class={`benefits-section relative overflow-hidden py-16 ${className}`}>
+  <Container>
+    <SectionHeading
+      title={title}
+      description={description}
+    />
+    
+    <!-- Primera fila: 3 tarjetas -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      {benefits.slice(0, 3).map((benefit) => (
+        <BenefitCard
+          id={benefit.id}
+          title={benefit.title}
+          description={benefit.description}
+          icon={benefit.icon}
+          className="h-full min-h-[280px]"
+        />
+      ))}
+    </div>
+    
+    <!-- Segunda fila: 2 tarjetas centradas -->
+    <div class="md:px-[16.67%]">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {benefits.slice(3, 5).map((benefit) => (
+          <BenefitCard
+            id={benefit.id}
+            title={benefit.title}
+            description={benefit.description}
+            icon={benefit.icon}
+            className="h-full min-h-[280px]"
+          />
+        ))}
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  /* Estilo para el patrón de cuadrícula en el fondo */
+  .benefits-section {
+    background-color: #f5f5f5;
+    background-image: 
+      linear-gradient(to right, rgba(255,255,255,1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,1) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+</style>
