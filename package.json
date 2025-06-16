@@ -13,6 +13,7 @@
     "lint:fix": "eslint src --ext .js,.ts,.astro --fix"
   },
   "dependencies": {
+    "@astrojs/react": "^4.3.0",
     "@tailwindcss/vite": "^4.1.5",
     "astro": "^5.7.9",
     "astro-icon": "^1.1.5",
@@ -20,11 +21,15 @@
     "clsx": "^2.1.1",
     "gsap": "^3.13.0",
     "lucide-react": "^0.506.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4.1.5",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.6",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
     "eslint": "^9.25.1",
