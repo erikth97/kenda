@@ -33,6 +33,7 @@ const {
     <link rel="preconnect" href="https://hook.make.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
     
     <!-- Precargar recursos críticos -->
     <link rel="preload" href="/images/hero/track.jpg" as="image" />
@@ -56,6 +57,15 @@ const {
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9MY6DBBCDC"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9MY6DBBCDC');
+    </script>
 
     <!-- Inyección de scripts -->
     <slot name="head" />
