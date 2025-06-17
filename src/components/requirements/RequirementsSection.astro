@@ -32,10 +32,19 @@ const requirements = [
 ---
 
 <section id="requisitos" class="w-full relative py-16 md:py-24 overflow-hidden">
+  <!-- Degradados de transición exactos al color de secciones adyacentes -->
+  <div class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#f8f8f8] via-[#f5f5f5] to-transparent z-20 pointer-events-none"></div>
+  <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#f8f8f8] via-[#f5f5f5] to-transparent z-20 pointer-events-none"></div>
+  
+  <!-- Degradado central eliminado para evitar interferencia -->
+  <div class="absolute inset-0 z-5 pointer-events-none">
+    <div class="absolute inset-0 bg-gradient-radial from-gray-50/10 via-transparent to-transparent opacity-30"></div>
+  </div>
+
   <div class="absolute inset-0 z-0 bg-[#f3f4f6]">
-    <div class="absolute inset-0 w-full h-full grid-background opacity-30"></div>
-    <div id="yellow-glow" class="absolute left-0 top-0 bottom-0 w-3/5 yellow-glow"></div>
-    <div id="orange-glow" class="absolute right-0 top-0 bottom-0 w-3/5 orange-glow"></div>
+    <div class="absolute inset-0 w-full h-full grid-background opacity-30 lazy-load-effect"></div>
+    <div id="yellow-glow" class="absolute left-0 top-0 bottom-0 w-3/5 yellow-glow lazy-load-effect"></div>
+    <div id="orange-glow" class="absolute right-0 top-0 bottom-0 w-3/5 orange-glow lazy-load-effect"></div>
   </div>
 
   <Container>
@@ -51,7 +60,7 @@ const requirements = [
           <!-- Línea vertical central (timeline) con mejor terminación -->
           <div 
             id="timeline" 
-            class="hidden md:block absolute left-1/2 w-1 bg-gradient-to-b from-orange-500 via-orange-500 to-orange-300 rounded-full transform -translate-x-1/2 z-0 timeline-progress"
+            class="hidden md:block absolute left-1/2 w-1 bg-gradient-to-b from-orange-500 via-orange-500 to-orange-300 rounded-full transform -translate-x-1/2 z-0 timeline-progress lazy-load-effect"
             style="top: 3rem; bottom: 6rem; mask-image: linear-gradient(to bottom, black 0%, black 90%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 0%, black 90%, transparent 100%);"
           >
           </div>
@@ -64,17 +73,17 @@ const requirements = [
               
               return (
                 <div 
-                  class="timeline-point absolute left-1/2 w-10 h-10 flex items-center justify-center opacity-0 transition-all duration-500 ease-out"
+                  class="timeline-point absolute left-1/2 w-10 h-10 flex items-center justify-center opacity-0 transition-all duration-500 ease-out hover:scale-125 active:scale-110"
                   data-target-req-id={req.id}
                   data-point-index={index}
                   style="transform: translateX(-50%) scale(0.5);"
                 >
-                  <!-- Círculo de fondo -->
-                  <div class="absolute inset-0 bg-orange-500 rounded-full shadow-xl"></div>
+                  <!-- Círculo de fondo con mejor hover -->
+                  <div class="absolute inset-0 bg-orange-500 rounded-full shadow-xl transition-all duration-300 hover:shadow-2xl hover:bg-orange-600"></div>
                   
                   <!-- Icono de flecha -->
                   <svg 
-                    class="relative z-10 w-6 h-6 text-white"
+                    class="relative z-10 w-6 h-6 text-white transition-transform duration-300"
                     fill="none" 
                     viewBox="0 0 24 24" 
                     stroke="currentColor"
@@ -86,6 +95,9 @@ const requirements = [
                       <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                     )}
                   </svg>
+                  
+                  <!-- Efecto de ondas para móvil/touch -->
+                  <div class="absolute inset-0 rounded-full bg-orange-400 opacity-0 scale-0 transition-all duration-500 ripple-effect"></div>
                 </div>
               );
             })}
@@ -99,6 +111,9 @@ const requirements = [
                 "opacity-0", "transform", "translate-y-5", 
                 "md:w-[calc(50%-3rem)]",
                 "transition-all", "duration-700", "ease-out",
+                "cursor-pointer", "hover:scale-105", "active:scale-95",
+                "rounded-2xl", "p-4", "hover:bg-white/10", "hover:backdrop-blur-sm",
+                "border", "border-transparent", "hover:border-white/20",
                 isEven ? 'md:mr-auto md:pr-10 lg:pr-12' : 'md:ml-auto md:pl-10 lg:pl-12'
               ].join(' ');
               
@@ -108,16 +123,23 @@ const requirements = [
                   data-step-index={index}
                   id={req.id}
                 >
-                  <div class="requirement-number text-5xl md:text-6xl font-bold text-orange-500 leading-none mr-4 flex-shrink-0">
+                  <div class="requirement-number text-5xl md:text-6xl font-bold text-orange-500 leading-none mr-4 flex-shrink-0 transition-all duration-300 hover:text-orange-600 hover:scale-110">
                     {req.number}
                   </div>
                   <div class="requirement-text flex-1 relative">
-                    <p class="text-base md:text-lg text-gray-900 font-medium leading-relaxed">
+                    <p class="text-base md:text-lg text-gray-900 font-medium leading-relaxed transition-colors duration-300 hover:text-gray-800">
                       {req.description}
                     </p>
                     {index < requirements.length - 1 && (
                       <div class="timeline-separator md:hidden w-1/2 h-px bg-gray-400 opacity-0 transition-opacity duration-500 mx-auto mt-6"></div>
                     )}
+                  </div>
+                  
+                  <!-- Indicador de interacción para móvil -->
+                  <div class="md:hidden absolute -right-2 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center opacity-60 transition-all duration-300 hover:opacity-100 hover:scale-110">
+                    <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
+                    </svg>
                   </div>
                 </div>
               );
@@ -128,39 +150,39 @@ const requirements = [
             <button 
               id="download-docs" 
               type="button"
-              class="bg-white text-gray-900 hover:bg-gray-50 font-bold py-4 px-12 md:px-16 rounded-full transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:scale-105 text-center border border-gray-200 cursor-pointer"
+              class="bg-white text-gray-900 hover:bg-gray-50 active:bg-gray-100 font-bold py-4 px-12 md:px-16 rounded-full transition-all duration-300 inline-block shadow-lg hover:shadow-xl active:shadow-md transform hover:scale-105 active:scale-95 text-center border border-gray-200 cursor-pointer focus:outline-none focus:ring-4 focus:ring-orange-500/20"
             >
-              Descargar documentos
+              <span class="flex items-center gap-3">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Descargar documentos
+              </span>
             </button>
           </div>
         </div>
       </div>
     </div>
   </Container>
-
-
 </section>
 
 <style>
-  /* Animación flotante para la llanta */
-  .floating-tire {
-    animation: float 6s ease-in-out infinite;
+  /* Degradado radial personalizado */
+  .bg-gradient-radial {
+    background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
   }
   
-  @keyframes float {
-    0% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-    100% {
-      transform: translateY(0);
-    }
+  /* Lazy loading effects - inicialmente invisibles */
+  .lazy-load-effect {
+    opacity: 0;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
-</style>
-
-<style>
+  
+  .lazy-load-effect.loaded {
+    opacity: 1;
+  }
+  
+  /* Grid background mejorado */
   .grid-background {
     background-image: 
       linear-gradient(rgba(200, 200, 200, 0.2) 1px, transparent 1px),
@@ -169,18 +191,100 @@ const requirements = [
     background-position: center;
   }
   
+  .grid-background.loaded {
+    opacity: 0.3 !important;
+  }
+  
+  /* Glows mejorados con lazy loading */
   .yellow-glow {
     background: radial-gradient(circle at left center, rgba(255, 217, 102, 0.8) 0%, rgba(255, 232, 142, 0.4) 30%, rgba(255, 232, 142, 0) 70%);
     transform-origin: left center;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .yellow-glow.loaded {
+    opacity: 1 !important;
   }
   
   .orange-glow {
     background: radial-gradient(circle at right center, rgba(255, 145, 0, 0.8) 0%, rgba(255, 170, 0, 0.4) 30%, rgba(255, 170, 0, 0) 70%);
     transform-origin: right center;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
+  .orange-glow.loaded {
+    opacity: 1 !important;
+  }
+  
+  /* Timeline progress con lazy loading */
+  .timeline-progress {
+    height: 0;
+    transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+  }
+  
+  .timeline-progress.loaded {
+    opacity: 1 !important;
+  }
+
+  /* Timeline points con mejores hover states */
+  .timeline-point {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+
+  .timeline-point:hover {
+    transform: translateX(-50%) scale(1.2) !important;
+  }
+  
+  .timeline-point:active {
+    transform: translateX(-50%) scale(1.1) !important;
+  }
+  
+  .timeline-point:hover > div:first-child {
+    box-shadow: 0 0 30px rgba(255, 145, 0, 0.7);
+  }
+  
+  /* Efecto ripple para touch devices */
+  .timeline-point:active .ripple-effect {
+    opacity: 0.3;
+    scale: 1.5;
+  }
+  
+  /* Requirement items con mejores hover states */
+  .requirement-item {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Hover states más pronunciados para móvil */
+  @media (hover: none) and (pointer: coarse) {
+    .requirement-item:active {
+      transform: scale(0.98) !important;
+      background: rgba(255, 255, 255, 0.15) !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+    }
+    
+    .timeline-point:active {
+      transform: translateX(-50%) scale(1.3) !important;
+    }
+    
+    .timeline-point:active > div:first-child {
+      box-shadow: 0 0 40px rgba(255, 145, 0, 0.8) !important;
+      background: #ea580c !important;
+    }
+    
+    .requirement-number:active {
+      color: #ea580c !important;
+      transform: scale(1.15) !important;
+    }
+  }
+  
+  /* Estados de focus mejorados para accesibilidad */
+  .requirement-item:focus-within {
+    outline: 2px solid rgba(255, 145, 0, 0.5);
+    outline-offset: 4px;
+  }
+  
+  /* Animación flotante para elementos decorativos */
   .floating-tire {
     animation: float 8s ease-in-out infinite;
   }
@@ -190,21 +294,48 @@ const requirements = [
     50% { transform: translateY(-20px) rotate(3deg); }
   }
   
-  .timeline-progress {
-    height: 0;
-    transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .timeline-point {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .timeline-point:hover {
-    transform: translateX(-50%) scale(1.2) !important;
+  /* Animación de pulso sutil para indicadores móviles */
+  @keyframes pulse-gentle {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
   }
   
-  .timeline-point:hover > div:first-child {
-    box-shadow: 0 0 20px rgba(255, 145, 0, 0.6);
+  .requirement-item .md\\:hidden {
+    animation: pulse-gentle 3s ease-in-out infinite;
+  }
+  
+  /* Mejoras para dispositivos con animaciones reducidas */
+  @media (prefers-reduced-motion: reduce) {
+    .lazy-load-effect,
+    .timeline-progress,
+    .timeline-point,
+    .requirement-item,
+    .floating-tire {
+      animation: none !important;
+      transition: none !important;
+    }
+    
+    .timeline-point:hover,
+    .requirement-item:hover {
+      transform: none !important;
+    }
+  }
+
+  /* Estilos adicionales para estados de descarga */
+  #download-docs.downloading {
+    pointer-events: none;
+    opacity: 0.8;
+  }
+  
+  /* Animación de spin para el loader */
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .animate-spin {
+    animation: spin 1s linear infinite;
   }
 </style>
 
@@ -220,6 +351,63 @@ const requirements = [
     const TIMELINE_TOP_OFFSET = 48; // 3rem
     const TIMELINE_BOTTOM_OFFSET = 96; // 6rem
     const POINT_VERTICAL_ADJUSTMENT = 0.3; // Para centrar mejor con el texto
+
+    // Variables para lazy loading
+    let lazyEffectsLoaded = false;
+    let performanceMode = false;
+
+    // Detectar preferencias de rendimiento y accesibilidad
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isLowEndDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2;
+    
+    if (prefersReducedMotion || isLowEndDevice) {
+      performanceMode = true;
+    }
+
+    // Función de lazy loading para efectos visuales complejos
+    function initializeLazyEffects() {
+      if (lazyEffectsLoaded || performanceMode) return;
+      
+      const lazyElements = document.querySelectorAll('.lazy-load-effect');
+      
+      // Usar requestIdleCallback si está disponible, sino setTimeout
+      const scheduleWork = (callback: () => void) => {
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(callback, { timeout: 2000 });
+        } else {
+          setTimeout(callback, 100);
+        }
+      };
+
+      scheduleWork(() => {
+        lazyElements.forEach((element, index) => {
+          setTimeout(() => {
+            element.classList.add('loaded');
+          }, index * 150); // Stagger loading
+        });
+        lazyEffectsLoaded = true;
+      });
+    }
+
+    // Intersection Observer para lazy loading
+    const lazyObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !lazyEffectsLoaded) {
+            initializeLazyEffects();
+            lazyObserver.disconnect(); // Solo cargar una vez
+          }
+        });
+      },
+      { 
+        threshold: 0.1,
+        rootMargin: '50px 0px'
+      }
+    );
+
+    if (section) {
+      lazyObserver.observe(section);
+    }
 
     // Posicionar los puntos de la timeline dinámicamente con mejor precisión
     const timelinePoints = document.querySelectorAll('.timeline-point') as NodeListOf<HTMLElement>;
@@ -251,71 +439,149 @@ const requirements = [
         }
       });
     }
+
+    // Funciones de interacción mejoradas para móvil
+    function addMobileInteractions() {
+      const requirementItems = document.querySelectorAll('.requirement-item');
+      
+      requirementItems.forEach(item => {
+        const itemElement = item as HTMLElement;
+        
+        // Touch feedback mejorado
+        itemElement.addEventListener('touchstart', (e) => {
+          if (!performanceMode) {
+            itemElement.style.transform = 'scale(0.98)';
+            itemElement.style.transition = 'transform 0.1s ease';
+          }
+        }, { passive: true });
+
+        itemElement.addEventListener('touchend', (e) => {
+          if (!performanceMode) {
+            setTimeout(() => {
+              itemElement.style.transform = '';
+              itemElement.style.transition = '';
+            }, 150);
+          }
+        }, { passive: true });
+
+        // Haptic feedback si está disponible
+        itemElement.addEventListener('click', () => {
+          if ('vibrate' in navigator) {
+            navigator.vibrate(50); // Vibración sutil
+          }
+        });
+      });
+
+      // Interacciones para timeline points en móvil
+      timelinePoints.forEach(point => {
+        point.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          if (!performanceMode) {
+            const ripple = point.querySelector('.ripple-effect') as HTMLElement;
+            if (ripple) {
+              ripple.style.opacity = '0.3';
+              ripple.style.transform = 'scale(1.5)';
+            }
+          }
+        }, { passive: false });
+
+        point.addEventListener('touchend', (e) => {
+          if (!performanceMode) {
+            const ripple = point.querySelector('.ripple-effect') as HTMLElement;
+            if (ripple) {
+              setTimeout(() => {
+                ripple.style.opacity = '0';
+                ripple.style.transform = 'scale(0)';
+              }, 300);
+            }
+          }
+        });
+      });
+    }
+
+    // Función de easing más suave
+    function easeInOutQuart(t: number): number {
+      return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
+    }
+
+    // Función principal para actualizar efectos de glow
+    function updateGlowEffects() {
+      if (performanceMode || !section || !yellowGlow || !orangeGlow || !timeline || !requirementsContainer) return;
+      
+      const rect = section.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      
+      const sectionMiddle = rect.top + rect.height / 2;
+      const viewportMiddle = windowHeight / 2;
+      const distanceFromCenter = Math.abs(sectionMiddle - viewportMiddle);
+      const maxDistance = windowHeight / 2 + rect.height / 2;
+      const visibilityRatio = 1 - Math.min(1, distanceFromCenter / maxDistance);
+      
+      const minScale = 0.85;
+      const maxScale = 1.15;
+      const scale = minScale + visibilityRatio * (maxScale - minScale);
+      
+      yellowGlow.style.transform = `scale(${scale})`;
+      orangeGlow.style.transform = `scale(${scale})`;
+      
+      const minOpacity = 0.7;
+      const maxOpacity = 1.0;
+      const opacity = minOpacity + visibilityRatio * (maxOpacity - minOpacity);
+      
+      yellowGlow.style.opacity = opacity.toString();
+      orangeGlow.style.opacity = opacity.toString();
+      
+      // Mejorar la progresión de la timeline
+      const cardRect = requirementsContainer.getBoundingClientRect();
+      const cardTop = cardRect.top;
+      let scrollProgress = (windowHeight - cardTop) / (windowHeight * 0.7);
+      scrollProgress = Math.min(1, Math.max(0, scrollProgress));
+
+      // Usar una curva de animación más suave
+      const easedProgress = easeInOutQuart(scrollProgress);
+      const timelineMaxHeight = requirementsContainer.offsetHeight - TIMELINE_TOP_OFFSET - TIMELINE_BOTTOM_OFFSET;
+      timeline.style.height = `${easedProgress * timelineMaxHeight}px`;
+
+      positionTimelinePoints(); 
+    }
+
+    // Variables para throttle y debounce
+    let ticking = false;
+    let lastScrollTime = 0;
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+
+    // Función de throttle para scroll
+    function requestTick() {
+      const now = performance.now();
+      if (!ticking && (now - lastScrollTime > 16)) { // ~60fps max
+        requestAnimationFrame(() => {
+          updateGlowEffects();
+          lastScrollTime = now;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    // Debounced resize handler
+    function handleResize() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        updateGlowEffects();
+        setTimeout(positionTimelinePoints, 100);
+      }, 250);
+    }
     
     if (section && yellowGlow && orangeGlow && timeline && requirementsContainer) {
-      function updateGlowEffects() {
-        const rect = section.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        
-        const sectionMiddle = rect.top + rect.height / 2;
-        const viewportMiddle = windowHeight / 2;
-        const distanceFromCenter = Math.abs(sectionMiddle - viewportMiddle);
-        const maxDistance = windowHeight / 2 + rect.height / 2;
-        const visibilityRatio = 1 - Math.min(1, distanceFromCenter / maxDistance);
-        
-        const minScale = 0.85;
-        const maxScale = 1.15;
-        const scale = minScale + visibilityRatio * (maxScale - minScale);
-        
-        yellowGlow.style.transform = `scale(${scale})`;
-        orangeGlow.style.transform = `scale(${scale})`;
-        
-        const minOpacity = 0.7;
-        const maxOpacity = 1.0;
-        const opacity = minOpacity + visibilityRatio * (maxOpacity - minOpacity);
-        
-        yellowGlow.style.opacity = opacity.toString();
-        orangeGlow.style.opacity = opacity.toString();
-        
-        // Mejorar la progresión de la timeline
-        const cardRect = requirementsContainer.getBoundingClientRect();
-        const cardTop = cardRect.top;
-        let scrollProgress = (windowHeight - cardTop) / (windowHeight * 0.7);
-        scrollProgress = Math.min(1, Math.max(0, scrollProgress));
-
-        // Usar una curva de animación más suave
-        const easedProgress = easeInOutQuart(scrollProgress);
-        const timelineMaxHeight = requirementsContainer.offsetHeight - TIMELINE_TOP_OFFSET - TIMELINE_BOTTOM_OFFSET;
-        timeline.style.height = `${easedProgress * timelineMaxHeight}px`;
-
-        positionTimelinePoints(); 
-      }
-      
-      // Función de easing más suave
-      function easeInOutQuart(t: number): number {
-        return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
-      }
       
       updateGlowEffects(); 
       setTimeout(positionTimelinePoints, 100);
 
-      // Throttle para mejor performance
-      let ticking = false;
-      function requestTick() {
-        if (!ticking) {
-          requestAnimationFrame(updateGlowEffects);
-          ticking = true;
-          setTimeout(() => { ticking = false; }, 16);
-        }
-      }
-
-      window.addEventListener('scroll', requestTick);
-      window.addEventListener('resize', () => {
-        updateGlowEffects();
-        setTimeout(positionTimelinePoints, 100);
-      });
+      window.addEventListener('scroll', requestTick, { passive: true });
+      window.addEventListener('resize', handleResize, { passive: true });
     }
     
+    // Intersection Observer para animaciones de entrada mejorado
     const itemObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -328,24 +594,29 @@ const requirements = [
           const index = parseInt(item.getAttribute('data-step-index') || '0', 10);
           
           if (entry.isIntersecting) {
+            const delay = performanceMode ? 0 : index * 200;
+            
             setTimeout(() => {
               item.style.opacity = '1';
               item.style.transform = 'translateY(0)';
               
-              if (point) {
+              if (point && !performanceMode) {
                 setTimeout(() => {
                   point.style.opacity = '1';
                   point.style.transform = 'translateX(-50%) scale(1)';
                 }, 150);
+              } else if (point && performanceMode) {
+                point.style.opacity = '1';
+                point.style.transform = 'translateX(-50%) scale(1)';
               }
               
               if (separator && window.innerWidth < 768) {
                 setTimeout(() => {
                   separator.style.opacity = '1';
-                }, 300);
+                }, performanceMode ? 0 : 300);
               }
-            }, index * 200); // Mayor stagger para mejor efecto
-          } else {
+            }, delay);
+          } else if (!performanceMode) {
             item.style.opacity = '0';
             item.style.transform = 'translateY(20px)';
             if (point) {
@@ -368,21 +639,64 @@ const requirements = [
       itemObserver.observe(item);
     });
 
-    // Inicialización mejorada
-    if (document.readyState === 'complete') {
+    // Inicialización mejorada con detección de carga
+    function initializeSection() {
+      // Agregar interacciones móviles
+      addMobileInteractions();
+      
+      // Posicionar timeline points
+      if (document.readyState === 'complete') {
         setTimeout(positionTimelinePoints, 150);
-    } else {
+      } else {
         window.addEventListener('load', () => setTimeout(positionTimelinePoints, 150));
+      }
+
+      // Inicializar efectos inmediatamente si no hay lazy loading
+      if (performanceMode) {
+        initializeLazyEffects();
+      }
     }
+
+    initializeSection();
+
+    // Cleanup para mejor gestión de memoria
+    const cleanup = () => {
+      window.removeEventListener('scroll', requestTick);
+      window.removeEventListener('resize', handleResize);
+      itemObserver.disconnect();
+      lazyObserver.disconnect();
+    };
+
+    // Cleanup al cambiar de página (si es SPA)
+    window.addEventListener('beforeunload', cleanup);
   });
 
-  // Función para descargar múltiples archivos
+  // Función para descargar múltiples archivos mejorada
   document.addEventListener('DOMContentLoaded', () => {
     const downloadButton = document.getElementById('download-docs');
     
     if (downloadButton) {
-      downloadButton.addEventListener('click', (e) => {
+      // Añadir indicador de carga
+      const originalText = downloadButton.innerHTML;
+      
+      downloadButton.addEventListener('click', async (e) => {
         e.preventDefault();
+        
+        // Prevenir múltiples clics
+        if (downloadButton.classList.contains('downloading')) {
+          return;
+        }
+        
+        downloadButton.classList.add('downloading');
+        downloadButton.innerHTML = `
+          <span class="flex items-center gap-3">
+            <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Descargando...
+          </span>
+        `;
         
         // Lista de archivos a descargar
         const files = [
@@ -390,38 +704,69 @@ const requirements = [
           { url: '/documents/proteccion-de-datos.pdf', name: 'proteccion-de-datos.pdf' }
         ];
         
-        // Descargar cada archivo con un pequeño retraso
-        files.forEach((file, index) => {
-          setTimeout(() => {
-            const link = document.createElement('a');
-            link.href = file.url;
-            link.download = file.name;
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          }, index * 500); // 500ms de retraso entre cada descarga
-        });
+        try {
+          // Descargar cada archivo con verificación de existencia
+          for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            
+            try {
+              // Verificar si el archivo existe antes de descargar
+              const response = await fetch(file.url, { method: 'HEAD' });
+              
+              if (response.ok) {
+                const link = document.createElement('a');
+                link.href = file.url;
+                link.download = file.name;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Retraso entre descargas
+                if (i < files.length - 1) {
+                  await new Promise(resolve => setTimeout(resolve, 500));
+                }
+              } else {
+                console.warn(`Archivo no encontrado: ${file.name}`);
+              }
+            } catch (error) {
+              console.error(`Error al descargar ${file.name}:`, error);
+            }
+          }
+          
+          // Feedback de éxito
+          downloadButton.innerHTML = `
+            <span class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              ¡Descargado!
+            </span>
+          `;
+          
+          // Vibración de éxito en móvil
+          if ('vibrate' in navigator) {
+            navigator.vibrate([100, 50, 100]);
+          }
+          
+        } catch (error) {
+          console.error('Error en la descarga:', error);
+          downloadButton.innerHTML = `
+            <span class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              Error en descarga
+            </span>
+          `;
+        }
+        
+        // Restaurar botón después de 3 segundos
+        setTimeout(() => {
+          downloadButton.classList.remove('downloading');
+          downloadButton.innerHTML = originalText;
+        }, 3000);
       });
     }
   });
 </script>
-
-<style>
-  /* Animación flotante para la llanta */
-  .floating-tire {
-    animation: float 6s ease-in-out infinite;
-  }
-  
-  @keyframes float {
-    0% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-    100% {
-      transform: translateY(0px);
-    }
-  }
-</style>
