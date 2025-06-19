@@ -92,7 +92,7 @@ import Container from '../../layouts/Container.astro';
                 aria-invalid="false"
               >
                 <option value="" disabled selected class="text-gray-400 italic">Selecciona una opción</option>
-                <option value="agencia" class="text-gray-900 font-medium">Agencia de autos</option>
+                <option value="agencia" class="text-gray-900 font-medium">Agencia de motos</option>
                 <option value="taller" class="text-gray-900 font-medium">Taller mecánico</option>
                 <option value="refaccionaria" class="text-gray-900 font-medium">Refaccionaria</option>
                 <option value="otro" class="text-gray-900 font-medium">Otro</option>
@@ -253,12 +253,12 @@ import Container from '../../layouts/Container.astro';
     <!-- Ícono SVG en cuadro redondeado -->
     <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-3 sm:mr-4 mt-0.5">
       <!-- Ícono de éxito -->
-      <svg id="toast-success-icon" class="w-6 h-6 sm:w-7 sm:h-7 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <svg id="toast-success-icon" class="w-8 h-8 sm:w-10 sm:h-10 text-green-600 opacity-0 mx-auto my-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
       </svg>
       
       <!-- Ícono de error -->
-      <svg id="toast-error-icon" class="w-6 h-6 sm:w-7 sm:h-7 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <svg id="toast-error-icon" class="w-6 h-6 sm:w-7 sm:h-7 text-white opacity-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
       </svg>
     </div>
@@ -778,8 +778,8 @@ import Container from '../../layouts/Container.astro';
         titleEl.textContent = title || 'Error';
         
         // Mostrar ícono de error, ocultar éxito
-        if (successIcon) successIcon.classList.add('hidden');
-        if (errorIcon) errorIcon.classList.remove('hidden');
+        if (successIcon) successIcon.classList.add('opacity-0');
+        if (errorIcon) errorIcon.classList.remove('opacity-0');
       } else {
         // Configurar para éxito
         toastEl.classList.remove('bg-red-500');
@@ -787,8 +787,8 @@ import Container from '../../layouts/Container.astro';
         titleEl.textContent = title || '¡Éxito!';
         
         // Mostrar ícono de éxito, ocultar error
-        if (errorIcon) errorIcon.classList.add('hidden');
-        if (successIcon) successIcon.classList.remove('hidden');
+        if (errorIcon) errorIcon.classList.add('opacity-0');
+        if (successIcon) successIcon.classList.remove('opacity-0');
       }
       
       messageEl.textContent = message;
