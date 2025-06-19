@@ -1,3 +1,6 @@
+/* Importación de fuentes */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
 /* Importar archivo de variables temáticas */
 @import './theme-variables.css';
 
@@ -46,8 +49,6 @@ body {
   font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
   font-feature-settings: "rlig" 1, "calt" 1;
 }
-
-
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
@@ -357,12 +358,7 @@ section {
     animation: slide-up 0.5s ease-out;
   }
 
-
-
-
-
-
-  /* 
+/* 
   Estilos globales para el sitio KENDA
 */
 
@@ -384,7 +380,7 @@ section {
   }
   
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Poppins', sans-serif;
     color: #333;
     line-height: 1.6;
     margin: 0;
@@ -508,153 +504,3 @@ section {
     background-color: var(--kenda-red);
     color: white;
   }
-
-  /* 
-  Estilos globales para el sitio KENDA
-*/
-
-/* Importación de fuentes */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-
-/* Definición de variables de colores personalizados */
-:root {
-  --kenda-red: #E32726;
-  --kenda-orange: #F7941D;
-  --kenda-dark: #292929;
-  --kenda-light: #F5F5F5;
-}
-
-/* Reset básico */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: 'Poppins', sans-serif;
-  color: #333;
-  line-height: 1.6;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
-
-/* Animaciones utilizadas en todo el sitio */
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slide-up {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes slide-in-right {
-  from { transform: translateX(30px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.8s ease-out forwards;
-}
-
-.animate-slide-up {
-  animation: slide-up 0.6s ease-out forwards;
-}
-
-.animate-slide-in-right {
-  animation: slide-in-right 0.6s ease-out forwards;
-}
-
-/* Clases utilitarias para colores personalizados */
-.text-kenda-red {
-  color: var(--kenda-red);
-}
-
-.text-kenda-orange {
-  color: var(--kenda-orange);
-}
-
-.bg-kenda-red {
-  background-color: var(--kenda-red);
-}
-
-.bg-kenda-orange {
-  background-color: var(--kenda-orange);
-}
-
-.border-kenda-red {
-  border-color: var(--kenda-red);
-}
-
-.focus\:ring-kenda-orange:focus {
-  --tw-ring-color: var(--kenda-orange);
-  --tw-ring-opacity: 1;
-  --tw-ring-offset-width: 2px;
-}
-
-/* Estilos para tarjetas y secciones */
-.shadow-custom {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.hover\:shadow-custom:hover {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-}
-
-/* Estilos para fondos con grid */
-.grid-bg {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-                   linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-/* Estilos específicos para inputs */
-input, textarea, select {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: 0.375rem;
-  transition: all 0.3s ease;
-}
-
-input:focus, textarea:focus, select:focus {
-  outline: none;
-  border-color: transparent;
-  box-shadow: 0 0 0 2px var(--kenda-orange);
-}
-
-/* Botones */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem 1.5rem;
-  font-weight: 500;
-  border-radius: 0.375rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background-color: var(--kenda-orange);
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #e08012; /* Versión más oscura del orange */
-}
-
-.btn-outline {
-  background-color: transparent;
-  border: 1px solid var(--kenda-red);
-  color: var(--kenda-red);
-}
-
-.btn-outline:hover {
-  background-color: var(--kenda-red);
-  color: white;
-}
