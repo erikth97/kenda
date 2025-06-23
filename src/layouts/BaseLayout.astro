@@ -16,7 +16,7 @@ export interface Props {
 const { 
   title = 'Distribuidor KENDA - Motos y Equipos',
   description = 'Conviértete en distribuidor de neumáticos KENDA para motocicletas. Más de 5,000 distribuidores confían en nosotros con 66 años de experiencia en calidad y servicio.',
-  ogImage = '/images/og-image.jpg'
+  ogImage = '/images/og-kenda-distributor.jpg'
 } = Astro.props;
 ---
 
@@ -28,6 +28,14 @@ const {
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    
+    <!-- SEO Keywords -->
+    <meta name="keywords" content="distribuidor KENDA, neumáticos motocicletas, llantas motos, distribución México, motos equipos, kenda tires, motorcycle tires distributor, Erik Fabian Tamayo Heredia DEVELOPER" />
+    <meta name="author" content="KENDA México" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={Astro.url} />
     
     <!-- Preconectar con dominios externos -->
     <link rel="preconnect" href="https://hook.make.com" />
@@ -119,6 +127,74 @@ const {
           }
         }
       });
+    </script>
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "KENDA Distribuidores México",
+      "alternateName": "Motos y Equipos",
+      "description": "Programa de distribuidores KENDA para neumáticos de motocicletas con más de 66 años de experiencia y 5,000 distribuidores en México",
+      "url": "https://distribuidorkenda.com",
+      "logo": "https://distribuidorkenda.com/images/kenda-logo.png",
+      "image": "https://distribuidorkenda.com/images/og-kenda-distributor.jpg",
+      "foundingDate": "1962",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "sales",
+        "areaServed": "MX",
+        "availableLanguage": "Spanish"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "MX",
+        "addressRegion": "México"
+      },
+      "offers": {
+        "@type": "Offer",
+        "name": "Programa de Distribuidor KENDA",
+        "description": "Conviértete en distribuidor autorizado de neumáticos KENDA para motocicletas con inversión inicial de $50,000 MXN",
+        "category": "Motorcycle Tire Distribution",
+        "businessFunction": "http://purl.org/goodrelations/v1#Sell",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Distribución de Neumáticos KENDA",
+          "serviceType": "Business Partnership",
+          "areaServed": "Mexico",
+          "provider": {
+            "@type": "Organization",
+            "name": "KENDA México"
+          }
+        },
+        "eligibleRegion": {
+          "@type": "Country",
+          "name": "Mexico"
+        }
+      },
+      "makesOffer": {
+        "@type": "Offer",
+        "name": "Neumáticos KENDA para Motocicletas",
+        "category": "Motorcycle Tires",
+        "brand": {
+          "@type": "Brand",
+          "name": "KENDA"
+        }
+      },
+      "sameAs": [
+        "https://www.kenda.com.tw",
+        "https://www.facebook.com/KendaTiresMexico",
+        "https://www.instagram.com/kendatires_mx"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "5000+",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    }
     </script>
     
     <!-- Slot para scripts adicionales -->
