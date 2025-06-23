@@ -34,13 +34,13 @@ const {
     
     <!-- Primera fila: 3 tarjetas -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-      {benefits.slice(0, 3).map((benefit) => (
+      {benefits.slice(0, 3).map((benefit, index) => (
         <BenefitCard
           id={benefit.id}
           title={benefit.title}
           description={benefit.description}
           icon={benefit.icon}
-          className="h-full min-h-[280px]"
+          className={`h-full min-h-[280px] benefit-card-${index + 1}`}
         />
       ))}
     </div>
@@ -48,13 +48,13 @@ const {
     <!-- Segunda fila: 2 tarjetas centradas -->
     <div class="md:px-[16.67%]">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {benefits.slice(3, 5).map((benefit) => (
+        {benefits.slice(3, 5).map((benefit, index) => (
           <BenefitCard
             id={benefit.id}
             title={benefit.title}
             description={benefit.description}
             icon={benefit.icon}
-            className="h-full min-h-[280px]"
+            className={`h-full min-h-[280px] benefit-card-${index + 4}`}
           />
         ))}
       </div>
@@ -72,3 +72,36 @@ const {
     background-size: 50px 50px;
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Intersection Observer para animar las cards cuando entren en viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Agregar clase de animación cuando la card sea visible
+            entry.target.classList.add('animate-in');
+            // Dejar de observar esta card una vez animada
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger cuando 20% de la card es visible
+        rootMargin: '0px 0px -50px 0px' // Offset para activar antes
+      }
+    );
+
+    // Observar todas las benefit cards
+    const benefitCards = document.querySelectorAll('.benefit-card');
+    benefitCards.forEach((card) => {
+      observer.observe(card);
+    });
+
+    // Cleanup al desmontar
+    window.addEventListener('beforeunload', () => {
+      observer.disconnect();
+    });
+  });
+</script>

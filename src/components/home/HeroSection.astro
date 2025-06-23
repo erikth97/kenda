@@ -1,184 +1,430 @@
 ---
-// Solo importamos el componente Image de Astro
-import { Image } from 'astro:assets';
+/**
+ * HeroSection Component
+ * Landing principal con CTA, fondos optimizados y navegación inteligente
+ */
 
-// Interfaces TypeScript 
+// === TYPES & INTERFACES ===
 interface HeroProps {
-  title?: string;
-  subtitle?: string;
+  readonly title?: string;
+  readonly subtitle?: string;
+  readonly ctaText?: string;
+  readonly targetSection?: string;
 }
 
-// Props con valores por defecto
+interface HeroConfig {
+  readonly animations: {
+    readonly pulseSpeed: string;
+    readonly floatSpeed: string;
+    readonly clickDuration: string;
+  };
+  readonly responsive: {
+    readonly minButtonWidth: Record<string, string>;
+  };
+}
+
+// === CONFIGURATION ===
+const CONFIG: HeroConfig = {
+  animations: {
+    pulseSpeed: '2s',
+    floatSpeed: '3s', 
+    clickDuration: '0.6s'
+  },
+  responsive: {
+    minButtonWidth: {
+      mobile: '280px',
+      desktop: '320px'
+    }
+  }
+} as const;
+
+// === PROPS VALIDATION & DEFAULTS ===
 const { 
   title = "¿Te interesa ser Distribuidor KENDA?",
-  subtitle = "Completa el formulario para agendar una llamada" 
+  subtitle = "Completa el formulario para agendar una llamada",
+  ctaText = "Iniciar registro",
+  targetSection = "formulario"
 } = Astro.props as HeroProps;
 
-// División del título en DOS líneas - CORREGIDO
-const titleParts = title.split(" ");
-const firstLine = titleParts.slice(0, 3).join(" "); // "¿Te interesa ser"
-const secondLine = titleParts.slice(3).join(" "); // "Distribuidor KENDA?"
+// === PURE FUNCTIONS ===
+function splitTitle(titleText: string): { firstLine: string; secondLine: string } {
+  if (!titleText?.trim()) {
+    throw new Error('Title cannot be empty');
+  }
+  
+  const words = titleText.split(" ");
+  return {
+    firstLine: words.slice(0, 3).join(" "),
+    secondLine: words.slice(3).join(" ")
+  };
+}
+
+function generateButtonId(): string {
+  return `hero-cta-${Date.now()}`;
+}
+
+// === COMPUTED VALUES ===
+const { firstLine, secondLine } = splitTitle(title);
+const buttonId = generateButtonId();
 ---
 
-<section id="hero" class="h-screen w-full relative overflow-hidden">
+<!-- Preload critical resources -->
+<link rel="preload" href="/images/hero/gradas-background.png" as="image" />
+<link rel="preload" href="/images/kenda-logo.png" as="image" />
 
-  <!-- Estructura de fondo -->
-  <div class="absolute inset-0 z-0">
-    <!-- Fondo izquierdo con estadio y cuadrícula blanca -->
-    <div class="absolute inset-0 w-full h-full">
-      <!-- Imagen de fondo del estadio con filtro - usando rutas estándar -->
-      <div class="absolute inset-0 w-full h-full filter-img">
-        <img src="/images/hero/gradas-background.png" alt="" class="w-full h-full object-cover" />
-      </div>
-      
-      <!-- Overlay de cuadrícula blanca sobre el estadio - cuadros grandes -->
-      <div class="absolute inset-0 w-full h-full grid-background"></div>
-      
-      <!-- Degradado mejorado al final de la sección -->
-      <div class="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-gray-100 via-gray-100/80 to-transparent"></div>
-    </div>
-    
-    <!-- Contenedor para mapa y elementos superpuestos - SOLO VISIBLE EN DESKTOP -->
-    <div class="absolute top-0 right-0 w-4/5 h-full overflow-hidden translate-x-8 hidden md:block">
-      <!-- Imagen combinada de México con el hombre -->
-      <div class="absolute inset-0">
+<section 
+  id="hero" 
+  class="hero h-screen w-full relative overflow-hidden"
+  role="banner"
+  aria-labelledby="hero-title"
+>
+  <!-- === BACKGROUND LAYERS === -->
+  <div class="hero__background absolute inset-0 z-0">
+    <!-- Stadium background with overlay -->
+    <div class="hero__stadium absolute inset-0 w-full h-full">
+      <div class="hero__stadium-image absolute inset-0 w-full h-full">
         <img 
-          src="/images/hero/map-man.webp" 
-          alt="Mapa de México con distribuidor" 
-          class="h-full w-full object-cover opacity-90"
-          loading="lazy"
+          src="/images/hero/gradas-background.png" 
+          alt="Estadio de fútbol con gradas llenas de espectadores" 
+          class="w-full h-full object-cover"
+          loading="eager"
+          decoding="async"
         />
       </div>
+      
+      <!-- Grid overlay -->
+      <div class="hero__grid-overlay absolute inset-0 w-full h-full"></div>
+      
+      <!-- Bottom gradient transition -->
+      <div class="hero__gradient absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-gray-100 via-gray-100/80 to-transparent"></div>
+    </div>
+    
+    <!-- Map visualization - Desktop only -->
+    <div class="hero__map absolute top-0 right-0 w-4/5 h-full overflow-hidden translate-x-8 hidden md:block">
+      <img 
+        src="/images/hero/map-man.webp" 
+        alt="Mapa de distribución de México mostrando presencia nacional de KENDA" 
+        class="h-full w-full object-cover opacity-90"
+        loading="lazy"
+        decoding="async"
+      />
     </div>
   </div>
   
-  <!-- Logo KENDA en la posición del círculo rojo (superior izquierda) -->
-  <div class="absolute top-4 md:top-8 left-4 md:left-8 z-20">
-    <img src="/images/kenda-logo.png" alt="KENDA" class="h-12 sm:h-16 md:h-24 lg:h-28" />
-  </div>
-  
-  <!-- Logo "Motos y Equipos" - responsive: arriba en móvil, derecha en desktop -->
-<div class="absolute top-4 left-1/2 transform -translate-x-1/2 md:translate-x-0 md:left-auto md:top-11 md:right-8 z-20 hidden sm:block">
-  <img 
-    src="/images/motos_equipos.webp" 
-    alt="Motos y Equipos" 
-    class="h-7 sm:h-10 md:h-12 lg:h-7 object-contain opacity-90"
-    loading="lazy"
-  />
-</div>
-  
-  <!-- Contenido principal -->
-  <div class="relative z-10 h-full w-full">
-
-    <!-- Contenido lado izquierdo - adaptable para móvil -->
-<div class="absolute inset-0 w-full md:w-2/5 flex flex-col justify-center p-6 sm:p-4 md:p-8 lg:p-16">
-  <!-- Contenedor para contenido - adaptado para móvil -->
-  <div class="flex flex-col mt-8 sm:mt-4 md:mt-8 space-y-6 sm:space-y-4 md:space-y-0">
-    <!-- Título en DOS líneas con tamaño aumentado y responsive -->
-    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] font-black text-black leading-[0.9] tracking-tight">
-      <span class="block">{firstLine}</span>
-      <span class="block">{secondLine}</span>
-    </h1>
+  <!-- === BRAND LOGOS === -->
+  <header class="hero__header absolute top-4 md:top-8 left-4 md:left-8 right-4 md:right-8 z-20 flex justify-between items-start">
+    <!-- Main KENDA logo -->
+    <div class="hero__brand-primary">
+      <img 
+        src="/images/kenda-logo.png" 
+        alt="KENDA - Neumáticos de calidad" 
+        class="h-12 sm:h-16 md:h-24 lg:h-28"
+        loading="eager"
+        decoding="async"
+      />
+    </div>
     
-    <!-- Subtítulo - responsive para móvil -->
-    <p class="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-black my-6 sm:my-4 md:my-6 lg:my-8 font-semibold md:font-light">
-      <span class="md:whitespace-nowrap">{subtitle}</span>
-    </p>
-    
-    <!-- Nuevo CTA limpio y organizado -->
-    <div class="mt-8 md:mt-12">
-      <button 
-        type="button"
-        id="registro-cta-button"
-        aria-label="Iniciar proceso de registro como distribuidor"
-        class="group relative bg-white/95 backdrop-blur-sm rounded-full pl-8 pr-3 py-3 shadow-lg hover:shadow-xl transition-all duration-300 ease-out hover:bg-white border border-gray-200/50 focus:outline-none focus:ring-4 focus:ring-orange-300/50 inline-flex items-center min-w-[280px] sm:min-w-[320px]"
-      >
-        <!-- Texto del botón -->
-        <span class="text-gray-700 font-medium text-lg md:text-xl group-hover:text-gray-900 transition-colors duration-300 mr-6 flex-1">
-          Iniciar registro
-        </span>
+    <!-- Secondary brand logo -->
+    <div class="hero__brand-secondary hidden sm:block md:mt-3">
+      <img 
+        src="/images/motos_equipos.webp" 
+        alt="Motos y Equipos - Distribuidor autorizado" 
+        class="h-7 sm:h-10 md:h-12 lg:h-7 object-contain opacity-90"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </header>
+  
+  <!-- === MAIN CONTENT === -->
+  <main class="hero__content relative z-10 h-full w-full">
+    <div class="hero__content-container absolute inset-0 w-full md:w-2/5 flex flex-col justify-center p-6 sm:p-4 md:p-8 lg:p-16">
+      <div class="hero__content-inner flex flex-col mt-8 sm:mt-4 md:mt-8 space-y-6 sm:space-y-4 md:space-y-0">
         
-        <!-- Círculo naranja con flecha -->
-        <div class="w-10 h-10 md:w-12 md:h-12 bg-[#F7941D] rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-[#e8841a] group-hover:scale-110 animate-pulse-soft flex-shrink-0">
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke-width="2.5" 
-            stroke="currentColor" 
-            class="w-5 h-5 md:w-6 md:h-6 text-white transform transition-transform duration-300 group-hover:translate-x-1 animate-float-arrow" 
-            id="arrow-right-icon"
+        <!-- Main headline with semantic structure -->
+        <h1 
+          id="hero-title"
+          class="hero__title text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] font-black text-black leading-[0.9] tracking-tight"
+        >
+          <span class="hero__title-line block">{firstLine}</span>
+          <span class="hero__title-line block">{secondLine}</span>
+        </h1>
+        
+        <!-- Subtitle with proper spacing -->
+        <p class="hero__subtitle text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-black my-6 sm:my-4 md:my-6 lg:my-8 font-semibold md:font-light">
+          <span class="md:whitespace-nowrap">{subtitle}</span>
+        </p>
+        
+        <!-- Call-to-action section -->
+        <div class="hero__cta-section mt-8 md:mt-12">
+          <button 
+            type="button"
+            id={buttonId}
+            data-target={targetSection}
+            aria-label={`${ctaText} - Navegar a la sección de ${targetSection}`}
+            class="hero__cta-button group relative bg-white/95 backdrop-blur-sm rounded-full pl-8 pr-3 py-3 shadow-lg hover:shadow-xl transition-all duration-300 ease-out hover:bg-white border border-gray-200/50 focus:outline-none focus:ring-4 focus:ring-orange-300/50 inline-flex items-center"
+            style={`min-width: ${CONFIG.responsive.minButtonWidth.mobile}; min-width: ${CONFIG.responsive.minButtonWidth.desktop};`}
           >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-          </svg>
+            <!-- Button text -->
+            <span class="hero__cta-text text-gray-700 font-medium text-lg md:text-xl group-hover:text-gray-900 transition-colors duration-300 mr-6 flex-1">
+              {ctaText}
+            </span>
+            
+            <!-- Animated arrow icon -->
+            <div class="hero__cta-icon w-10 h-10 md:w-12 md:h-12 bg-[#F7941D] rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-[#e8841a] group-hover:scale-110 hero__pulse flex-shrink-0">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke-width="2.5" 
+                stroke="currentColor" 
+                class="hero__arrow w-5 h-5 md:w-6 md:h-6 text-white transform transition-transform duration-300 group-hover:translate-x-1"
+                aria-hidden="true"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </div>
+          </button>
         </div>
-      </button>
+        
+      </div>
     </div>
-  </div>
-</div>
-  </div>
+  </main>
   
 
 </section>
 
 
 
-<!-- Script para el nuevo CTA -->
+<!-- === HERO INTERACTION LOGIC === -->
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const registroButton = document.getElementById('registro-cta-button');
-    const arrowIcon = document.getElementById('arrow-right-icon');
+  /**
+   * HeroController - Gestiona todas las interacciones del Hero
+   * Principios SOLID aplicados:
+   * - SRP: Una responsabilidad por clase/método
+   * - OCP: Abierto para extensión, cerrado para modificación
+   * - DIP: Depende de abstracciones, no de concreciones
+   */
+  
+  interface ScrollService {
+    scrollToTarget(targetId: string): Promise<void>;
+  }
+  
+  interface AnimationService {
+    pauseAnimations(element: HTMLElement): void;
+    resumeAnimations(element: HTMLElement): void;
+    triggerClickAnimation(element: HTMLElement): void;
+  }
+  
+  // === SERVICES IMPLEMENTATION ===
+  class SmoothScrollService implements ScrollService {
+    async scrollToTarget(targetId: string): Promise<void> {
+      const target = document.getElementById(targetId);
+      if (!target) {
+        console.warn(`Target section "${targetId}" not found`);
+        return;
+      }
+      
+      target.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+      });
+      
+      // Update URL without triggering navigation
+      history.pushState(null, '', `#${targetId}`);
+    }
+  }
+  
+  class HeroAnimationService implements AnimationService {
+    private readonly CLICK_ANIMATION_CLASS = 'hero__arrow--click';
+    private readonly CLICK_DURATION = 800;
     
-    if (registroButton && arrowIcon) {
-      registroButton.addEventListener('click', function() {
-        // Animación sutil de la flecha al hacer click
-        arrowIcon.classList.add('animate-arrow-click');
-        
-        // Pausar temporalmente las animaciones continuas durante el click
-        const circleContainer = arrowIcon.closest('.animate-pulse-soft') as HTMLElement;
-        if (circleContainer) {
-          circleContainer.style.animationPlayState = 'paused';
-          (arrowIcon as HTMLElement).style.animationPlayState = 'paused';
+    pauseAnimations(element: HTMLElement): void {
+      const pulseContainer = element.closest('.hero__pulse') as HTMLElement;
+      if (pulseContainer) {
+        pulseContainer.style.animationPlayState = 'paused';
+        element.style.animationPlayState = 'paused';
+      }
+    }
+    
+    resumeAnimations(element: HTMLElement): void {
+      const pulseContainer = element.closest('.hero__pulse') as HTMLElement;
+      if (pulseContainer) {
+        pulseContainer.style.animationPlayState = 'running';
+        element.style.animationPlayState = 'running';
+      }
+    }
+    
+    triggerClickAnimation(element: HTMLElement): void {
+      element.classList.add(this.CLICK_ANIMATION_CLASS);
+      
+      setTimeout(() => {
+        element.classList.remove(this.CLICK_ANIMATION_CLASS);
+      }, this.CLICK_DURATION);
+    }
+  }
+  
+  // === MAIN CONTROLLER ===
+  class HeroController {
+    private readonly scrollService: ScrollService;
+    private readonly animationService: AnimationService;
+    
+    constructor(
+      scrollService: ScrollService,
+      animationService: AnimationService
+    ) {
+      this.scrollService = scrollService;
+      this.animationService = animationService;
+    }
+    
+    public initialize(): void {
+      this.attachCTAListeners();
+      this.setupKeyboardNavigation();
+      this.initializeA11y();
+    }
+    
+    private attachCTAListeners(): void {
+      const ctaButtons = document.querySelectorAll('.hero__cta-button');
+      
+      ctaButtons.forEach(button => {
+        if (button instanceof HTMLElement) {
+          button.addEventListener('click', (e) => this.handleCTAClick(e));
         }
-        
-        // Scroll automático al formulario
-        setTimeout(() => {
-          const formularioSection = document.getElementById('formulario');
-          if (formularioSection) {
-            formularioSection.scrollIntoView({ 
-              behavior: 'smooth',
-              block: 'start',
-              inline: 'nearest'
-            });
-            
-            // Actualizar URL con hash
-            history.pushState(null, '', '#formulario');
-          }
-          
-          // Remover la animación después del scroll y reanudar las continuas
-          setTimeout(() => {
-            arrowIcon.classList.remove('animate-arrow-click');
-            
-            // Reanudar animaciones continuas
-            const circleContainer = arrowIcon.closest('.animate-pulse-soft') as HTMLElement;
-            if (circleContainer) {
-              circleContainer.style.animationPlayState = 'running';
-              (arrowIcon as HTMLElement).style.animationPlayState = 'running';
-            }
-          }, 800);
-        }, 150);
       });
     }
+    
+    private async handleCTAClick(event: Event): Promise<void> {
+      event.preventDefault();
+      
+      const button = event.currentTarget as HTMLElement;
+      const targetSection = button.dataset.target;
+      const arrow = button.querySelector('.hero__arrow') as HTMLElement;
+      
+      if (!targetSection) {
+        console.error('No target section specified for CTA button');
+        return;
+      }
+      
+      // Trigger visual feedback
+      if (arrow) {
+        this.animationService.pauseAnimations(arrow);
+        this.animationService.triggerClickAnimation(arrow);
+      }
+      
+      // Perform navigation with delay for visual feedback
+      setTimeout(async () => {
+        await this.scrollService.scrollToTarget(targetSection);
+        
+        // Resume animations after scroll completion
+        if (arrow) {
+          setTimeout(() => {
+            this.animationService.resumeAnimations(arrow);
+          }, 300);
+        }
+      }, 150);
+    }
+    
+    private setupKeyboardNavigation(): void {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          const focusedElement = document.activeElement as HTMLElement;
+          if (focusedElement?.classList.contains('hero__cta-button')) {
+            e.preventDefault();
+            focusedElement.click();
+          }
+        }
+      });
+    }
+    
+    private initializeA11y(): void {
+      // Add skip link for screen readers
+      const skipLink = this.createSkipLink();
+      document.body.insertBefore(skipLink, document.body.firstChild);
+    }
+    
+    private createSkipLink(): HTMLElement {
+      const skipLink = document.createElement('a');
+      skipLink.href = '#main-content';
+      skipLink.textContent = 'Saltar al contenido principal';
+      skipLink.className = 'sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:p-2 focus:rounded';
+      return skipLink;
+    }
+  }
+  
+  // === INITIALIZATION ===
+  document.addEventListener('DOMContentLoaded', () => {
+    const scrollService = new SmoothScrollService();
+    const animationService = new HeroAnimationService();
+    const heroController = new HeroController(scrollService, animationService);
+    
+    heroController.initialize();
   });
 </script>
 
 <style>
-  /* Animación continua de palpitación suave para el círculo */
-  .animate-pulse-soft {
-    animation: pulseSoft 2s ease-in-out infinite;
+  /* === CSS CUSTOM PROPERTIES === */
+  .hero {
+    --hero-transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --hero-pulse-duration: 2s;
+    --hero-float-duration: 3s;
+    --hero-click-duration: 0.6s;
+    --hero-orange: #F7941D;
+    --hero-orange-hover: #e8841a;
+    --hero-grid-size: 80px;
+    --hero-grid-size-mobile: 60px;
   }
   
-  @keyframes pulseSoft {
+  /* === LAYOUT COMPONENTS === */
+  .hero__stadium-image {
+    filter: brightness(0.9) contrast(0.9);
+  }
+  
+  .hero__stadium-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(245, 245, 245, 0.7);
+  }
+  
+  .hero__grid-overlay {
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+    background-size: var(--hero-grid-size) var(--hero-grid-size);
+    background-position: center;
+  }
+  
+  /* === INTERACTIVE COMPONENTS === */
+  .hero__cta-button {
+    transition: all var(--hero-transition);
+  }
+  
+  .hero__cta-button:focus-visible {
+    outline: 2px solid var(--hero-orange);
+    outline-offset: 3px;
+  }
+  
+  .hero__cta-button:hover .hero__cta-icon {
+    transform: scale(1.05);
+    background-color: var(--hero-orange-hover);
+  }
+  
+  /* === ANIMATIONS === */
+  .hero__pulse {
+    animation: heroPulse var(--hero-pulse-duration) ease-in-out infinite;
+  }
+  
+  .hero__arrow {
+    animation: heroFloat var(--hero-float-duration) ease-in-out infinite;
+  }
+  
+  .hero__arrow--click {
+    animation: heroClick var(--hero-click-duration) ease-out;
+  }
+  
+  /* === KEYFRAMES === */
+  @keyframes heroPulse {
     0%, 100% {
       transform: scale(1);
       box-shadow: 0 0 0 0 rgba(247, 148, 29, 0.4);
@@ -189,12 +435,7 @@ const secondLine = titleParts.slice(3).join(" "); // "Distribuidor KENDA?"
     }
   }
   
-  /* Animación flotante sutil para la flecha */
-  .animate-float-arrow {
-    animation: floatArrow 3s ease-in-out infinite;
-  }
-  
-  @keyframes floatArrow {
+  @keyframes heroFloat {
     0%, 100% {
       transform: translateX(0);
     }
@@ -203,12 +444,7 @@ const secondLine = titleParts.slice(3).join(" "); // "Distribuidor KENDA?"
     }
   }
   
-  /* Animación sutil para la flecha al hacer click */
-  .animate-arrow-click {
-    animation: arrowClick 0.6s ease-out;
-  }
-  
-  @keyframes arrowClick {
+  @keyframes heroClick {
     0% {
       transform: translateX(0) scale(1);
     }
@@ -223,62 +459,65 @@ const secondLine = titleParts.slice(3).join(" "); // "Distribuidor KENDA?"
     }
   }
   
-  /* Mejoras adicionales para el CTA */
-  #registro-cta-button:hover .bg-\[#F7941D\] {
-    transform: scale(1.05);
-  }
-  
-  /* Estados de focus mejorados */
-  #registro-cta-button:focus-visible {
-    outline: 2px solid #F7941D;
-    outline-offset: 3px;
-  }
-
-  /* Filtro para la imagen de las gradas */
-  .filter-img {
-    filter: brightness(0.9) contrast(0.9);
-  }
-  
-  .filter-img::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(245, 245, 245, 0.7);
-  }
-  
-  /* Cuadrícula con cuadros grandes */
-  .grid-background {
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
-    background-size: 80px 80px;
-    background-position: center;
-  }
-  
-  /* Responsive adjustments */
+  /* === RESPONSIVE DESIGN === */
   @media (max-width: 768px) {
-    .grid-background {
-      background-size: 60px 60px;
+    .hero {
+      --hero-grid-size: var(--hero-grid-size-mobile);
+    }
+    
+    .hero__grid-overlay {
+      background-size: var(--hero-grid-size) var(--hero-grid-size);
     }
   }
   
-  /* Animación flotante para la llanta */
-  .floating-tire {
-    animation: float 6s ease-in-out infinite;
+  /* === ACCESSIBILITY === */
+  @media (prefers-reduced-motion: reduce) {
+    .hero__pulse,
+    .hero__arrow,
+    .hero__arrow--click {
+      animation: none !important;
+    }
+    
+    .hero__cta-button,
+    .hero__cta-icon {
+      transition: none !important;
+    }
   }
   
-  @keyframes float {
-    0% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-    100% {
-      transform: translateY(0);
-    }
+  /* Screen reader only content */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  .focus\:not-sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+  
+  /* === PERFORMANCE OPTIMIZATIONS === */
+  .hero__background {
+    will-change: transform;
+  }
+  
+  .hero__cta-icon {
+    will-change: transform, background-color;
+  }
+  
+  .hero__arrow {
+    will-change: transform;
   }
 </style>

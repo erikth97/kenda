@@ -32,12 +32,16 @@ const {
 } = Astro.props;
 ---
 
-<div class={`group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 p-6 md:p-8 border border-gray-100 ${className}`}>
+<div class={`benefit-card group bg-white rounded-xl shadow-sm p-6 md:p-8 border border-gray-100 cursor-pointer ${className}`}>
   <div class="flex flex-col items-start h-full">
-    <!-- Icono con hover effect (mantiene compatibilidad) -->
-    <div class="mb-4 transition-transform duration-300 group-hover:scale-110">
-      {isHtml && <Fragment set:html={icon} />}
-      {!isHtml && <span class="icon text-4xl" set:html={icon}></span>}
+    <!-- Icono con hover effect mejorado -->
+    <div class="icon-container mb-4 relative">
+      <div class="icon-wrapper">
+        {isHtml && <Fragment set:html={icon} />}
+        {!isHtml && <span class="icon text-4xl" set:html={icon}></span>}
+      </div>
+      <!-- Círculo de glow detrás del icono -->
+      <div class="icon-glow"></div>
     </div>
     
     <!-- Título con clase CSS custom para forzar el tamaño -->
@@ -53,33 +57,189 @@ const {
 </div>
 
 <style>
-  /* Microinteracciones para mejor UX */
-  .group:hover .icon-container {
-    transform: scale(1.05);
-  }
-  
-  /* Asegurar que las cards mantengan altura uniforme */
-  .group {
+  /* === LIFT EFFECT PRINCIPAL === */
+  .benefit-card {
     min-height: 280px;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: center bottom;
+    position: relative;
+    overflow: hidden;
   }
   
-  /* Forzar el tamaño del título con CSS custom */
+  /* Estados del hover - Lift Effect */
+  .benefit-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(255, 122, 0, 0.1),
+      0 0 30px rgba(255, 122, 0, 0.05);
+    border-color: rgba(255, 122, 0, 0.2);
+  }
+  
+  /* Efecto de brillo sutil en hover */
+  .benefit-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.4), 
+      transparent
+    );
+    transition: left 0.6s ease;
+    z-index: 1;
+  }
+  
+  .benefit-card:hover::before {
+    left: 100%;
+  }
+  
+  /* === ANIMACIÓN DEL ICONO === */
+  .icon-container {
+    position: relative;
+    width: fit-content;
+    z-index: 2;
+  }
+  
+  .icon-wrapper {
+    position: relative;
+    z-index: 3;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  
+  .benefit-card:hover .icon-wrapper {
+    transform: scale(1.15) rotate(5deg);
+  }
+  
+  /* Glow effect detrás del icono */
+  .icon-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(
+      circle,
+      rgba(255, 122, 0, 0.2) 0%,
+      rgba(255, 122, 0, 0.1) 50%,
+      transparent 100%
+    );
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 1;
+  }
+  
+  .benefit-card:hover .icon-glow {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 1;
+  }
+  
+  /* === ANIMACIÓN DEL TÍTULO === */
   .benefit-title {
     font-size: 1.125rem !important; /* 18px - text-lg */
     line-height: 1.25 !important;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
   }
   
-  /* Responsive para título */
+  .benefit-card:hover .benefit-title {
+    color: #e30613; /* kenda-red */
+    transform: translateY(-2px);
+  }
+  
+  /* === ANIMACIÓN DE LA DESCRIPCIÓN === */
+  .benefit-card p {
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+  }
+  
+  .benefit-card:hover p {
+    color: #4a5568;
+    transform: translateY(-1px);
+  }
+  
+  /* === RESPONSIVE === */
   @media (min-width: 768px) {
     .benefit-title {
       font-size: 1.25rem !important; /* 20px - text-xl */
+    }
+    
+    .benefit-card:hover {
+      transform: translateY(-16px) scale(1.03);
     }
   }
   
   /* Optimización para móvil */
   @media (max-width: 768px) {
-    .group {
+    .benefit-card {
       min-height: 240px;
+    }
+    
+    .benefit-card:hover {
+      transform: translateY(-8px) scale(1.01);
+    }
+    
+    .icon-glow {
+      width: 50px;
+      height: 50px;
+    }
+  }
+  
+  /* === ESTADOS DE FOCUS === */
+  .benefit-card:focus-within {
+    outline: 2px solid rgba(255, 122, 0, 0.5);
+    outline-offset: 4px;
+  }
+  
+  /* === ANIMACIÓN DE ENTRADA === */
+  @keyframes cardEntrance {
+    from {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  
+  .benefit-card {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  
+  .benefit-card.animate-in {
+    animation: cardEntrance 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+  
+  /* Stagger delay para múltiples cards */
+  .benefit-card-1 { animation-delay: 0.1s; }
+  .benefit-card-2 { animation-delay: 0.2s; }
+  .benefit-card-3 { animation-delay: 0.3s; }
+  .benefit-card-4 { animation-delay: 0.4s; }
+  .benefit-card-5 { animation-delay: 0.5s; }
+  
+  /* === ANIMACIONES REDUCIDAS === */
+  @media (prefers-reduced-motion: reduce) {
+    .benefit-card,
+    .icon-wrapper,
+    .icon-glow,
+    .benefit-title,
+    .benefit-card p {
+      animation: none !important;
+      transition: none !important;
+    }
+    
+    .benefit-card:hover {
+      transform: none !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
     }
   }
 </style>
