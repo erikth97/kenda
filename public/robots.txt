@@ -1,4 +1,22 @@
-# Example: Permitir a todos los bots de búsqueda escanear e indexar el sitio web.
-# Full syntax: https://developers.google.com/search/docs/advanced/robots/create-robots-txt
+# Robots.txt para Distribuidor KENDA México
 User-agent: *
 Allow: /
+
+# Prioridades para crawlers
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://distribuidorkenda.com/sitemap-index.xml
+Sitemap: https://distribuidorkenda.com/sitemap-0.xml
+
+# Bloquear archivos innecesarios para SEO
+Disallow: /api/
+Disallow: /_astro/
+Disallow: /admin/
+Disallow: *.json$
+Disallow: *.xml$
+
+# Permitir específicamente archivos importantes
+Allow: /sitemap*.xml
+Allow: /favicon.ico
+Allow: /robots.txt
