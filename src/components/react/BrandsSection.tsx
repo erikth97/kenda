@@ -252,7 +252,7 @@ const BrandsSection: React.FC = () => {
                     <img 
                       src={brand.logo} 
                       alt={`Logo de ${brand.name}`} 
-                      className="h-12 md:h-16 w-auto grayscale group-hover:grayscale-0 transition-all duration-300 pointer-events-none select-none"
+                      className="h-12 md:h-16 w-auto md:grayscale md:group-hover:grayscale-0 transition-all duration-300 pointer-events-none select-none"
                       draggable={false}
                     />
                   </div>
