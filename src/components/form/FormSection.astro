@@ -25,70 +25,106 @@ import Container from '../../layouts/Container.astro';
         <p class="text-base sm:text-lg text-gray-700 font-medium">Más de 5,000 distribuidores</p>
       </div>
       
-      <form id="distributor-form" class="space-y-6 sm:space-y-8 md:space-y-10">
+      <form id="distributor-form" class="space-y-4 sm:space-y-6 md:space-y-8">
         <!-- Campo Nombre -->
-        <div class="mb-6 sm:mb-8 md:mb-10">
+        <div class="mb-4 sm:mb-6 md:mb-8">
           <label for="nombre" class="block text-gray-800 font-semibold mb-3 text-base">Nombre completo</label>
-          <input 
-            type="text" 
-            id="nombre" 
-            name="nombre" 
-            class="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium placeholder-gray-500" 
-            placeholder="Ej: Juan Pérez García"
-            required 
-            aria-describedby="error-nombre"
-            aria-invalid="false"
-          />
+          <div class="relative">
+            <input 
+              type="text" 
+              id="nombre" 
+              name="nombre" 
+              autocomplete="given-name family-name"
+              class="w-full px-4 sm:px-5 py-3 sm:py-4 pr-12 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium placeholder-gray-500" 
+              placeholder="Ej: Juan Pérez García"
+              required 
+              aria-describedby="error-nombre"
+              aria-invalid="false"
+            />
+            <!-- Iconos de validación -->
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <svg class="field-success-icon hidden w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <svg class="field-error-icon hidden w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </div>
+          </div>
           <p class="error-message text-red-600 text-sm mt-2 ml-1 hidden font-medium" id="error-nombre" role="alert">Este campo es obligatorio</p>
         </div>
         
         <!-- Fila de Email y Teléfono con etiquetas fijas -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8 md:mb-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6 md:mb-8">
           <!-- Campo Email -->
           <div>
             <label for="email" class="block text-gray-800 font-semibold mb-3 text-base">Correo electrónico</label>
-            <input 
-              type="email" 
-              id="email" 
-              name="email" 
-              class="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium placeholder-gray-500" 
-              placeholder="tu@email.com"
-              required 
-              aria-describedby="error-email"
-              aria-invalid="false"
-            />
+            <div class="relative">
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                autocomplete="email"
+                class="w-full px-4 sm:px-5 py-3 sm:py-4 pr-12 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium placeholder-gray-500" 
+                placeholder="tu@email.com"
+                required 
+                aria-describedby="error-email"
+                aria-invalid="false"
+              />
+              <!-- Iconos de validación -->
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg class="field-success-icon hidden w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <svg class="field-error-icon hidden w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </div>
+            </div>
             <p class="error-message text-red-600 text-sm mt-2 ml-1 hidden font-medium" id="error-email" role="alert">Ingrese un correo electrónico válido</p>
           </div>
           
           <!-- Campo Celular/Teléfono -->
           <div>
             <label for="telefono" class="block text-gray-800 font-semibold mb-3 text-base">Teléfono</label>
-            <input 
-              type="tel" 
-              id="telefono" 
-              name="telefono" 
-              class="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium placeholder-gray-500" 
-              placeholder="55 1234 5678"
-              required 
-              pattern="[\d\s\-\(\)\+]{10,15}"
-              maxlength="15"
-              title="Ingrese un número de teléfono mexicano válido"
-              aria-describedby="error-telefono"
-              aria-invalid="false"
-            />
+            <div class="relative">
+              <input 
+                type="tel" 
+                id="telefono" 
+                name="telefono" 
+                autocomplete="tel"
+                class="w-full px-4 sm:px-5 py-3 sm:py-4 pr-12 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium placeholder-gray-500" 
+                placeholder="55 1234 5678"
+                required 
+                pattern="[\d\s\-\(\)\+]{10,15}"
+                maxlength="19"
+                title="Ingrese un número de teléfono mexicano válido"
+                aria-describedby="error-telefono"
+                aria-invalid="false"
+              />
+              <!-- Iconos de validación -->
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg class="field-success-icon hidden w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <svg class="field-error-icon hidden w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </div>
+            </div>
             <p class="error-message text-red-600 text-sm mt-2 ml-1 hidden font-medium" id="error-telefono" role="alert">Ingrese un teléfono válido (10 dígitos mínimo)</p>
           </div>
         </div>
         
         <!-- Campos de selección con mejor jerarquía visual y espaciado optimizado -->
-        <div class="space-y-6 sm:space-y-8 md:space-y-10 mb-8 sm:mb-10 md:mb-12">
+        <div class="space-y-4 sm:space-y-6 md:space-y-8 mb-6 sm:mb-8 md:mb-10">
           <div>
             <label for="giroComercial" class="block text-gray-800 font-semibold mb-4 text-base leading-relaxed">¿Tienes un negocio enfocado al sector de motocicletas o autos?</label>
             <div class="relative">
               <select 
                 id="giroComercial" 
                 name="giroComercial" 
-                class="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none appearance-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium cursor-pointer" 
+                class="w-full px-4 sm:px-5 py-4 sm:py-5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none appearance-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium cursor-pointer" 
                 required
                 aria-describedby="error-giroComercial"
                 aria-invalid="false"
@@ -116,7 +152,7 @@ import Container from '../../layouts/Container.astro';
               <select 
                 id="estado" 
                 name="estado" 
-                class="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none appearance-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium cursor-pointer" 
+                class="w-full px-4 sm:px-5 py-4 sm:py-5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none appearance-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium cursor-pointer" 
                 required
                 aria-describedby="error-estado"
                 aria-invalid="false"
@@ -176,7 +212,7 @@ import Container from '../../layouts/Container.astro';
               <select 
                 id="tipoNegocio" 
                 name="tipoNegocio" 
-                class="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none appearance-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium cursor-pointer" 
+                class="w-full px-4 sm:px-5 py-4 sm:py-5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none appearance-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium cursor-pointer" 
                 required
                 aria-describedby="error-tipoNegocio"
                 aria-invalid="false"
@@ -203,7 +239,7 @@ import Container from '../../layouts/Container.astro';
               <select 
                 id="iniciarOperaciones" 
                 name="inicioOperaciones" 
-                class="w-full px-4 sm:px-5 py-3 sm:py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none appearance-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium cursor-pointer" 
+                class="w-full px-4 sm:px-5 py-4 sm:py-5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none appearance-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium cursor-pointer" 
                 required
                 aria-describedby="error-iniciarOperaciones"
                 aria-invalid="false"
@@ -249,44 +285,67 @@ import Container from '../../layouts/Container.astro';
   </Container>
 </Section>
 
-<!-- Toast notification con diseño mejorado y responsive -->
-<div id="toast-notification" class="fixed bottom-4 left-4 right-4 sm:bottom-4 sm:right-4 sm:left-auto bg-green-500 text-white rounded-xl shadow-xl z-50 hidden w-full sm:w-80 md:w-96 max-w-[calc(100vw-2rem)] sm:max-w-none overflow-hidden" role="alert" aria-live="assertive">
-  <div class="flex items-start p-4 sm:p-5">
-    <!-- Ícono SVG en cuadro redondeado -->
-    <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-3 sm:mr-4 mt-0.5">
-      <!-- Ícono de éxito -->
-      <svg id="toast-success-icon" class="w-8 h-8 sm:w-10 sm:h-10 text-green-600 opacity-0 mx-auto my-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-      </svg>
+<!-- Toast notification sutil y limpio -->
+<div id="toast-notification" class="toast-container fixed bottom-4 left-4 right-4 sm:bottom-6 sm:right-6 sm:left-auto z-50 hidden w-full sm:w-96 max-w-[calc(100vw-2rem)] sm:max-w-none" role="alert" aria-live="assertive">
+  <!-- Contenedor principal con fondo sutil -->
+  <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden">
+    
+    <!-- Botón de cierre en la esquina superior derecha -->
+    <div class="absolute top-3 right-3">
+      <button id="close-toast" class="toast-close-btn w-8 h-8 sm:w-9 sm:h-9 text-gray-400 hover:text-gray-600 transition-all duration-300 rounded-lg hover:bg-gray-100 flex items-center justify-center group" aria-label="Cerrar notificación">
+        <svg class="h-5 w-5 transition-transform duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="flex items-center p-5 sm:p-6 pr-12">
+      <!-- Icono contenedor simple -->
+      <div class="flex-shrink-0">
+        <div class="w-11 h-11 sm:w-12 sm:h-12 bg-green-100 rounded-xl flex items-center justify-center mr-4 border border-green-200 relative">
+          <!-- Success icon perfectamente centrado -->
+          <svg id="toast-success-icon" class="w-6 h-6 sm:w-7 sm:h-7 text-green-600 opacity-0 transition-all duration-500 absolute inset-0 m-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+          </svg>
+          
+          <!-- Error icon -->
+          <svg id="toast-error-icon" class="w-6 h-6 sm:w-7 sm:h-7 text-red-600 opacity-0 transition-all duration-500 absolute inset-0 m-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </div>
+      </div>
       
-      <!-- Ícono de error -->
-      <svg id="toast-error-icon" class="w-6 h-6 sm:w-7 sm:h-7 text-white opacity-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
-      </svg>
+      <!-- Contenido de texto -->
+      <div class="flex-1 min-w-0">
+        <h4 id="toast-title" class="text-base sm:text-lg font-semibold text-gray-900 mb-1 leading-tight">¡Gracias por tu interés!</h4>
+        <p id="toast-message" class="text-sm sm:text-base text-gray-600 leading-relaxed">Tu solicitud fue enviada exitosamente. Nuestro equipo se pondrá en contacto contigo pronto.</p>
+      </div>
     </div>
     
-    <!-- Contenido del texto -->
-    <div class="flex-1 min-w-0">
-      <h4 id="toast-title" class="text-base sm:text-lg font-semibold text-white mb-1 leading-tight">¡Gracias por tu interés!</h4>
-      <p id="toast-message" class="text-sm sm:text-base text-white opacity-90 leading-relaxed pr-2">Tu solicitud fue enviada exitosamente. Nuestro equipo se pondrá en contacto contigo pronto.</p>
+    <!-- Barra de progreso verde sutil -->
+    <div class="relative h-1.5 bg-gray-100">
+      <div id="toast-progress" class="h-full bg-gradient-to-r from-green-500 to-green-600 transition-all duration-300 ease-linear rounded-b-2xl" style="width: 100%"></div>
     </div>
-    
-    <!-- Botón de cierre -->
-    <button id="close-toast" class="flex-shrink-0 ml-2 sm:ml-4 w-6 h-6 sm:w-7 sm:h-7 text-white hover:text-gray-200 transition-colors duration-200 rounded-md hover:bg-white hover:bg-opacity-10 flex items-center justify-center" aria-label="Cerrar notificación">
-      <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
-  </div>
-  
-  <!-- Barra de progreso opcional -->
-  <div class="h-1 bg-white bg-opacity-20">
-    <div id="toast-progress" class="h-full bg-white bg-opacity-40 transition-all duration-300 ease-linear" style="width: 100%"></div>
   </div>
 </div>
 
 <!-- Canvas para el confeti -->
 <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-40 hidden" aria-hidden="true"></canvas>
+
+<!-- Auto-save indicator -->
+<div id="auto-save-indicator" class="auto-save-indicator">
+  <div class="flex items-center space-x-2">
+    <svg class="w-4 h-4 animate-spin hidden" id="save-spinner" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    <svg class="w-4 h-4" id="save-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+    </svg>
+    <span id="save-text">Datos guardados</span>
+  </div>
+</div>
 
 <style>
   /* Cuadrícula uniforme sin degradados */
@@ -327,7 +386,7 @@ import Container from '../../layouts/Container.astro';
     transition: all 0.3s ease;
   }
 
-  /* Estados de validación visual */
+  /* Estados de validación visual mejorados */
   .field-valid {
     border-color: #10b981 !important;
     background-color: #f0fdf4 !important;
@@ -336,6 +395,56 @@ import Container from '../../layouts/Container.astro';
   .field-invalid {
     border-color: #ef4444 !important;
     background-color: #fef2f2 !important;
+  }
+
+  /* Iconos de validación */
+  .field-success-icon {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+  }
+
+  .field-error-icon {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+  }
+
+  .field-valid .field-success-icon {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .field-invalid .field-error-icon {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Auto-save indicator */
+  .auto-save-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(16, 185, 129, 0.9);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+  }
+
+  .auto-save-indicator.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .auto-save-indicator.error {
+    background: rgba(239, 68, 68, 0.9);
   }
 
   /* Efectos de hover mejorados para selects */
@@ -385,6 +494,84 @@ import Container from '../../layouts/Container.astro';
   .pulse-effect:disabled {
     animation: none;
     box-shadow: none;
+  }
+
+  /* 🟢 NUEVO: Toast notification limpio y sutil */
+  .toast-container {
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .toast-container:not(.hidden) {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .toast-close-btn:hover {
+    background: rgba(107, 114, 128, 0.1);
+    transform: scale(1.05);
+  }
+
+  /* 📊 Progress bar enhancements */
+  #toast-progress {
+    background: linear-gradient(90deg, 
+      #10b981 0%, 
+      #059669 25%, 
+      #047857 50%, 
+      #059669 75%, 
+      #10b981 100%
+    );
+    background-size: 200% 100%;
+    animation: progress-shimmer 2s ease-in-out infinite;
+    transform-origin: left center;
+    will-change: width, transform;
+  }
+
+  @keyframes progress-shimmer {
+    0%, 100% {
+      background-position: 200% 0%;
+    }
+    50% {
+      background-position: -200% 0%;
+    }
+  }
+
+  /* Smooth progress transitions */
+  #toast-progress.smooth-start {
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  #toast-progress.smooth-progress {
+    transition: width 15s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  #toast-progress.smooth-reset {
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 640px) {
+    .toast-container {
+      margin: 0 1rem;
+    }
+    
+    #toast-progress {
+      animation-duration: 3s;
+    }
+  }
+
+  /* Accessibility improvements */
+  @media (prefers-reduced-motion: reduce) {
+    .toast-container {
+      transition: opacity 0.3s ease;
+      transform: none !important;
+    }
+    
+    #toast-progress {
+      animation: none !important;
+      background: linear-gradient(90deg, #10b981, #059669) !important;
+    }
   }
 </style>
 
@@ -653,6 +840,130 @@ import Container from '../../layouts/Container.astro';
       }
     }
     
+    // 🆕 NUEVA: Función para formatear teléfono mexicano
+    function formatPhoneNumber(value) {
+      // Remover todo excepto números
+      const cleaned = value.replace(/\D/g, '');
+      
+      // Limitar a 10 dígitos
+      const match = cleaned.match(/^(\d{0,2})(\d{0,4})(\d{0,4})$/);
+      
+      if (match) {
+        let formatted = '';
+        if (match[1]) formatted += match[1];
+        if (match[2]) formatted += (match[1] ? ' ' : '') + match[2];
+        if (match[3]) formatted += (match[2] ? ' ' : '') + match[3];
+        return formatted;
+      }
+      
+      return value;
+    }
+    
+    // 🆕 NUEVA: Auto-save functionality
+    let autoSaveTimeout;
+    const autoSaveDelay = 2000; // 2 segundos
+    
+    function showAutoSaveIndicator(status = 'saving') {
+      const indicator = document.getElementById('auto-save-indicator');
+      const spinner = document.getElementById('save-spinner');
+      const check = document.getElementById('save-check');
+      const text = document.getElementById('save-text');
+      
+      if (!indicator) return;
+      
+      indicator.classList.remove('error');
+      
+      if (status === 'saving') {
+        spinner.classList.remove('hidden');
+        check.classList.add('hidden');
+        text.textContent = 'Guardando...';
+        indicator.classList.add('show');
+      } else if (status === 'saved') {
+        spinner.classList.add('hidden');
+        check.classList.remove('hidden');
+        text.textContent = 'Datos guardados';
+        indicator.classList.add('show');
+        
+        // Ocultar después de 2 segundos
+        setTimeout(() => {
+          indicator.classList.remove('show');
+        }, 2000);
+      } else if (status === 'error') {
+        spinner.classList.add('hidden');
+        check.classList.add('hidden');
+        text.textContent = 'Error al guardar';
+        indicator.classList.add('error', 'show');
+        
+        // Ocultar después de 3 segundos
+        setTimeout(() => {
+          indicator.classList.remove('show', 'error');
+        }, 3000);
+      }
+    }
+    
+    function autoSaveFormData() {
+      try {
+        const formData = new FormData(form);
+        const formObject = {};
+        
+        formData.forEach((value, key) => {
+          if (value.trim() !== '') {
+            formObject[key] = value;
+          }
+        });
+        
+        // Solo guardar si hay al menos un campo lleno
+        if (Object.keys(formObject).length > 0) {
+          localStorage.setItem('kenda-form-draft', JSON.stringify({
+            data: formObject,
+            timestamp: new Date().toISOString()
+          }));
+          showAutoSaveIndicator('saved');
+        }
+      } catch (error) {
+        console.error('Error en auto-save:', error);
+        showAutoSaveIndicator('error');
+      }
+    }
+    
+    function triggerAutoSave() {
+      showAutoSaveIndicator('saving');
+      clearTimeout(autoSaveTimeout);
+      autoSaveTimeout = setTimeout(() => {
+        autoSaveFormData();
+      }, autoSaveDelay);
+    }
+    
+    // 🆕 NUEVA: Restaurar datos guardados
+    function restoreFormData() {
+      try {
+        const saved = localStorage.getItem('kenda-form-draft');
+        if (saved) {
+          const { data, timestamp } = JSON.parse(saved);
+          const saveDate = new Date(timestamp);
+          const now = new Date();
+          const hoursDiff = (now - saveDate) / (1000 * 60 * 60);
+          
+          // Solo restaurar si es menor a 24 horas
+          if (hoursDiff < 24) {
+            Object.keys(data).forEach(key => {
+              const field = document.getElementById(key);
+              if (field && field.value === '') {
+                field.value = data[key];
+              }
+            });
+            console.log('💾 Datos del formulario restaurados desde auto-save');
+          } else {
+            // Limpiar datos antiguos
+            localStorage.removeItem('kenda-form-draft');
+          }
+        }
+      } catch (error) {
+        console.error('Error restaurando datos:', error);
+        localStorage.removeItem('kenda-form-draft');
+      }
+    }
+    
     // 🆕 NUEVO: Función para resolver promotor basado en estado seleccionado
     function resolverPromotor(estadoSeleccionado) {
       console.log(`🔍 Resolviendo promotor para estado: ${estadoSeleccionado}`);
@@ -803,21 +1114,33 @@ import Container from '../../layouts/Container.astro';
       // Mostrar el toast
       toastNotification.classList.remove('hidden');
       
-      // Animar barra de progreso
+      // Animar barra de progreso con fluidez mejorada
       if (progressBar) {
-        setTimeout(() => {
-          progressBar.style.width = '0%';
-          progressBar.style.transition = 'width 15s linear';
-        }, 100);
+        // Resetear clases y aplicar clase inicial
+        progressBar.className = progressBar.className.replace(/smooth-\w+/g, '');
+        progressBar.classList.add('smooth-start');
+        
+        // Inicializar al 100%
+        requestAnimationFrame(() => {
+          progressBar.style.width = '100%';
+          
+          // Aplicar transición fluida después de una breve pausa
+          setTimeout(() => {
+            progressBar.classList.remove('smooth-start');
+            progressBar.classList.add('smooth-progress');
+            progressBar.style.width = '0%';
+          }, 300);
+        });
       }
       
       // Configurar el temporizador para ocultar después de 15 segundos
       toastTimer = setTimeout(function() {
         toastNotification.classList.add('hidden');
-        // Resetear barra de progreso
+        // Resetear barra de progreso con transición suave
         if (progressBar) {
+          progressBar.className = progressBar.className.replace(/smooth-\w+/g, '');
+          progressBar.classList.add('smooth-reset');
           progressBar.style.width = '100%';
-          progressBar.style.transition = 'width 0.3s ease-linear';
         }
       }, 15000);
     }
@@ -1026,18 +1349,28 @@ import Container from '../../layouts/Container.astro';
       });
       
       field.addEventListener('input', function() {
-        // Para el teléfono, formatear entrada
+        // 📱 MEJORADO: Smart formatting para teléfono
         if (this.id === 'telefono') {
-          let value = this.value.replace(/\D/g, '');
-          if (value.length > 10) {
-            value = value.slice(0, 15);
+          const cursorPosition = this.selectionStart;
+          const oldValue = this.value;
+          const formatted = formatPhoneNumber(this.value);
+          
+          if (formatted !== oldValue) {
+            this.value = formatted;
+            
+            // Mantener posición del cursor
+            const newCursorPosition = cursorPosition + (formatted.length - oldValue.length);
+            this.setSelectionRange(newCursorPosition, newCursorPosition);
           }
-          this.value = value;
         }
+        
         showError(this.id, false);
         
         // Quitar estado de validación al modificar
         this.classList.remove('field-valid', 'field-invalid');
+        
+        // 💾 Auto-save en cada cambio
+        triggerAutoSave();
       });
       
       if (field.tagName === 'SELECT') {
@@ -1208,6 +1541,9 @@ import Container from '../../layouts/Container.astro';
           // Resetear formulario
           form.reset();
           
+          // 💾 Limpiar auto-save al enviar exitosamente
+          localStorage.removeItem('kenda-form-draft');
+          
           // Limpiar estados visuales
           formFields.forEach(field => {
             field.classList.remove('field-valid', 'field-invalid');
@@ -1246,6 +1582,9 @@ import Container from '../../layouts/Container.astro';
     // 10. Inicializaciones
     confettiAnimation.init();
     controlPulseAnimation();
+    
+    // 🆕 NUEVA: Restaurar datos del auto-save al cargar la página
+    restoreFormData();
     
     // 11. Funciones para pruebas
     window.testToast = function() {
