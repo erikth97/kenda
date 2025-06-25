@@ -26,8 +26,8 @@ const {
 
 <!-- Sección de Beneficios con fondo gris claro cuadriculado -->
 <section class={`benefits-section relative overflow-hidden py-8 ${className}`}>
-  <!-- Degradado suave al inicio de la sección -->
-  <div class="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#f5f5f5]/70 to-[#f5f5f5] pointer-events-none"></div>
+  <!-- Degradado suave al inicio de la sección - oculto en mobile para evitar que cubra el título -->
+  <div class="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#f5f5f5]/70 to-[#f5f5f5] pointer-events-none hidden md:block"></div>
   <!-- Degradado suave al final de la sección -->
   <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#f5f5f5]/70 to-[#f5f5f5] pointer-events-none"></div>
   <Container>
@@ -75,10 +75,67 @@ const {
       linear-gradient(to bottom, rgba(255,255,255,1) 1px, transparent 1px);
     background-size: 50px 50px;
   }
+
+  /* 🆕 NUEVA: Animación de card central en mobile */
+  .benefit-card-center {
+    transform: scale(1.04) translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+    border-color: #F7941D !important;
+    border-width: 2px !important;
+    z-index: 2;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Transición suave para todas las benefit cards */
+  .benefit-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Estados de animación de entrada existentes mejorados */
+  .benefit-card.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Efectos iniciales para animación de entrada */
+  .benefit-card {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  /* 🎯 ACCESIBILIDAD: Respetar preferencias de movimiento reducido */
+  @media (prefers-reduced-motion: reduce) {
+    .benefit-card-center {
+      transform: none !important;
+      transition: none !important;
+    }
+    
+    .benefit-card {
+      transition: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  /* 📱 MOBILE ONLY: Solo aplicar en dispositivos móviles */
+  @media (max-width: 768px) {
+    .benefit-card-center {
+      transform: scale(1.05) translateY(-6px);
+      box-shadow: 0 16px 32px rgba(247, 148, 29, 0.2);
+    }
+  }
 </style>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // Detectar si estamos en móvil
+    const isMobile = () => window.innerWidth < 768;
+    
+    // Detectar preferencias de movimiento reducido
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
     // Intersection Observer para animar las cards cuando entren en viewport
     const observer = new IntersectionObserver(
       (entries) => {
@@ -97,15 +154,129 @@ const {
       }
     );
 
-    // Observar todas las benefit cards
+    // 🆕 NUEVO: Intersection Observer para card central en mobile
+    const centerCardObserver = new IntersectionObserver(
+      (entries) => {
+        if (!isMobile() || prefersReducedMotion) return;
+        
+        entries.forEach((entry) => {
+          const card = entry.target;
+          
+          if (entry.isIntersecting) {
+            // Verificar si la card está en el centro del viewport
+            const rect = card.getBoundingClientRect();
+            const viewportCenter = window.innerHeight / 2;
+            const cardCenter = rect.top + rect.height / 2;
+            const distanceFromCenter = Math.abs(cardCenter - viewportCenter);
+            
+            // Si está cerca del centro (tolerancia de 100px)
+            if (distanceFromCenter < 100) {
+              // Remover clase de otras cards
+              document.querySelectorAll('.benefit-card').forEach(otherCard => {
+                if (otherCard !== card) {
+                  otherCard.classList.remove('benefit-card-center');
+                }
+              });
+              
+              // Agregar clase a la card central
+              card.classList.add('benefit-card-center');
+            } else {
+              // Remover clase si no está centrada
+              card.classList.remove('benefit-card-center');
+            }
+          } else {
+            // Remover clase cuando la card sale del viewport
+            card.classList.remove('benefit-card-center');
+          }
+        });
+      },
+      {
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], // Múltiples thresholds para mayor precisión
+        rootMargin: '-20% 0px -20% 0px' // Solo considerar el 60% central del viewport
+      }
+    );
+
+    // Obtener todas las benefit cards
     const benefitCards = document.querySelectorAll('.benefit-card');
+    
+    // Observar para animación de entrada
     benefitCards.forEach((card) => {
       observer.observe(card);
     });
+    
+    // 📱 MOBILE: Observar para animación de centro solo en móvil
+    if (isMobile() && !prefersReducedMotion) {
+      benefitCards.forEach((card) => {
+        centerCardObserver.observe(card);
+      });
+    }
+    
+    // 🔄 RESPONSIVO: Re-evaluar en cambio de tamaño de ventana
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        const nowMobile = isMobile();
+        
+        if (nowMobile && !prefersReducedMotion) {
+          // Si cambió a móvil, empezar a observar
+          benefitCards.forEach((card) => {
+            centerCardObserver.observe(card);
+          });
+        } else {
+          // Si cambió a desktop, dejar de observar y limpiar clases
+          benefitCards.forEach((card) => {
+            centerCardObserver.unobserve(card);
+            card.classList.remove('benefit-card-center');
+          });
+        }
+      }, 250); // Debounce de 250ms
+    });
+
+    // 🎯 THROTTLED SCROLL: Para mejor performance en móvil
+    let ticking = false;
+    
+    function updateCenterCards() {
+      if (!isMobile() || prefersReducedMotion || ticking) return;
+      
+      ticking = true;
+      requestAnimationFrame(() => {
+        // El Intersection Observer ya maneja la lógica
+        // Este scroll listener es backup para casos edge
+        ticking = false;
+      });
+    }
+    
+    // Solo agregar scroll listener en móvil
+    if (isMobile() && !prefersReducedMotion) {
+      window.addEventListener('scroll', updateCenterCards, { passive: true });
+    }
 
     // Cleanup al desmontar
     window.addEventListener('beforeunload', () => {
       observer.disconnect();
+      centerCardObserver.disconnect();
+      clearTimeout(resizeTimeout);
     });
+    
+    // 🧪 FUNCIÓN DE TESTING (solo en desarrollo)
+    window.testCenterCard = function(cardIndex) {
+      const cards = document.querySelectorAll('.benefit-card');
+      cards.forEach((card, index) => {
+        if (index === cardIndex) {
+          card.classList.add('benefit-card-center');
+          console.log(`✅ Card ${cardIndex + 1} ahora está centrada`);
+        } else {
+          card.classList.remove('benefit-card-center');
+        }
+      });
+    };
+    
+    window.clearCenterCards = function() {
+      document.querySelectorAll('.benefit-card').forEach(card => {
+        card.classList.remove('benefit-card-center');
+      });
+      console.log('🧹 Todas las cards center limpiadas');
+    };
   });
 </script>

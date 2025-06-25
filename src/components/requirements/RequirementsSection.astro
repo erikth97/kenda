@@ -125,11 +125,11 @@ const requirements = [
                 >
                   <div class="requirement-number text-5xl md:text-6xl font-bold text-orange-500 leading-none mr-4 flex-shrink-0 transition-all duration-300 hover:text-orange-600 hover:scale-110">
                     <span 
-                      class="count-up-number" 
+                      class="static-number" 
                       data-target={req.number}
                       data-req-index={index}
                     >
-                      00
+                      {req.number}
                     </span>
                   </div>
                   <div class="requirement-text flex-1 relative">
@@ -137,15 +137,10 @@ const requirements = [
                       {req.description}
                     </p>
                     {index < requirements.length - 1 && (
-                      <div class="timeline-separator md:hidden w-1/2 h-px bg-gray-400 opacity-0 transition-opacity duration-500 mx-auto mt-6"></div>
+                      <div class="modern-separator md:hidden mt-8 mb-4 flex justify-center">
+                        <div class="w-24 h-px bg-gradient-to-r from-transparent via-orange-400 to-transparent opacity-60"></div>
+                      </div>
                     )}
-                  </div>
-                  
-                  <!-- Indicador de interacción para móvil -->
-                  <div class="md:hidden absolute -right-2 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center opacity-60 transition-all duration-300 hover:opacity-100 hover:scale-110">
-                    <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
-                    </svg>
                   </div>
                 </div>
               );
@@ -300,18 +295,36 @@ const requirements = [
     50% { transform: translateY(-20px) rotate(3deg); }
   }
   
-  /* Animación de pulso sutil para indicadores móviles */
-  @keyframes pulse-gentle {
-    0%, 100% { opacity: 0.6; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.05); }
+  /* 🆕 NUEVO: Separador de línea moderno */
+  .modern-separator {
+    opacity: 0;
+    transform: translateY(10px) scaleX(0);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
-  .requirement-item .md\\:hidden {
-    animation: pulse-gentle 3s ease-in-out infinite;
+  .modern-separator.animate-in {
+    opacity: 1;
+    transform: translateY(0) scaleX(1);
   }
   
-  /* === COUNT-UP ANIMATION === */
-  .count-up-number {
+  /* Animación de brillo sutil para la línea */
+  .modern-separator > div {
+    animation: lineGlow 3s ease-in-out infinite;
+  }
+  
+  @keyframes lineGlow {
+    0%, 100% { 
+      opacity: 0.6;
+      transform: scaleX(1);
+    }
+    50% { 
+      opacity: 0.8;
+      transform: scaleX(1.2);
+    }
+  }
+  
+  /* === STATIC NUMBER SCALE ANIMATION === */
+  .static-number {
     display: inline-block;
     position: relative;
     overflow: hidden;
@@ -319,13 +332,13 @@ const requirements = [
     min-width: 2ch; /* Asegurar espacio para 2 dígitos */
   }
   
-  .count-up-number.animating {
+  .static-number.animating {
     color: #f97316; /* orange-500 más brillante durante animación */
     transform: scale(1.1);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   
-  .count-up-number.completed {
+  .static-number.completed {
     animation: numberPulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   
@@ -346,7 +359,7 @@ const requirements = [
   }
   
   /* Efecto de glow cuando el número se anima */
-  .count-up-number.animating::before {
+  .static-number.animating::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -378,7 +391,8 @@ const requirements = [
     .timeline-point,
     .requirement-item,
     .floating-tire,
-    .count-up-number {
+    .static-number,
+    .modern-separator {
       animation: none !important;
       transition: none !important;
     }
@@ -388,10 +402,21 @@ const requirements = [
       transform: none !important;
     }
     
-    .count-up-number.animating,
-    .count-up-number.completed {
+    .static-number.animating,
+    .static-number.completed {
       transform: none !important;
       color: #f97316 !important;
+    }
+    
+    .modern-separator {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    
+    .modern-separator > div {
+      animation: none !important;
+      opacity: 0.6 !important;
+      transform: none !important;
     }
   }
 
@@ -674,17 +699,13 @@ const requirements = [
               item.style.opacity = '1';
               item.style.transform = 'translateY(0)';
               
-              // Activar count-up animation para el número con delay escalonado
-              const countUpElement = item.querySelector('.count-up-number') as HTMLElement | null;
-              if (countUpElement && !performanceMode) {
-                const countUpDelay = 200 + (index * 80); // Delay escalonado más rápido
+              // Activar scale animation para el número con delay escalonado
+              const numberElement = item.querySelector('.static-number') as HTMLElement | null;
+              if (numberElement && !performanceMode) {
+                const scaleDelay = 200 + (index * 80); // Delay escalonado
                 setTimeout(() => {
-                  animateCountUp(countUpElement);
-                }, countUpDelay);
-              } else if (countUpElement && performanceMode) {
-                // Mostrar número final inmediatamente en modo performance
-                const target = countUpElement.getAttribute('data-target') || '00';
-                countUpElement.textContent = target;
+                  animateNumberScale(numberElement);
+                }, scaleDelay);
               }
               
               if (point && !performanceMode) {
@@ -697,9 +718,12 @@ const requirements = [
                 point.style.transform = 'translateX(-50%) scale(1)';
               }
               
-              if (separator && window.innerWidth < 768) {
+              // 🆕 MEJORADO: Animar nuevo separador moderno
+              const modernSeparator = item.querySelector('.modern-separator') as HTMLElement | null;
+              if (modernSeparator && window.innerWidth < 768) {
                 setTimeout(() => {
-                  separator.style.opacity = '1';
+                  modernSeparator.style.opacity = '1';
+                  modernSeparator.style.transform = 'translateY(0) scaleX(1)';
                 }, performanceMode ? 0 : 300);
               }
             }, delay);
@@ -707,19 +731,22 @@ const requirements = [
             item.style.opacity = '0';
             item.style.transform = 'translateY(20px)';
             
-            // Reset count-up number al salir del viewport
-            const countUpElement = item.querySelector('.count-up-number') as HTMLElement | null;
-            if (countUpElement) {
-              countUpElement.textContent = '00';
-              countUpElement.classList.remove('animating', 'completed');
+            // Reset number animation al salir del viewport
+            const numberElement = item.querySelector('.static-number') as HTMLElement | null;
+            if (numberElement) {
+              numberElement.classList.remove('animating', 'completed');
             }
             
             if (point) {
               point.style.opacity = '0';
               point.style.transform = 'translateX(-50%) scale(0.5)';
             }
-            if (separator && window.innerWidth < 768) {
-              separator.style.opacity = '0';
+            
+            // 🆕 MEJORADO: Reset del nuevo separador moderno
+            const modernSeparator = item.querySelector('.modern-separator') as HTMLElement | null;
+            if (modernSeparator && window.innerWidth < 768) {
+              modernSeparator.style.opacity = '0';
+              modernSeparator.style.transform = 'translateY(10px) scaleX(0)';
             }
           }
         });
@@ -752,73 +779,21 @@ const requirements = [
       }
     }
 
-    // === FUNCIÓN COUNT-UP ANIMATION ===
-    function animateCountUp(element: HTMLElement) {
-      const targetString = element.getAttribute('data-target') || '01';
-      const target = parseInt(targetString, 10);
-      const duration = 800; // Duración en ms - más rápido
-      const steps = 20; // Número de pasos en la animación - menos pasos
-      const stepDuration = duration / steps;
-      
-      let current = 0;
-      let step = 0;
-      
+    // === FUNCIÓN SCALE ANIMATION (sin contador) ===
+    function animateNumberScale(element: HTMLElement) {
       // Agregar clase de animación
       element.classList.add('animating');
       
-      // Función de easing (ease-out cubic)
-      function easeOutCubic(t: number): number {
-        return 1 - Math.pow(1 - t, 3);
-      }
-      
-      const animation = setInterval(() => {
-        step++;
-        const progress = step / steps;
-        const easedProgress = easeOutCubic(progress);
+      // Después de un pequeño delay, agregar clase completada para el pulso
+      setTimeout(() => {
+        element.classList.remove('animating');
+        element.classList.add('completed');
         
-        // Calcular valor actual con easing
-        current = Math.round(easedProgress * target);
-        
-        // Formatear número con ceros a la izquierda
-        const displayValue = current.toString().padStart(2, '0');
-        element.textContent = displayValue;
-        
-        // Finalizar animación
-        if (step >= steps) {
-          clearInterval(animation);
-          
-          // Asegurar valor final exacto con formato original
-          element.textContent = targetString;
-          
-          // Remover clase de animación y agregar clase completada
-          element.classList.remove('animating');
-          element.classList.add('completed');
-          
-          // Remover clase completada después de la animación de pulso - más rápido
-          setTimeout(() => {
-            element.classList.remove('completed');
-          }, 600);
-        }
-      }, stepDuration);
-      
-      // Cleanup en caso de que el elemento sea removido
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.type === 'childList') {
-            mutation.removedNodes.forEach((node) => {
-              if (node === element || (node as Element)?.contains?.(element)) {
-                clearInterval(animation);
-                observer.disconnect();
-              }
-            });
-          }
-        });
-      });
-      
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true
-      });
+        // Remover clase completada después de la animación de pulso
+        setTimeout(() => {
+          element.classList.remove('completed');
+        }, 600);
+      }, 300);
     }
 
     initializeSection();
