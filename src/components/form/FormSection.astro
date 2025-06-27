@@ -96,9 +96,9 @@ import Container from '../../layouts/Container.astro';
                 class="w-full px-4 sm:px-5 py-3 sm:py-4 pr-12 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium placeholder-gray-500" 
                 placeholder="55 1234 5678"
                 required 
-                pattern="[\d\s\-\(\)\+]{10,15}"
+                pattern="[0-9\s\-]{10,19}"
                 maxlength="19"
-                title="Ingrese un número de teléfono mexicano válido"
+                title="Ingrese un número de teléfono válido (solo números, espacios y guiones)"
                 aria-describedby="error-telefono"
                 aria-invalid="false"
               />
@@ -206,6 +206,30 @@ import Container from '../../layouts/Container.astro';
             </div>
           </div>
           
+          <!-- 🆕 NUEVO: Campo Municipio -->
+          <div id="municipio-container" class="hidden">
+            <label for="municipio" class="block text-gray-800 font-semibold mb-4 text-base leading-relaxed">Municipio</label>
+            <div class="relative">
+              <select 
+                id="municipio" 
+                name="municipio" 
+                class="w-full px-4 sm:px-5 py-4 sm:py-5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-kenda-orange focus:border-kenda-orange focus:outline-none appearance-none transition-all duration-300 hover:bg-gray-100 hover:border-gray-300 text-gray-900 font-medium cursor-pointer" 
+                required
+                aria-describedby="error-municipio"
+                aria-invalid="false"
+              >
+                <option value="" disabled selected class="text-gray-400 italic">Selecciona tu municipio</option>
+              </select>
+              <!-- Ícono de flecha para el select -->
+              <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                <svg class="w-5 h-5 text-gray-600 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+              <p class="error-message text-red-600 text-sm mt-2 ml-1 hidden font-medium" id="error-municipio" role="alert">Seleccione un municipio</p>
+            </div>
+          </div>
+          
           <div>
             <label for="tipoNegocio" class="block text-gray-800 font-semibold mb-4 text-base leading-relaxed">¿Cuál es tu capital de inversión?</label>
             <div class="relative">
@@ -285,47 +309,45 @@ import Container from '../../layouts/Container.astro';
   </Container>
 </Section>
 
-<!-- Toast notification sutil y limpio -->
-<div id="toast-notification" class="toast-container fixed bottom-4 left-4 right-4 sm:bottom-6 sm:right-6 sm:left-auto z-50 hidden w-full sm:w-96 max-w-[calc(100vw-2rem)] sm:max-w-none" role="alert" aria-live="assertive">
-  <!-- Contenedor principal con fondo sutil -->
-  <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden">
+<!-- Minimalist Toast Notification -->
+<div id="toast-notification" class="toast-container fixed bottom-6 right-6 z-50 hidden w-full sm:w-96 max-w-[calc(100vw-2rem)] sm:max-w-96" role="alert" aria-live="assertive">
+  <!-- Clean white container with subtle shadow -->
+  <div class="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
     
-    <!-- Botón de cierre en la esquina superior derecha -->
-    <div class="absolute top-3 right-3">
-      <button id="close-toast" class="toast-close-btn w-8 h-8 sm:w-9 sm:h-9 text-gray-400 hover:text-gray-600 transition-all duration-300 rounded-lg hover:bg-gray-100 flex items-center justify-center group" aria-label="Cerrar notificación">
-        <svg class="h-5 w-5 transition-transform duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Contenido principal -->
-    <div class="flex items-center p-5 sm:p-6 pr-12">
-      <!-- Icono contenedor simple -->
-      <div class="flex-shrink-0">
-        <div class="w-11 h-11 sm:w-12 sm:h-12 bg-green-100 rounded-xl flex items-center justify-center mr-4 border border-green-200 relative">
-          <!-- Success icon perfectamente centrado -->
-          <svg id="toast-success-icon" class="w-6 h-6 sm:w-7 sm:h-7 text-green-600 opacity-0 transition-all duration-500 absolute inset-0 m-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+    <!-- Content with better spacing -->
+    <div class="flex items-start p-4 pr-10">
+      <!-- Minimalist icon -->
+      <div class="flex-shrink-0 mr-3">
+        <div class="w-5 h-5 rounded-full flex items-center justify-center">
+          <!-- Success icon -->
+          <svg id="toast-success-icon" class="w-5 h-5 text-emerald-500 opacity-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.236 4.53L8.22 10.653a.75.75 0 00-1.06 1.061l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
           </svg>
           
           <!-- Error icon -->
-          <svg id="toast-error-icon" class="w-6 h-6 sm:w-7 sm:h-7 text-red-600 opacity-0 transition-all duration-500 absolute inset-0 m-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+          <svg id="toast-error-icon" class="w-5 h-5 text-red-500 opacity-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
           </svg>
         </div>
       </div>
       
-      <!-- Contenido de texto -->
+      <!-- Clean typography -->
       <div class="flex-1 min-w-0">
-        <h4 id="toast-title" class="text-base sm:text-lg font-semibold text-gray-900 mb-1 leading-tight">¡Gracias por tu interés!</h4>
-        <p id="toast-message" class="text-sm sm:text-base text-gray-600 leading-relaxed">Tu solicitud fue enviada exitosamente. Nuestro equipo se pondrá en contacto contigo pronto.</p>
+        <h4 id="toast-title" class="text-sm font-medium text-gray-900 mb-1">¡Éxito!</h4>
+        <p id="toast-message" class="text-sm text-gray-600 leading-5">Tu solicitud fue enviada exitosamente.</p>
       </div>
     </div>
     
-    <!-- Barra de progreso verde sutil -->
-    <div class="relative h-1.5 bg-gray-100">
-      <div id="toast-progress" class="h-full bg-gradient-to-r from-green-500 to-green-600 transition-all duration-300 ease-linear rounded-b-2xl" style="width: 100%"></div>
+    <!-- Clean close button -->
+    <button id="close-toast" class="toast-close-btn absolute top-3 right-3 w-6 h-6 rounded-md flex items-center justify-center text-gray-400 hover:text-gray-600" aria-label="Cerrar notificación">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    
+    <!-- Simple progress bar -->
+    <div class="h-1 bg-gray-100">
+      <div id="toast-progress" class="h-full transition-all duration-75 ease-linear" style="width: 100%"></div>
     </div>
   </div>
 </div>
@@ -496,11 +518,11 @@ import Container from '../../layouts/Container.astro';
     box-shadow: none;
   }
 
-  /* 🟢 NUEVO: Toast notification limpio y sutil */
+  /* 🎨 Minimalist Toast Notification */
   .toast-container {
-    transform: translateY(100px);
+    transform: translateY(100%);
     opacity: 0;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .toast-container:not(.hidden) {
@@ -508,273 +530,352 @@ import Container from '../../layouts/Container.astro';
     opacity: 1;
   }
 
+  .toast-close-btn {
+    transition: all 0.2s ease;
+  }
+
   .toast-close-btn:hover {
-    background: rgba(107, 114, 128, 0.1);
-    transform: scale(1.05);
+    background: #f3f4f6;
+    color: #374151;
   }
 
-  /* 📊 Progress bar enhancements */
+  /* Success state styling */
+  .toast-success {
+    border-left: 3px solid #10b981;
+    background: #ffffff;
+  }
+
+  /* Error state styling */
+  .toast-error {
+    border-left: 3px solid #ef4444;
+    background: #ffffff;
+  }
+
+  /* Remove shimmer animation - keep simple */
   #toast-progress {
-    background: linear-gradient(90deg, 
-      #10b981 0%, 
-      #059669 25%, 
-      #047857 50%, 
-      #059669 75%, 
-      #10b981 100%
-    );
-    background-size: 200% 100%;
-    animation: progress-shimmer 2s ease-in-out infinite;
-    transform-origin: left center;
-    will-change: width, transform;
+    background: #e5e7eb;
+    transition: width 0.2s ease;
   }
 
-  @keyframes progress-shimmer {
-    0%, 100% {
-      background-position: 200% 0%;
-    }
-    50% {
-      background-position: -200% 0%;
-    }
+  #toast-progress.success {
+    background: #10b981;
   }
 
-  /* Smooth progress transitions */
-  #toast-progress.smooth-start {
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  #toast-progress.error {
+    background: #ef4444;
   }
 
-  #toast-progress.smooth-progress {
-    transition: width 15s cubic-bezier(0.25, 0.1, 0.25, 1);
-  }
-
-  #toast-progress.smooth-reset {
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Icon improvements */
+  #toast-success-icon,
+  #toast-error-icon {
+    transition: opacity 0.2s ease;
   }
 
   /* Mobile optimizations */
   @media (max-width: 640px) {
     .toast-container {
-      margin: 0 1rem;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
+      width: auto;
+      max-width: none;
     }
     
-    #toast-progress {
-      animation-duration: 3s;
+    #toast-notification .bg-white {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
   }
 
   /* Accessibility improvements */
   @media (prefers-reduced-motion: reduce) {
     .toast-container {
-      transition: opacity 0.3s ease;
+      transition: opacity 0.2s ease;
       transform: none !important;
     }
     
     #toast-progress {
-      animation: none !important;
-      background: linear-gradient(90deg, #10b981, #059669) !important;
+      transition: none !important;
     }
   }
 </style>
 
 <script is:inline>
-  // 🆕 NUEVO: Base de datos de promotores por estado
+  // 🆕 NUEVO: Base de datos de promotores por estado con estructura mejorada
   const PROMOTORES_POR_ESTADO = {
     'aguascalientes': {
+      tipo: 'simple',
       nombre: 'FRANCISCO JAVIER PEÑA',
       whatsapp: '6671207132',
       email: 'ventas.pacifico2@motosyequipos.com',
       zonas: ['ZACATECAS', 'AGUASCALIENTES', 'NAYARIT', 'JALISCO']
     },
     'baja-california': {
+      tipo: 'simple',
       nombre: 'CHRISTIAN PAUL DAVIZON VILLEGAS',
       whatsapp: '6691229912',
       email: 'ventas.pacifico3@motosyequipos.com',
       zonas: ['SINALOA', 'SONORA', 'BAJA CALIFORNIA SUR', 'NORTE Y DURANGO']
     },
     'baja-california-sur': {
+      tipo: 'simple',
       nombre: 'CHRISTIAN PAUL DAVIZON VILLEGAS',
       whatsapp: '6691229912',
       email: 'ventas.pacifico3@motosyequipos.com',
       zonas: ['SINALOA', 'SONORA', 'BAJA CALIFORNIA SUR', 'NORTE Y DURANGO']
     },
     'campeche': {
-      nombre: 'ULISES MARTIN VILLEGAS',
-      whatsapp: '9993965148',
-      email: 'ventas.peninsula@motosyequipos.com',
-      zonas: ['YUCATÁN', 'CAMPECHE', 'QUINTANA ROO']
+      tipo: 'multiple',
+      asesores: [
+        {
+          nombre: 'ULISES MARTIN VILLEGAS',
+          whatsapp: '9993965148',
+          email: 'ventas.peninsula@motosyequipos.com',
+          prioridad: 'principal',
+          zonas: ['YUCATÁN', 'CAMPECHE', 'QUINTANA ROO']
+        },
+        {
+          nombre: 'JORGE URTECHO REJON',
+          whatsapp: '9991098579',
+          email: 'ventas.golfosur@motosyequipos.com',
+          prioridad: 'alternativo',
+          zonas: ['CAMPECHE(NTE.)', 'TABASCO', 'VERACRUZ (SUR)']
+        }
+      ]
     },
     'chiapas': {
+      tipo: 'simple',
       nombre: 'JOSE DANIEL RAMOS MARTÍNEZ',
       whatsapp: '9626225169',
       email: 'ventas.suroeste@motosyequipos.com',
       zonas: ['CHIAPAS']
     },
     'chihuahua': {
+      tipo: 'simple',
       nombre: 'JUAN CARLOS HERNANDEZ PACHECO',
       whatsapp: '8126229318',
       email: 'ventas.norte@motosyequipos.com',
       zonas: ['CHIHUAHUA', 'NUEVO LEON', 'COAHUILA', 'TAMAULIPAS']
     },
-'ciudad-de-mexico': {
-      nombre: 'ALEJANDRO ROBERTO PIÑA GARCIA',
-      whatsapp: '5527378228',
-      email: 'ventas.sur@motosyequipos.com',
-      zonas: ['CDMX', 'EDO. MEXICO', 'PUEBLA', 'TLAXCALA'],
-      alternativo: {
-        nombre: 'SERGIO AARON CARDENAS GARCIA',
-        whatsapp: '5543038476',
-        email: 'ventas.sureste@motosyequipos.com'
-      }
+    'ciudad-de-mexico': {
+      tipo: 'multiple',
+      asesores: [
+        {
+          nombre: 'ALEJANDRO ROBERTO PIÑA GARCIA',
+          whatsapp: '5527378228',
+          email: 'ventas.sur@motosyequipos.com',
+          prioridad: 'principal',
+          zonas: ['CDMX', 'EDO. MEXICO', 'PUEBLA', 'TLAXCALA']
+        },
+        {
+          nombre: 'SERGIO AARON CARDENAS GARCIA',
+          whatsapp: '5543038476',
+          email: 'ventas.sureste@motosyequipos.com',
+          prioridad: 'alternativo',
+          zonas: ['CDMX', 'EDO. MEXICO', 'PUEBLA', 'TLAXCALA']
+        }
+      ]
     },
     'coahuila': {
+      tipo: 'simple',
       nombre: 'JUAN CARLOS HERNANDEZ PACHECO',
       whatsapp: '8126229318',
       email: 'ventas.norte@motosyequipos.com',
       zonas: ['CHIHUAHUA', 'NUEVO LEON', 'COAHUILA', 'TAMAULIPAS']
     },
     'colima': {
+      tipo: 'simple',
       nombre: 'FRANCISCO JAVIER RENTERIA',
       whatsapp: '3311520857',
       email: 'ventas.jalisco@motosyequipos.com',
       zonas: ['JALISCO', 'COLIMA', 'MICHOACÁN']
     },
     'durango': {
+      tipo: 'simple',
       nombre: 'CHRISTIAN PAUL DAVIZON VILLEGAS',
       whatsapp: '6691229912',
       email: 'ventas.pacifico3@motosyequipos.com',
       zonas: ['SINALOA', 'SONORA', 'BAJA CALIFORNIA SUR', 'NORTE Y DURANGO']
     },
     'guanajuato': {
+      tipo: 'simple',
       nombre: 'RICARDO REBOLLEDO ORTIZ',
       whatsapp: '4451042272',
       email: 'ventas.bajio@motosyequipos.com',
       zonas: ['GUANAJUATO', 'SAN LUIS POTOSÍ']
     },
     'guerrero': {
+      tipo: 'simple',
       nombre: 'IVÁN HERNÁNDEZ LEAL',
       whatsapp: '3511779622',
       email: 'ventas.pacifico4@motosyequipos.com',
       zonas: ['GUERRERO', 'MORELOS', 'MICHOACÁN']
     },
     'hidalgo': {
+      tipo: 'simple',
       nombre: 'OCTAVIO NAVARRETE FERNANDEZ',
       whatsapp: '5562404656',
       email: 'ventas.mexico@motosyequipos.com',
       zonas: ['HIDALGO', 'QUERÉTARO', 'EDO. MEXICO']
     },
     'jalisco': {
+      tipo: 'simple',
       nombre: 'FRANCISCO JAVIER RENTERIA',
       whatsapp: '3311520857',
       email: 'ventas.jalisco@motosyequipos.com',
       zonas: ['JALISCO', 'COLIMA', 'MICHOACÁN']
     },
     'mexico': {
-      nombre: 'ALEJANDRO ROBERTO PIÑA GARCIA',
-      whatsapp: '5527378228',
-      email: 'ventas.sur@motosyequipos.com',
-      zonas: ['CDMX', 'EDO. MEXICO', 'PUEBLA', 'TLAXCALA'],
-      alternativo: {
-        nombre: 'SERGIO AARON CARDENAS GARCIA',
-        whatsapp: '5543038476',
-        email: 'ventas.sureste@motosyequipos.com'
-      }
+      tipo: 'multiple',
+      asesores: [
+        {
+          nombre: 'ALEJANDRO ROBERTO PIÑA GARCIA',
+          whatsapp: '5527378228',
+          email: 'ventas.sur@motosyequipos.com',
+          prioridad: 'principal',
+          zonas: ['CDMX', 'EDO. MEXICO', 'PUEBLA', 'TLAXCALA']
+        },
+        {
+          nombre: 'SERGIO AARON CARDENAS GARCIA',
+          whatsapp: '5543038476',
+          email: 'ventas.sureste@motosyequipos.com',
+          prioridad: 'alternativo',
+          zonas: ['CDMX', 'EDO. MEXICO', 'PUEBLA', 'TLAXCALA']
+        },
+        {
+          nombre: 'OCTAVIO NAVARRETE FERNANDEZ',
+          whatsapp: '5562404656',
+          email: 'ventas.mexico@motosyequipos.com',
+          prioridad: 'alternativo',
+          zonas: ['HIDALGO', 'QUERÉTARO', 'EDO. MEXICO']
+        }
+      ]
     },
     'michoacan': {
+      tipo: 'simple',
       nombre: 'FRANCISCO JAVIER RENTERIA',
       whatsapp: '3311520857',
       email: 'ventas.jalisco@motosyequipos.com',
       zonas: ['JALISCO', 'COLIMA', 'MICHOACÁN']
     },
     'morelos': {
+      tipo: 'simple',
       nombre: 'IVÁN HERNÁNDEZ LEAL',
       whatsapp: '3511779622',
       email: 'ventas.pacifico4@motosyequipos.com',
       zonas: ['GUERRERO', 'MORELOS', 'MICHOACÁN']
     },
     'nayarit': {
+      tipo: 'simple',
       nombre: 'FRANCISCO JAVIER PEÑA',
       whatsapp: '6671207132',
       email: 'ventas.pacifico2@motosyequipos.com',
       zonas: ['ZACATECAS', 'AGUASCALIENTES', 'NAYARIT', 'JALISCO']
     },
     'nuevo-leon': {
+      tipo: 'simple',
       nombre: 'JUAN CARLOS HERNANDEZ PACHECO',
       whatsapp: '8126229318',
       email: 'ventas.norte@motosyequipos.com',
       zonas: ['CHIHUAHUA', 'NUEVO LEON', 'COAHUILA', 'TAMAULIPAS']
     },
     'oaxaca': {
+      tipo: 'simple',
       nombre: 'LIBER HOMERO CABALLERO VILLA',
       whatsapp: '5554336749',
       email: 'ventas.oaxaca@motosyequipos.com',
       zonas: ['OAXACA']
     },
     'puebla': {
+      tipo: 'simple',
       nombre: 'ALEJANDRO ROBERTO PIÑA GARCIA',
       whatsapp: '5527378228',
       email: 'ventas.sur@motosyequipos.com',
       zonas: ['CDMX', 'EDO. MEXICO', 'PUEBLA', 'TLAXCALA']
     },
     'queretaro': {
+      tipo: 'simple',
       nombre: 'OCTAVIO NAVARRETE FERNANDEZ',
       whatsapp: '5562404656',
       email: 'ventas.mexico@motosyequipos.com',
       zonas: ['HIDALGO', 'QUERÉTARO', 'EDO. MEXICO']
     },
     'quintana-roo': {
+      tipo: 'simple',
       nombre: 'ULISES MARTIN VILLEGAS',
       whatsapp: '9993965148',
       email: 'ventas.peninsula@motosyequipos.com',
       zonas: ['YUCATÁN', 'CAMPECHE', 'QUINTANA ROO']
     },
     'san-luis-potosi': {
+      tipo: 'simple',
       nombre: 'RICARDO REBOLLEDO ORTIZ',
       whatsapp: '4451042272',
       email: 'ventas.bajio@motosyequipos.com',
       zonas: ['GUANAJUATO', 'SAN LUIS POTOSÍ']
     },
     'sinaloa': {
+      tipo: 'simple',
       nombre: 'CHRISTIAN PAUL DAVIZON VILLEGAS',
       whatsapp: '6691229912',
       email: 'ventas.pacifico3@motosyequipos.com',
       zonas: ['SINALOA', 'SONORA', 'BAJA CALIFORNIA SUR', 'NORTE Y DURANGO']
     },
     'sonora': {
+      tipo: 'simple',
       nombre: 'CHRISTIAN PAUL DAVIZON VILLEGAS',
       whatsapp: '6691229912',
       email: 'ventas.pacifico3@motosyequipos.com',
       zonas: ['SINALOA', 'SONORA', 'BAJA CALIFORNIA SUR', 'NORTE Y DURANGO']
     },
     'tabasco': {
+      tipo: 'simple',
       nombre: 'JORGE URTECHO REJON',
       whatsapp: '9991098579',
       email: 'ventas.golfosur@motosyequipos.com',
       zonas: ['CAMPECHE(NTE.)', 'TABASCO', 'VERACRUZ (SUR)']
     },
     'tamaulipas': {
+      tipo: 'simple',
       nombre: 'JUAN CARLOS HERNANDEZ PACHECO',
       whatsapp: '8126229318',
       email: 'ventas.norte@motosyequipos.com',
       zonas: ['CHIHUAHUA', 'NUEVO LEON', 'COAHUILA', 'TAMAULIPAS']
     },
     'tlaxcala': {
+      tipo: 'simple',
       nombre: 'ALEJANDRO ROBERTO PIÑA GARCIA',
       whatsapp: '5527378228',
       email: 'ventas.sur@motosyequipos.com',
       zonas: ['CDMX', 'EDO. MEXICO', 'PUEBLA', 'TLAXCALA']
     },
     'veracruz': {
-      nombre: 'MIGUEL ANGEL GZZ VIDAL',
-      whatsapp: '2321033094',
-      email: 'ventas.veracruz@motosyequipos.com',
-      zonas: ['VERACRUZ']
+      tipo: 'multiple',
+      asesores: [
+        {
+          nombre: 'MIGUEL ANGEL GZZ VIDAL',
+          whatsapp: '2321033094',
+          email: 'ventas.veracruz@motosyequipos.com',
+          prioridad: 'principal',
+          zonas: ['VERACRUZ']
+        },
+        {
+          nombre: 'JORGE URTECHO REJON',
+          whatsapp: '9991098579',
+          email: 'ventas.golfosur@motosyequipos.com',
+          prioridad: 'alternativo',
+          zonas: ['CAMPECHE(NTE.)', 'TABASCO', 'VERACRUZ (SUR)']
+        }
+      ]
     },
     'yucatan': {
+      tipo: 'simple',
       nombre: 'ULISES MARTIN VILLEGAS',
       whatsapp: '9993965148',
       email: 'ventas.peninsula@motosyequipos.com',
       zonas: ['YUCATÁN', 'CAMPECHE', 'QUINTANA ROO']
     },
     'zacatecas': {
+      tipo: 'simple',
       nombre: 'FRANCISCO JAVIER PEÑA',
       whatsapp: '6671207132',
       email: 'ventas.pacifico2@motosyequipos.com',
@@ -790,8 +891,105 @@ import Container from '../../layouts/Container.astro';
     esDefault: true
   };
 
+  // 🆕 NUEVO: Función para cargar municipios desde el archivo JSON
+  let estadosMunicipiosData = null;
+
+  async function cargarEstadosMunicipios() {
+    try {
+      const response = await fetch('/estados-municipios.json');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      estadosMunicipiosData = await response.json();
+      return estadosMunicipiosData;
+    } catch (error) {
+      console.error('Error cargando estados-municipios.json:', error);
+      return null;
+    }
+  }
+
+  // 🆕 NUEVO: Función para mapear nombres de estados con claves del JSON
+  function obtenerClaveEstado(estadoValue) {
+    const mapeoEstados = {
+      'aguascalientes': 'Aguascalientes',
+      'baja-california': 'Baja California',
+      'baja-california-sur': 'Baja California Sur',
+      'campeche': 'Campeche',
+      'chiapas': 'Chiapas',
+      'chihuahua': 'Chihuahua',
+      'ciudad-de-mexico': 'Ciudad de Mexico',
+      'coahuila': 'Coahuila',
+      'colima': 'Colima',
+      'durango': 'Durango',
+      'guanajuato': 'Guanajuato',
+      'guerrero': 'Guerrero',
+      'hidalgo': 'Hidalgo',
+      'jalisco': 'Jalisco',
+      'mexico': 'Estado de Mexico',
+      'michoacan': 'Michoacan',
+      'morelos': 'Morelos',
+      'nayarit': 'Nayarit',
+      'nuevo-leon': 'Nuevo Leon',
+      'oaxaca': 'Oaxaca',
+      'puebla': 'Puebla',
+      'queretaro': 'Queretaro',
+      'quintana-roo': 'Quintana Roo',
+      'san-luis-potosi': 'San Luis Potosi',
+      'sinaloa': 'Sinaloa',
+      'sonora': 'Sonora',
+      'tabasco': 'Tabasco',
+      'tamaulipas': 'Tamaulipas',
+      'tlaxcala': 'Tlaxcala',
+      'veracruz': 'Veracruz',
+      'yucatan': 'Yucatan',
+      'zacatecas': 'Zacatecas'
+    };
+    
+    return mapeoEstados[estadoValue] || null;
+  }
+
+  // 🆕 NUEVO: Función para poblar el select de municipios
+  function poblarMunicipios(estadoSeleccionado) {
+    const municipioSelect = document.getElementById('municipio');
+    const municipioContainer = document.getElementById('municipio-container');
+    
+    if (!municipioSelect || !municipioContainer) return;
+
+    // Limpiar opciones previas
+    municipioSelect.innerHTML = '<option value="" disabled selected class="text-gray-400 italic">Selecciona tu municipio</option>';
+    
+    if (!estadoSeleccionado || !estadosMunicipiosData) {
+      municipioContainer.classList.add('hidden');
+      municipioSelect.removeAttribute('required');
+      return;
+    }
+
+    const claveEstado = obtenerClaveEstado(estadoSeleccionado);
+    const municipios = estadosMunicipiosData[claveEstado];
+    
+    if (municipios && Array.isArray(municipios)) {
+      // Mostrar el campo de municipios
+      municipioContainer.classList.remove('hidden');
+      municipioSelect.setAttribute('required', 'true');
+      
+      // Agregar municipios ordenados alfabéticamente
+      municipios.sort().forEach(municipio => {
+        const option = document.createElement('option');
+        option.value = municipio;
+        option.textContent = municipio;
+        option.className = 'text-gray-900 font-medium';
+        municipioSelect.appendChild(option);
+      });
+    } else {
+      municipioContainer.classList.add('hidden');
+      municipioSelect.removeAttribute('required');
+    }
+  }
+
   // Script principal continúa...
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', async function() {
+    // Cargar datos de estados-municipios al iniciar
+    await cargarEstadosMunicipios();
     // 1. Declaraciones de elementos
     const form = document.getElementById('distributor-form');
     const toastNotification = document.getElementById('toast-notification');
@@ -950,9 +1148,14 @@ import Container from '../../layouts/Container.astro';
               const field = document.getElementById(key);
               if (field && field.value === '') {
                 field.value = data[key];
+                
+                // Si se restaura el estado, cargar municipios correspondientes
+                if (key === 'estado' && data[key]) {
+                  poblarMunicipios(data[key]);
+                }
               }
             });
-            console.log('💾 Datos del formulario restaurados desde auto-save');
+            // Datos restaurados desde auto-save
           } else {
             // Limpiar datos antiguos
             localStorage.removeItem('kenda-form-draft');
@@ -964,78 +1167,154 @@ import Container from '../../layouts/Container.astro';
       }
     }
     
-    // 🆕 NUEVO: Función para resolver promotor basado en estado seleccionado
+    // Función para resolver promotor basado en estado seleccionado
     function resolverPromotor(estadoSeleccionado) {
-      console.log(`🔍 Resolviendo promotor para estado: ${estadoSeleccionado}`);
+      // Buscar datos del estado
+      let estadoData = PROMOTORES_POR_ESTADO[estadoSeleccionado];
       
-      // Buscar promotor directo
-      let promotor = PROMOTORES_POR_ESTADO[estadoSeleccionado];
-      
-      if (promotor) {
-        console.log(`✅ Promotor encontrado: ${promotor.nombre} (${promotor.whatsapp})`);
-        return {
-          ...promotor,
-          esDefault: false
-        };
+      if (estadoData) {
+        if (estadoData.tipo === 'multiple') {
+          // Estado con múltiples asesores
+          return {
+            tipo: 'multiple',
+            asesores: estadoData.asesores,
+            esDefault: false
+          };
+        } else {
+          // Estado con un solo asesor
+          return {
+            tipo: 'simple',
+            nombre: estadoData.nombre,
+            whatsapp: estadoData.whatsapp,
+            email: estadoData.email,
+            zonas: estadoData.zonas,
+            esDefault: false
+          };
+        }
       }
       
       // Si no se encuentra, usar promotor por defecto
-      console.warn(`⚠️ No se encontró promotor para estado: ${estadoSeleccionado}, usando default`);
-      return PROMOTOR_DEFAULT;
+      return {
+        ...PROMOTOR_DEFAULT,
+        tipo: 'simple'
+      };
     }
     
-    // 🆕 NUEVO: Función para validar datos del promotor
-    function validarDatosPromotor(promotor) {
+    // Función para validar datos del promotor
+    function validarDatosPromotor(promotorData) {
       const errores = [];
       
-      if (!promotor.whatsapp || promotor.whatsapp.toString().length < 10) {
-        errores.push('Número de WhatsApp del promotor inválido');
+      if (promotorData.tipo === 'multiple') {
+        // Validar múltiples asesores
+        if (!promotorData.asesores || !Array.isArray(promotorData.asesores) || promotorData.asesores.length === 0) {
+          return false;
+        }
+        
+        promotorData.asesores.forEach((asesor, index) => {
+          if (!asesor.whatsapp || asesor.whatsapp.toString().length < 10) {
+            errores.push(`WhatsApp asesor ${index + 1} inválido`);
+          }
+          
+          if (!asesor.email || !asesor.email.includes('@')) {
+            errores.push(`Email asesor ${index + 1} inválido`);
+          }
+          
+          if (!asesor.nombre || asesor.nombre.trim().length === 0) {
+            errores.push(`Nombre asesor ${index + 1} inválido`);
+          }
+        });
+      } else {
+        // Validar asesor único
+        if (!promotorData.whatsapp || promotorData.whatsapp.toString().length < 10) {
+          errores.push('WhatsApp promotor inválido');
+        }
+        
+        if (!promotorData.email || !promotorData.email.includes('@')) {
+          errores.push('Email promotor inválido');
+        }
+        
+        if (!promotorData.nombre || promotorData.nombre.trim().length === 0) {
+          errores.push('Nombre promotor inválido');
+        }
       }
       
-      if (!promotor.email || !promotor.email.includes('@')) {
-        errores.push('Email del promotor inválido');
-      }
-      
-      if (!promotor.nombre || promotor.nombre.trim().length === 0) {
-        errores.push('Nombre del promotor inválido');
-      }
-      
-      if (errores.length > 0) {
-        console.error('❌ Errores en datos del promotor:', errores);
-        return false;
-      }
-      
-      return true;
+      return errores.length === 0;
     }
 
-    // 🆕 NUEVO: Función para mostrar información del promotor al usuario
-    function mostrarInfoPromotor(promotor) {
+    // Función para mostrar información del promotor al usuario
+    function mostrarInfoPromotor(promotorData) {
       const infoElement = document.getElementById('promotor-info');
       
       if (!infoElement) {
-        console.error('❌ Elemento promotor-info no encontrado');
         return;
       }
       
-      if (!promotor.esDefault) {
-        infoElement.innerHTML = `
-          <div class="bg-kenda-orange bg-opacity-10 border border-kenda-orange rounded-xl p-4 transition-all duration-300">
-            <div class="flex items-start">
-              <div class="flex-shrink-0 w-10 h-10 bg-kenda-orange bg-opacity-20 rounded-lg flex items-center justify-center mr-3">
-                <svg class="w-5 h-5 text-kenda-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                </svg>
-              </div>
-              <div class="flex-1">
-                <h4 class="text-sm font-semibold text-gray-900 mb-1">Tu asesor de zona asignado</h4>
-                <p class="text-sm text-gray-700 font-medium">${promotor.nombre}</p>
-                <p class="text-xs text-gray-600 mt-1">Se pondrá en contacto contigo después de enviar el formulario</p>
+      if (!promotorData.esDefault) {
+        if (promotorData.tipo === 'multiple') {
+          // Mostrar múltiples asesores
+          const asesoresHtml = promotorData.asesores.map(asesor => 
+            `<p class="text-sm text-gray-700 font-medium">• ${asesor.nombre}</p>`
+          ).join('');
+          
+          infoElement.innerHTML = `
+            <div class="bg-kenda-orange bg-opacity-10 border border-kenda-orange rounded-xl p-4 transition-all duration-300">
+              <div class="flex items-start">
+                <div class="flex-shrink-0 w-10 h-10 bg-kenda-orange bg-opacity-20 rounded-lg flex items-center justify-center mr-3">
+                  <svg class="w-5 h-5 text-kenda-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-sm font-semibold text-gray-900 mb-1">Tus asesores de zona asignados</h4>
+                  ${asesoresHtml}
+                  <p class="text-xs text-gray-600 mt-1">Alguno de los asesores se pondrá en contacto contigo después de enviar el formulario</p>
+                </div>
               </div>
             </div>
-          </div>
-        `;
+          `;
+          
+          // 🎯 META PIXEL: Tracking de asignación de promotor múltiple
+          if (typeof window.trackFormEvent === 'function') {
+            window.trackFormEvent('ViewContent', {
+              content_name: 'Promoter Assignment',
+              content_category: 'Sales Process',
+              content_type: 'multiple',
+              value: promotorData.asesores.length,
+              currency: 'MXN'
+            });
+          }
+        } else {
+          // Mostrar asesor único
+          infoElement.innerHTML = `
+            <div class="bg-kenda-orange bg-opacity-10 border border-kenda-orange rounded-xl p-4 transition-all duration-300">
+              <div class="flex items-start">
+                <div class="flex-shrink-0 w-10 h-10 bg-kenda-orange bg-opacity-20 rounded-lg flex items-center justify-center mr-3">
+                  <svg class="w-5 h-5 text-kenda-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-sm font-semibold text-gray-900 mb-1">Tu asesor de zona asignado</h4>
+                  <p class="text-sm text-gray-700 font-medium">${promotorData.nombre}</p>
+                  <p class="text-xs text-gray-600 mt-1">Se pondrá en contacto contigo después de enviar el formulario</p>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          // 🎯 META PIXEL: Tracking de asignación de promotor simple
+          if (typeof window.trackFormEvent === 'function') {
+            window.trackFormEvent('ViewContent', {
+              content_name: 'Promoter Assignment',
+              content_category: 'Sales Process',
+              content_type: 'simple',
+              value: 1,
+              currency: 'MXN'
+            });
+          }
+        }
+        
         infoElement.classList.remove('hidden');
-        console.log(`📱 Mostrando info del promotor: ${promotor.nombre}`);
       } else {
         infoElement.classList.add('hidden');
       }
@@ -1070,7 +1349,7 @@ import Container from '../../layouts/Container.astro';
       return true;
     }
     // 5. Función para mostrar el toast mejorada con iconos SVG
-    function showToast(type = 'success', message = 'Formulario enviado correctamente.', title = 'Success') {
+    function showToast(type = 'success', message = 'Formulario enviado correctamente.', title = 'Éxito') {
       // Limpiar cualquier temporizador anterior
       if (toastTimer) {
         clearTimeout(toastTimer);
@@ -1078,71 +1357,70 @@ import Container from '../../layouts/Container.astro';
       
       // Elementos del toast
       const toastEl = toastNotification;
+      const toastContainer = toastEl.querySelector('div');
       const titleEl = document.getElementById('toast-title');
       const messageEl = document.getElementById('toast-message');
       const successIcon = document.getElementById('toast-success-icon');
       const errorIcon = document.getElementById('toast-error-icon');
       const progressBar = document.getElementById('toast-progress');
       
+      // Configurar estilos y contenido según el tipo
       if (type === 'error') {
-        // Configurar para error
-        toastEl.classList.remove('bg-green-500');
-        toastEl.classList.add('bg-red-500');
         titleEl.textContent = title || 'Error';
+        toastContainer.classList.remove('toast-success');
+        toastContainer.classList.add('toast-error');
         
-        // Mostrar ícono de error, ocultar éxito
+        // Mostrar ícono de error
         if (successIcon) successIcon.classList.add('opacity-0');
         if (errorIcon) errorIcon.classList.remove('opacity-0');
-      } else {
-        // Configurar para éxito
-        toastEl.classList.remove('bg-red-500');
-        toastEl.classList.add('bg-green-500');
-        titleEl.textContent = title || '¡Éxito!';
         
-        // Mostrar ícono de éxito, ocultar error
+        // Barra de progreso roja
+        if (progressBar) {
+          progressBar.classList.remove('success');
+          progressBar.classList.add('error');
+        }
+      } else {
+        titleEl.textContent = title || '¡Éxito!';
+        toastContainer.classList.remove('toast-error');
+        toastContainer.classList.add('toast-success');
+        
+        // Mostrar ícono de éxito
         if (errorIcon) errorIcon.classList.add('opacity-0');
         if (successIcon) successIcon.classList.remove('opacity-0');
+        
+        // Barra de progreso verde
+        if (progressBar) {
+          progressBar.classList.remove('error');
+          progressBar.classList.add('success');
+        }
       }
       
       messageEl.textContent = message;
       
-      // Resetear y mostrar barra de progreso
-      if (progressBar) {
-        progressBar.style.width = '100%';
-      }
-      
       // Mostrar el toast
       toastNotification.classList.remove('hidden');
       
-      // Animar barra de progreso con fluidez mejorada
+      // Inicializar barra de progreso al 100% y animar hacia 0%
       if (progressBar) {
-        // Resetear clases y aplicar clase inicial
-        progressBar.className = progressBar.className.replace(/smooth-\w+/g, '');
-        progressBar.classList.add('smooth-start');
+        progressBar.style.width = '100%';
         
-        // Inicializar al 100%
-        requestAnimationFrame(() => {
-          progressBar.style.width = '100%';
-          
-          // Aplicar transición fluida después de una breve pausa
-          setTimeout(() => {
-            progressBar.classList.remove('smooth-start');
-            progressBar.classList.add('smooth-progress');
-            progressBar.style.width = '0%';
-          }, 300);
-        });
+        // Pequeño delay para que se vea inicialmente al 100%
+        setTimeout(() => {
+          progressBar.style.transitionDuration = '5000ms';
+          progressBar.style.width = '0%';
+        }, 100);
       }
       
-      // Configurar el temporizador para ocultar después de 15 segundos
+      // Auto-hide después de 5 segundos (más rápido y limpio)
       toastTimer = setTimeout(function() {
         toastNotification.classList.add('hidden');
-        // Resetear barra de progreso con transición suave
+        
+        // Reset para próxima vez
         if (progressBar) {
-          progressBar.className = progressBar.className.replace(/smooth-\w+/g, '');
-          progressBar.classList.add('smooth-reset');
+          progressBar.style.transitionDuration = '75ms';
           progressBar.style.width = '100%';
         }
-      }, 15000);
+      }, 5000);
     }
         
     // 6. Animación de confeti mejorada
@@ -1349,7 +1627,7 @@ import Container from '../../layouts/Container.astro';
       });
       
       field.addEventListener('input', function() {
-        // 📱 MEJORADO: Smart formatting para teléfono
+        // Smart formatting para teléfono
         if (this.id === 'telefono') {
           const cursorPosition = this.selectionStart;
           const oldValue = this.value;
@@ -1369,7 +1647,7 @@ import Container from '../../layouts/Container.astro';
         // Quitar estado de validación al modificar
         this.classList.remove('field-valid', 'field-invalid');
         
-        // 💾 Auto-save en cada cambio
+        // Auto-save en cada cambio
         triggerAutoSave();
       });
       
@@ -1385,28 +1663,59 @@ import Container from '../../layouts/Container.astro';
     if (estadoField) {
       estadoField.addEventListener('change', function() {
         const estadoSeleccionado = this.value;
-        console.log(`🏛️ Estado seleccionado: ${estadoSeleccionado}`);
         
         if (estadoSeleccionado) {
-          const promotor = resolverPromotor(estadoSeleccionado);
-          mostrarInfoPromotor(promotor);
+          const promotorData = resolverPromotor(estadoSeleccionado);
+          mostrarInfoPromotor(promotorData);
+          
+          // 🆕 NUEVO: Cargar municipios del estado seleccionado
+          poblarMunicipios(estadoSeleccionado);
+          
+          // 🎯 META PIXEL: Tracking de selección de ubicación
+          if (typeof window.trackFormEvent === 'function') {
+            window.trackFormEvent('InitiateCheckout', {
+              content_name: 'Location Selection',
+              content_category: 'Form Progress',
+              custom_parameter_1: estadoSeleccionado
+            });
+          }
         } else {
           // Ocultar info si no hay estado seleccionado
           const infoElement = document.getElementById('promotor-info');
           if (infoElement) {
             infoElement.classList.add('hidden');
           }
+          
+          // 🆕 NUEVO: Ocultar campo de municipios
+          poblarMunicipios(null);
+        }
+      });
+    }
+    
+    // 🎯 META PIXEL: Event listener para selección de municipio
+    const municipioField = document.getElementById('municipio');
+    if (municipioField) {
+      municipioField.addEventListener('change', function() {
+        const municipioSeleccionado = this.value;
+        const estadoSeleccionado = document.getElementById('estado')?.value;
+        
+        if (municipioSeleccionado && estadoSeleccionado) {
+          // 🎯 META PIXEL: Tracking de ubicación completa
+          if (typeof window.trackFormEvent === 'function') {
+            window.trackFormEvent('AddToCart', {
+              content_name: 'Complete Location Selection',
+              content_category: 'Form Progress',
+              value: 1,
+              currency: 'MXN',
+              custom_parameter_1: estadoSeleccionado,
+              custom_parameter_2: municipioSeleccionado
+            });
+          }
         }
       });
     }
     
     // 9. Event listeners principales
-    closeToastButton.addEventListener('click', function() {
-      if (toastTimer) {
-        clearTimeout(toastTimer);
-      }
-      toastNotification.classList.add('hidden');
-    });
     
     // 🔄 MODIFICADO: Manejar el envío del formulario con datos enriquecidos
     form.addEventListener('submit', async function(e) {
@@ -1447,56 +1756,73 @@ import Container from '../../layouts/Container.astro';
           formObject[key] = value;
         });
         
-        console.log("📝 Datos originales del formulario:", JSON.stringify(formObject, null, 2));
-        
-        // 🆕 NUEVA LÓGICA: Resolver promotor basado en estado
+        // Resolver promotor basado en estado
         const estadoSeleccionado = formObject.estado;
-        const promotorAsignado = resolverPromotor(estadoSeleccionado);
+        const promotorData = resolverPromotor(estadoSeleccionado);
         
         // Validar datos del promotor
-        if (!validarDatosPromotor(promotorAsignado)) {
-          console.error('❌ Datos del promotor inválidos, usando promotor por defecto');
-          promotorAsignado = PROMOTOR_DEFAULT;
+        if (!validarDatosPromotor(promotorData)) {
+          promotorData = {
+            ...PROMOTOR_DEFAULT,
+            tipo: 'simple'
+          };
         }
         
-        // 🆕 Enriquecer datos del formulario
+        // Formatear fecha/hora en formato DD/MM/YYYY HH:MM
+        const ahora = new Date();
+        const fechaFormateada = `${String(ahora.getDate()).padStart(2, '0')}/${String(ahora.getMonth() + 1).padStart(2, '0')}/${ahora.getFullYear()} ${String(ahora.getHours()).padStart(2, '0')}:${String(ahora.getMinutes()).padStart(2, '0')}`;
+        
+        // Estructura optimizada sin duplicaciones
         const datosEnriquecidos = {
-          // Datos originales del formulario (para compatibilidad con Google Sheets)
-          ...formObject,
-          
-          // 🆕 Datos estructurados del cliente
+          // Datos estructurados del cliente
           cliente: {
             nombre: formObject.nombre,
             email: formObject.email,
             telefono: formObject.telefono,
-            estado: formObject.estado,
-            giroComercial: formObject.giroComercial,
-            tipoNegocio: formObject.tipoNegocio,
-            inicioOperaciones: formObject.inicioOperaciones || formObject.iniciarOperaciones
+            ubicacion: {
+              estado: formObject.estado,
+              municipio: formObject.municipio || null
+            },
+            negocio: {
+              giroComercial: formObject.giroComercial,
+              capitalInversion: formObject.tipoNegocio,
+              inicioOperaciones: formObject.inicioOperaciones || formObject.iniciarOperaciones
+            }
           },
           
-          // 🆕 Datos del promotor asignado
-          promotor: {
-            nombre: promotorAsignado.nombre,
-            whatsapp: promotorAsignado.whatsapp,
-            email: promotorAsignado.email,
-            esDefault: promotorAsignado.esDefault || false,
-            zonas: promotorAsignado.zonas || []
-          },
+          // Datos del promotor asignado
+          promotor: promotorData.tipo === 'multiple' 
+            ? {
+                tipo: 'multiple',
+                principal: promotorData.asesores.find(a => a.prioridad === 'principal'),
+                alternativos: promotorData.asesores.filter(a => a.prioridad === 'alternativo'),
+                cantidadAsesores: promotorData.asesores.length,
+                esDefault: false
+              }
+            : {
+                tipo: 'simple',
+                nombre: promotorData.nombre,
+                whatsapp: promotorData.whatsapp,
+                email: promotorData.email,
+                zonas: promotorData.zonas || [],
+                esDefault: promotorData.esDefault || false
+              },
           
-          // 🆕 Metadatos adicionales
-          metadata: {
-            timestamp: new Date().toISOString(),
-            source: 'website-form-v2',
-            requiresWhatsapp: true,
+          // Metadatos del envío
+          envio: {
+            timestamp: ahora.toISOString(),
+            fechaLegible: fechaFormateada,
+            source: 'website-form-v3',
+            version: 'v3.1',
             userAgent: navigator.userAgent,
             url: window.location.href
           }
         };
         
-        console.log("🚀 Datos enriquecidos a enviar:", JSON.stringify(datosEnriquecidos, null, 2));
+        // 📋 Log del JSON completo para debugging
+        console.log('📋 JSON del formulario:', JSON.stringify(datosEnriquecidos, null, 2));
         
-        // 🔄 MODIFICADO: Envío al webhook con datos enriquecidos
+        // Envío al webhook
         const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/3mknzgigjscwegtansipvrz0163zko73';
         
         const response = await fetch(MAKE_WEBHOOK_URL, {
@@ -1508,9 +1834,12 @@ import Container from '../../layouts/Container.astro';
           body: JSON.stringify(datosEnriquecidos)
         });
         
-        console.log("📡 Status de respuesta:", response.status);
+        // Manejo de respuesta
+        console.log('📤 Respuesta del webhook:', {
+          status: response.status,
+          statusText: response.statusText
+        });
         
-        // Manejo de respuesta (Make.com puede devolver 200, 201, 202, o 204 como éxito)
         if (response.status >= 200 && response.status < 300) {
           // Respuesta exitosa
           let responseData = {};
@@ -1521,27 +1850,70 @@ import Container from '../../layouts/Container.astro';
               responseData = JSON.parse(textResponse);
             }
           } catch (parseError) {
-            console.log("⚠️ Respuesta sin JSON válido, pero request exitoso");
             responseData = { status: 'success' };
           }
           
-          console.log("✅ Respuesta del servidor:", responseData);
+          // Mensaje de éxito personalizado
+          let mensajeExito, tituloExito;
           
-          // 🆕 MODIFICADO: Mensaje de éxito personalizado con datos del promotor
-          const mensajeExito = promotorAsignado.esDefault 
-            ? 'Tu solicitud fue enviada exitosamente. Nuestro equipo se pondrá en contacto contigo pronto.'
-            : `Tu solicitud fue enviada exitosamente. ${promotorAsignado.nombre} se pondrá en contacto contigo pronto.`;
-            
-          const tituloExito = '¡Gracias por tu interés en ser distribuidor KENDA!';
+          if (promotorData.esDefault) {
+            mensajeExito = 'Tu solicitud fue enviada exitosamente. Nuestro equipo se pondrá en contacto contigo pronto.';
+          } else if (promotorData.tipo === 'multiple') {
+            mensajeExito = `Tu solicitud fue enviada exitosamente. ${promotorData.asesores.map(a => a.nombre).join(' y ')} se pondrán en contacto contigo pronto.`;
+          } else {
+            mensajeExito = `Tu solicitud fue enviada exitosamente. ${promotorData.nombre} se pondrá en contacto contigo pronto.`;
+          }
+          
+          tituloExito = '¡Gracias por tu interés en ser distribuidor KENDA!';
           
           showToast('success', mensajeExito, tituloExito);
           confettiAnimation.start();
           submitStatus.textContent = 'Formulario enviado exitosamente';
           
+          // 🎯 META PIXEL: Tracking de conversión exitosa (Lead)
+          if (typeof window.trackFormEvent === 'function') {
+            const estadoValue = formObject.estado || '';
+            const capitalInversion = formObject.tipoNegocio || '';
+            
+            // Asignar valor monetario basado en capital de inversión
+            let leadValue = 1;
+            switch(capitalInversion) {
+              case '50k-100k': leadValue = 75; break;
+              case '100k-250k': leadValue = 175; break;
+              case '250k-500k': leadValue = 375; break;
+              case 'mas-500k': leadValue = 750; break;
+              default: leadValue = 1;
+            }
+            
+            window.trackFormEvent('Lead', {
+              content_name: 'Distributor Application',
+              content_category: 'Business Lead',
+              value: leadValue,
+              currency: 'MXN',
+              status: 'completed',
+              predicted_ltv: leadValue * 10, // Valor estimado a largo plazo
+              content_type: promotorData.tipo,
+              custom_parameter_1: estadoValue,
+              custom_parameter_2: formObject.municipio || '',
+              custom_parameter_3: capitalInversion,
+              custom_parameter_4: formObject.giroComercial || ''
+            });
+            
+            // 🎯 META PIXEL: Evento adicional de Purchase (conversión de alta calidad)
+            window.trackFormEvent('Purchase', {
+              content_name: 'Distributor Partnership',
+              content_category: 'Business Partnership',
+              value: leadValue,
+              currency: 'MXN',
+              content_type: 'distributor_application',
+              num_items: 1
+            });
+          }
+          
           // Resetear formulario
           form.reset();
           
-          // 💾 Limpiar auto-save al enviar exitosamente
+          // Limpiar auto-save
           localStorage.removeItem('kenda-form-draft');
           
           // Limpiar estados visuales
@@ -1550,10 +1922,16 @@ import Container from '../../layouts/Container.astro';
             field.setAttribute('aria-invalid', 'false');
           });
           
-          // 🆕 Ocultar información del promotor al resetear
+          // Ocultar información del promotor
           const infoElement = document.getElementById('promotor-info');
           if (infoElement) {
             infoElement.classList.add('hidden');
+          }
+          
+          // Ocultar campo de municipios
+          const municipioContainer = document.getElementById('municipio-container');
+          if (municipioContainer) {
+            municipioContainer.classList.add('hidden');
           }
           
           setTimeout(() => {
@@ -1563,12 +1941,14 @@ import Container from '../../layouts/Container.astro';
         } else {
           // Error del servidor
           const errorText = await response.text();
-          console.error("❌ Error del servidor:", response.status, errorText);
           throw new Error(`Error HTTP ${response.status}: ${errorText}`);
         }
         
       } catch (error) {
-        console.error("❌ Error al enviar el formulario:", error);
+        console.log('Form submission error occurred:', error);
+        console.log('Error type:', error.constructor.name);
+        console.log('Error message:', error.message);
+        console.log('Error stack:', error.stack);
         showToast('error', 'Hubo un error al enviar el formulario. Por favor, intente nuevamente.', 'Error');
         submitStatus.textContent = 'Error al enviar el formulario';
       } finally {
@@ -1579,72 +1959,74 @@ import Container from '../../layouts/Container.astro';
       }
     });
 
-    // 10. Inicializaciones
+    // 🎯 META PIXEL: Tracking de inicio de interacción con formulario
+    let hasTrackedFormStart = false;
+    formFields.forEach(field => {
+      field.addEventListener('focus', function() {
+        if (!hasTrackedFormStart) {
+          hasTrackedFormStart = true;
+          if (typeof window.trackFormEvent === 'function') {
+            window.trackFormEvent('InitiateCheckout', {
+              content_name: 'Form Interaction Start',
+              content_category: 'Form Engagement',
+              value: 1,
+              currency: 'MXN'
+            });
+          }
+        }
+      }, { once: true });
+    });
+    
+    // 🎯 META PIXEL: Tracking de progreso del formulario (cuando se completa información básica)
+    function trackFormProgress() {
+      const nombre = document.getElementById('nombre')?.value || '';
+      const email = document.getElementById('email')?.value || '';
+      const telefono = document.getElementById('telefono')?.value || '';
+      
+      if (nombre && email && telefono) {
+        if (typeof window.trackFormEvent === 'function') {
+          window.trackFormEvent('AddPaymentInfo', {
+            content_name: 'Basic Info Completed',
+            content_category: 'Form Progress',
+            value: 2,
+            currency: 'MXN'
+          });
+        }
+      }
+    }
+    
+    // Agregar listeners para tracking de progreso
+    ['nombre', 'email', 'telefono'].forEach(fieldId => {
+      const field = document.getElementById(fieldId);
+      if (field) {
+        field.addEventListener('blur', trackFormProgress);
+      }
+    });
+
+    // Event listener para cerrar toast
+    closeToastButton.addEventListener('click', function() {
+      if (toastTimer) {
+        clearTimeout(toastTimer);
+      }
+      toastNotification.classList.add('hidden');
+    });
+
+    // Inicializaciones finales
     confettiAnimation.init();
     controlPulseAnimation();
-    
-    // 🆕 NUEVA: Restaurar datos del auto-save al cargar la página
     restoreFormData();
     
-    // 11. Funciones para pruebas
-    window.testToast = function() {
-      showToast('success', 'Tu solicitud fue enviada exitosamente. Nuestro equipo se pondrá en contacto contigo pronto.', '¡Gracias por tu interés!');
-    };
-    
-    window.testConfetti = function() {
-      confettiAnimation.start();
-    };
-    
-    window.testBoth = function() {
-      showToast('success', 'Tu solicitud fue enviada exitosamente. Nuestro equipo se pondrá en contacto contigo pronto.', '¡Gracias por tu interés!');
-      confettiAnimation.start();
-    };
-    
-    window.testValidation = function(fieldId, value) {
-      const campo = document.getElementById(fieldId);
-      if (campo) {
-        campo.value = value;
-        const esValido = validateField(campo);
-        console.log(`Campo "${fieldId}" con valor "${value}" es válido: ${esValido}`);
-        return esValido;
+    // 🎯 META PIXEL: Tracking de vista de formulario (después de carga)
+    setTimeout(() => {
+      if (typeof window.trackFormEvent === 'function') {
+        window.trackFormEvent('ViewContent', {
+          content_name: 'Distributor Form',
+          content_category: 'Form View',
+          content_type: 'application_form',
+          value: 1,
+          currency: 'MXN'
+        });
       }
-    };
-    
-    // 🆕 NUEVO: Funciones de testing adicionales para promotores
-    window.testPromotor = function(estado) {
-      const promotor = resolverPromotor(estado);
-      console.log(`🧪 Testing promotor para ${estado}:`, promotor);
-      mostrarInfoPromotor(promotor);
-      return promotor;
-    };
-    
-    window.testTodosPromotores = function() {
-      console.log('🧪 Testing todos los promotores:');
-      Object.keys(PROMOTORES_POR_ESTADO).forEach(estado => {
-        const promotor = resolverPromotor(estado);
-        console.log(`${estado}: ${promotor.nombre} (${promotor.whatsapp})`);
-      });
-    };
-    
-    window.testFormularioCompleto = function() {
-      // Llenar formulario con datos de prueba
-      document.getElementById('nombre').value = 'Juan Pérez Test';
-      document.getElementById('email').value = 'test@example.com';
-      document.getElementById('telefono').value = '5555555555';
-      document.getElementById('giroComercial').value = 'refaccionaria';
-      document.getElementById('estado').value = 'nuevo-leon';
-      document.getElementById('tipoNegocio').value = '2000000';
-      document.getElementById('iniciarOperaciones').value = '6-meses';
-      
-      // Disparar evento change para mostrar promotor
-      document.getElementById('estado').dispatchEvent(new Event('change'));
-      
-      console.log('🧪 Formulario llenado con datos de prueba');
-    };
-    
-    // Exponer objetos para debugging
-    window.PROMOTORES_POR_ESTADO = PROMOTORES_POR_ESTADO;
-    window.resolverPromotor = resolverPromotor;
-    window.mostrarInfoPromotor = mostrarInfoPromotor;
+    }, 2000);
   });
 </script>

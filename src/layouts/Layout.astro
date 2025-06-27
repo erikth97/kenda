@@ -1,17 +1,65 @@
+---
+import CookieConsent from '../components/common/CookieConsent.astro';
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = "KENDA - Distribuidores Autorizados", description = "Únete a la red de distribuidores KENDA. Más de 5,000 distribuidores confían en nosotros." } = Astro.props;
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro Basics</title>
+    <meta name="description" content={description} />
+    
+    <!-- SEO Meta Tags -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/images/kenda-og-image.jpg" />
+    
+    <!-- Meta Pixel Code (will be loaded conditionally based on consent) -->
+    <script>
+      // Initialize consent check before any tracking
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      
+      // Set default consent state
+      gtag('consent', 'default', {
+        'analytics_storage': 'denied',
+        'ad_storage': 'denied',
+        'wait_for_update': 500
+      });
+      
+      // Global function for form tracking (available after consent)
+      window.trackFormEvent = function(eventType, data = {}) {
+        // Tracking blocked - waiting for consent
+      };
+    </script>
+    
+    <title>{title}</title>
   </head>
   <body class="relative">
     <!-- Fondo tipo malla con z-index bajo para que esté detrás de todo -->
     <div class="fixed inset-0 w-full h-full pointer-events-none z-0" 
          style="background-image: url('/images/background.png'); background-repeat: repeat; background-color: #F5F5F5; opacity: 0.3;"></div>
+    
     <slot />
+    
+    <!-- Cookie Consent Component -->
+    <CookieConsent />
+    
+    <!-- NoScript fallback for Meta Pixel -->
+    <noscript>
+      <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=239939421526941&ev=PageView&noscript=1" />
+    </noscript>
   </body>
 </html>
 

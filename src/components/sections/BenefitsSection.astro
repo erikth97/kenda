@@ -76,7 +76,7 @@ const {
     background-size: 50px 50px;
   }
 
-  /* 🆕 NUEVA: Animación de card central en mobile */
+  /* Animación de card central en mobile */
   .benefit-card-center {
     transform: scale(1.04) translateY(-4px);
     box-shadow: 0 12px 28px rgba(0,0,0,0.15);
@@ -105,7 +105,7 @@ const {
     transform: translateY(20px);
   }
 
-  /* 🎯 ACCESIBILIDAD: Respetar preferencias de movimiento reducido */
+  /* Accesibilidad: Respetar preferencias de movimiento reducido */
   @media (prefers-reduced-motion: reduce) {
     .benefit-card-center {
       transform: none !important;
@@ -119,7 +119,7 @@ const {
     }
   }
 
-  /* 📱 MOBILE ONLY: Solo aplicar en dispositivos móviles */
+  /* Mobile only: Solo aplicar en dispositivos móviles */
   @media (max-width: 768px) {
     .benefit-card-center {
       transform: scale(1.05) translateY(-6px);
@@ -154,7 +154,7 @@ const {
       }
     );
 
-    // 🆕 NUEVO: Intersection Observer para card central en mobile
+    // Intersection Observer para card central en mobile
     const centerCardObserver = new IntersectionObserver(
       (entries) => {
         if (!isMobile() || prefersReducedMotion) return;
@@ -204,14 +204,14 @@ const {
       observer.observe(card);
     });
     
-    // 📱 MOBILE: Observar para animación de centro solo en móvil
+    // Mobile: Observar para animación de centro solo en móvil
     if (isMobile() && !prefersReducedMotion) {
       benefitCards.forEach((card) => {
         centerCardObserver.observe(card);
       });
     }
     
-    // 🔄 RESPONSIVO: Re-evaluar en cambio de tamaño de ventana
+    // Responsivo: Re-evaluar en cambio de tamaño de ventana
     let resizeTimeout;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimeout);
@@ -233,7 +233,7 @@ const {
       }, 250); // Debounce de 250ms
     });
 
-    // 🎯 THROTTLED SCROLL: Para mejor performance en móvil
+    // Throttled scroll: Para mejor performance en móvil
     let ticking = false;
     
     function updateCenterCards() {
@@ -259,24 +259,5 @@ const {
       clearTimeout(resizeTimeout);
     });
     
-    // 🧪 FUNCIÓN DE TESTING (solo en desarrollo)
-    window.testCenterCard = function(cardIndex) {
-      const cards = document.querySelectorAll('.benefit-card');
-      cards.forEach((card, index) => {
-        if (index === cardIndex) {
-          card.classList.add('benefit-card-center');
-          console.log(`✅ Card ${cardIndex + 1} ahora está centrada`);
-        } else {
-          card.classList.remove('benefit-card-center');
-        }
-      });
-    };
-    
-    window.clearCenterCards = function() {
-      document.querySelectorAll('.benefit-card').forEach(card => {
-        card.classList.remove('benefit-card-center');
-      });
-      console.log('🧹 Todas las cards center limpiadas');
-    };
   });
 </script>
