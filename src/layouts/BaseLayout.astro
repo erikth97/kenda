@@ -4,6 +4,7 @@ import '../styles/global.css';
 import ProgressBar from '../components/ui/custom/ProgressBar.astro';
 import Footer from '../components/common/Footer.astro';
 import FloatingTire from '../components/common/FloatingTire.astro';
+import CookieConsentInline from '../components/common/CookieConsentInline.astro';
 
 // Props e interfaces
 export interface Props {
@@ -62,13 +63,26 @@ const {
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Google Analytics -->
+    <!-- Google Analytics with consent management -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9MY6DBBCDC"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      
+      // Set default consent state
+      gtag('consent', 'default', {
+        'analytics_storage': 'denied',
+        'ad_storage': 'denied',
+        'wait_for_update': 500
+      });
+      
       gtag('js', new Date());
       gtag('config', 'G-9MY6DBBCDC');
+      
+      // Global function for form tracking (available after consent)
+      window.trackFormEvent = function(eventType, data = {}) {
+        // Tracking blocked - waiting for consent
+      };
     </script>
 
     <!-- Inyección de scripts -->
@@ -88,6 +102,15 @@ const {
     
     <!-- Componente Footer -->
     <Footer />
+    
+    <!-- Cookie Consent Component -->
+    <CookieConsentInline />
+    
+    <!-- NoScript fallback for Meta Pixel -->
+    <noscript>
+      <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=239939421526941&ev=PageView&noscript=1" />
+    </noscript>
     
     <!-- Script para navegación suave -->
     <script>

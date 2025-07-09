@@ -1,5 +1,5 @@
 ---
-import CookieConsent from '../components/common/CookieConsent.astro';
+import CookieConsentInline from '../components/common/CookieConsentInline.astro';
 
 export interface Props {
   title?: string;
@@ -53,7 +53,21 @@ const { title = "KENDA - Distribuidores Autorizados", description = "Únete a la
     <slot />
     
     <!-- Cookie Consent Component -->
-    <CookieConsent />
+    <CookieConsentInline />
+    
+    <!-- Immediate cookie banner check for production -->
+    <script>
+      // Check for cookie consent immediately
+      if (!localStorage.getItem('cookie-consent')) {
+        const banner = document.getElementById('cookie-consent-banner');
+        if (banner) {
+          setTimeout(() => {
+            banner.style.display = 'block';
+            banner.classList.add('show');
+          }, 800);
+        }
+      }
+    </script>
     
     <!-- NoScript fallback for Meta Pixel -->
     <noscript>
