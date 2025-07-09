@@ -1758,7 +1758,7 @@ import Container from '../../layouts/Container.astro';
         
         // Resolver promotor basado en estado
         const estadoSeleccionado = formObject.estado;
-        const promotorData = resolverPromotor(estadoSeleccionado);
+        let promotorData = resolverPromotor(estadoSeleccionado);
         
         // Validar datos del promotor
         if (!validarDatosPromotor(promotorData)) {
@@ -1768,13 +1768,71 @@ import Container from '../../layouts/Container.astro';
           };
         }
         
-        // Formatear fecha/hora en formato DD/MM/YYYY HH:MM
+        // Función para convertir capital de inversión a valores numéricos
+        function convertirCapitalInversion(capitalString) {
+          switch(capitalString) {
+            case '50k-100k':
+              return { minimo: 50000, maximo: 100000 };
+            case '100k-250k':
+              return { minimo: 100000, maximo: 250000 };
+            case '250k-500k':
+              return { minimo: 250000, maximo: 500000 };
+            case 'mas-500k':
+              return { minimo: 500000, maximo: null };
+            default:
+              return { minimo: 0, maximo: null };
+          }
+        }
+
+        // Función para convertir inicio de operaciones a meses
+        function convertirInicioOperaciones(inicioString) {
+          switch(inicioString) {
+            case 'inmediato':
+              return 0;
+            case '3-meses':
+              return 3;
+            case '6-meses':
+              return 6;
+            case '1-año':
+              return 12;
+            default:
+              return 0;
+          }
+        }
+
+        // Función para obtener promotores como array con prioridades
+        function obtenerPromotoresArray(promotorData) {
+          const promotores = [];
+          
+          if (promotorData.tipo === 'multiple') {
+            // Agregar promotores con prioridades
+            promotorData.asesores.forEach(asesor => {
+              promotores.push({
+                nombre: asesor.nombre,
+                whatsapp: asesor.whatsapp,
+                email: asesor.email,
+                prioridad: asesor.prioridad,
+                zonas: asesor.zonas || promotorData.zonas || []
+              });
+            });
+          } else {
+            // Promotor simple como principal
+            promotores.push({
+              nombre: promotorData.nombre,
+              whatsapp: promotorData.whatsapp,
+              email: promotorData.email,
+              prioridad: 'principal',
+              zonas: promotorData.zonas || []
+            });
+          }
+          
+          return promotores;
+        }
+
         const ahora = new Date();
-        const fechaFormateada = `${String(ahora.getDate()).padStart(2, '0')}/${String(ahora.getMonth() + 1).padStart(2, '0')}/${ahora.getFullYear()} ${String(ahora.getHours()).padStart(2, '0')}:${String(ahora.getMinutes()).padStart(2, '0')}`;
         
-        // Estructura optimizada sin duplicaciones
+        // Estructura JSON optimizada y compacta
         const datosEnriquecidos = {
-          // Datos estructurados del cliente
           cliente: {
             nombre: formObject.nombre,
             email: formObject.email,
@@ -1785,37 +1843,15 @@ import Container from '../../layouts/Container.astro';
             },
             negocio: {
               giroComercial: formObject.giroComercial,
-              capitalInversion: formObject.tipoNegocio,
-              inicioOperaciones: formObject.inicioOperaciones || formObject.iniciarOperaciones
+              capitalInversion: convertirCapitalInversion(formObject.tipoNegocio),
+              inicioOperaciones: {
+                valor: convertirInicioOperaciones(formObject.inicioOperaciones || formObject.iniciarOperaciones)
+              }
             }
           },
-          
-          // Datos del promotor asignado
-          promotor: promotorData.tipo === 'multiple' 
-            ? {
-                tipo: 'multiple',
-                principal: promotorData.asesores.find(a => a.prioridad === 'principal'),
-                alternativos: promotorData.asesores.filter(a => a.prioridad === 'alternativo'),
-                cantidadAsesores: promotorData.asesores.length,
-                esDefault: false
-              }
-            : {
-                tipo: 'simple',
-                nombre: promotorData.nombre,
-                whatsapp: promotorData.whatsapp,
-                email: promotorData.email,
-                zonas: promotorData.zonas || [],
-                esDefault: promotorData.esDefault || false
-              },
-          
-          // Metadatos del envío
+          promotores: obtenerPromotoresArray(promotorData),
           envio: {
-            timestamp: ahora.toISOString(),
-            fechaLegible: fechaFormateada,
-            source: 'website-form-v3',
-            version: 'v3.1',
-            userAgent: navigator.userAgent,
-            url: window.location.href
+            timestamp: ahora.toISOString()
           }
         };
         
