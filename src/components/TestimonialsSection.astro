@@ -55,52 +55,52 @@ const testimonials: Testimonial[] = [
     </div>
 
     <!-- Carrusel de testimoniales -->
-    <div class="testimonials-carousel relative mx-auto max-w-[320px] xs:max-w-[360px] sm:max-w-[640px] md:max-w-5xl lg:max-w-7xl px-2 sm:px-4 md:px-6">
-      <div class="carousel-viewport relative overflow-visible h-[280px] sm:h-[320px] md:h-[450px]">
+    <div class="testimonials-carousel relative mx-auto max-w-[350px] xs:max-w-[380px] sm:max-w-[680px] md:max-w-5xl lg:max-w-7xl px-2 sm:px-4 md:px-6">
+      <div class="carousel-viewport relative overflow-visible h-[350px] sm:h-[380px] md:h-[500px]">
         <div class="carousel-track relative h-full">
           {testimonials.map((testimonial, index) => (
             <div 
-              class="testimonial-card absolute w-[280px] xs:w-[300px] sm:w-[320px] md:w-[400px] h-[260px] sm:h-[280px] md:h-[420px] top-1/2 -translate-y-1/2 cursor-grab"
+              class="testimonial-card absolute w-[320px] xs:w-[350px] sm:w-[380px] md:w-[450px] h-[320px] sm:h-[350px] md:h-[470px] top-1/2 -translate-y-1/2 cursor-grab"
               data-testimonial-id={testimonial.id}
               data-index={index}
             >
-              <div class="bg-white rounded-xl md:rounded-2xl lg:rounded-3xl p-3 xs:p-3.5 sm:p-4 md:p-5 h-full flex flex-col relative shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div class="bg-white rounded-xl md:rounded-2xl lg:rounded-3xl p-4 xs:p-5 sm:p-6 md:p-7 h-full flex flex-col relative shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <!-- Quote Icon -->
-                <div class="absolute top-2 left-2 text-gray-200">
-                  <svg class="w-6 h-6 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 24 24">
+                <div class="absolute top-3 left-3 text-gray-200">
+                  <svg class="w-7 h-7 md:w-9 md:h-9" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
                   </svg>
                 </div>
 
                 <!-- Avatar centrado -->
-                <div class="flex justify-center mb-2 sm:mb-3 md:mb-4">
+                <div class="flex justify-center mb-3 sm:mb-4 md:mb-5">
                   <div class="relative">
                     <img 
                       src={testimonial.image}
                       alt={testimonial.name}
-                      class="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full object-cover"
+                      class="w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-full object-cover"
                     />
                   </div>
                 </div>
                 
                 <!-- Contenido justificado a la izquierda -->
                 <div class="text-left flex-1 flex flex-col justify-start overflow-hidden px-1">
-                  <div class="mb-2">
-                    <h3 class="text-[11px] sm:text-xs md:text-sm lg:text-base font-medium text-gray-800 leading-tight">
+                  <div class="mb-3">
+                    <h3 class="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-gray-800 leading-tight">
                       {testimonial.name}
                     </h3>
                     {testimonial.role && (
-                      <p class="text-[9px] sm:text-[10px] md:text-xs font-light text-gray-500">
+                      <p class="text-xs sm:text-sm md:text-base font-light text-gray-500 mt-1">
                         {testimonial.role}
                       </p>
                     )}
                   </div>
-                  <p class="text-gray-600 text-[9px] sm:text-[10px] md:text-xs mb-2 font-medium">
+                  <p class="text-gray-600 text-xs sm:text-sm md:text-base mb-3 font-medium">
                     {testimonial.company}
                   </p>
                   
                   <div class="flex-1 overflow-y-auto">
-                    <p class="text-gray-700 leading-relaxed text-[10px] sm:text-xs md:text-sm lg:text-base pr-1">
+                    <p class="text-gray-700 leading-relaxed text-sm sm:text-base md:text-lg lg:text-xl pr-1">
                       {testimonial.content}
                     </p>
                   </div>
@@ -134,12 +134,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const getConfig = () => ({
     isMobile: window.innerWidth < 640,
     isTablet: window.innerWidth >= 640 && window.innerWidth < 768,
-    cardWidth: window.innerWidth < 360 ? 280 : 
-               window.innerWidth < 480 ? 300 :
-               window.innerWidth < 640 ? 320 : 
-               window.innerWidth < 768 ? 320 : 400,
-    cardGap: window.innerWidth < 640 ? 12 : // Reducir gap en móvil
-             window.innerWidth < 768 ? 40 : 60
+    cardWidth: window.innerWidth < 360 ? 320 : 
+               window.innerWidth < 480 ? 350 :
+               window.innerWidth < 640 ? 380 : 
+               window.innerWidth < 768 ? 380 : 450,
+    cardGap: window.innerWidth < 640 ? 15 : // Aumentar gap ligeramente
+             window.innerWidth < 768 ? 45 : 65
   });
   
   let config = getConfig();
